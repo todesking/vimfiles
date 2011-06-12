@@ -33,8 +33,8 @@ endif
 
 " keymap
 nnoremap ,n :tabnew<CR>
-nnoremap ,h :tabPrevious<CR>
-nnoremap ,l :tabNext<CR>
+nnoremap ,h :tabprevious<CR>
+nnoremap ,l :tabnext<CR>
 
 nnoremap ,bd :bdelete<CR>
 
