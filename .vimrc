@@ -25,9 +25,12 @@ set hidden
 
 set history=500
 
+set tags+=./tags,../tags,../../tags,../../../tags,../../../../tags
+
 if(has('gui'))
 	set noballooneval
 	set guifont=Osaka-Mono:h18
+	set guioptions=erL
 endif
 
 
@@ -37,6 +40,57 @@ nnoremap ,h :tabprevious<CR>
 nnoremap ,l :tabnext<CR>
 
 nnoremap ,bd :bdelete<CR>
+
+nmap n nzz
+nmap N Nzz
+nmap * *zz
+nmap # #zz
+nmap g* g*zz
+nmap g# g#zz
+nmap { {zz
+nmap } }zz
+nmap <C-I> <C-I>zz
+nmap <C-O> <C-O>zz
+nmap <C-T> <C-T>zz
+nmap <C-]> <C-]>zz
+
+
+"statusline
+let &statusline = '%< %F%=%m%y%{"[".(&fenc!=""?&fenc:&enc).",".&ff."]"}[%{GetB()}] %3l,%3c %3p%%'
+function! GetB()
+  let c = matchstr(getline('.'), '.', col('.') - 1)
+  let c = iconv(c, &enc, &fenc)
+  return String2Hex(c)
+endfunction
+" :help eval-examples
+" The function Nr2Hex() returns the Hex string of a number.
+func! Nr2Hex(nr)
+  let n = a:nr
+  let r = ""
+  while n
+    let r = '0123456789ABCDEF'[n % 16] . r
+    let n = n / 16
+  endwhile
+  return r
+endfunc
+" The function String2Hex() converts each character in a string to a two
+" character Hex string.
+func! String2Hex(str)
+  let out = ''
+  let ix = 0
+  while ix < strlen(a:str)
+    let out = out . Nr2Hex(char2nr(a:str[ix]))
+    let ix = ix + 1
+  endwhile
+  return out
+endfunc
+
+"入力モード時、ステータスラインのカラーを変更
+augroup InsertHook
+autocmd!
+autocmd InsertEnter * highlight StatusLine guifg=#ccdc90 guibg=#2E4340
+autocmd InsertLeave * highlight StatusLine guifg=#2E4340 guibg=#ccdc90
+augroup END
 
 
 " normalでしばらく放置するとcursorline
