@@ -19,3 +19,6 @@
 [submodule "bundle/vim-easymotion"]
 	path = bundle/vim-easymotion
 	url = https://github.com/Lokaltog/vim-easymotion.git
+[submodule "bundle/neko-ghc"]
+	path = bundle/neko-ghc
+	url = https://github.com/ujihisa/neco-ghc.git
