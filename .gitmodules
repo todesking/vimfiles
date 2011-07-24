@@ -22,3 +22,6 @@
 [submodule "bundle/neko-ghc"]
 	path = bundle/neko-ghc
 	url = https://github.com/ujihisa/neco-ghc.git
+[submodule "bundle/vim-surround"]
+	path = bundle/vim-surround
+	url = https://github.com/tpope/vim-surround.git
