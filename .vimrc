@@ -41,6 +41,8 @@ nnoremap ,l :tabnext<CR>
 
 nnoremap ,bd :bdelete<CR>
 
+nnoremap <C-L> <C-X><C-L>
+
 nmap n nzz
 nmap N Nzz
 nmap * *zz
@@ -54,6 +56,13 @@ nmap <C-O> <C-O>zz
 nmap <C-T> <C-T>zz
 nmap <C-]> <C-]>zz
 
+nnoremap _ :let &hlsearch=!&hlsearch<CR>
+nnoremap <C-S> :Unite buffer file_mru<CR>
+
+" neocomplcache
+let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
+" unite
+let g:unite_enable_start_insert = 1
 
 "statusline
 let &statusline = '%< %F%=%m%y%{"[".(&fenc!=""?&fenc:&enc).",".&ff."]"}[%{GetB()}] %3l,%3c %3p%%'
