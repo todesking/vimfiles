@@ -60,6 +60,9 @@ nnoremap _ :let &hlsearch=!&hlsearch<CR>
 nnoremap <C-S> :Unite buffer file_mru<CR>
 
 " neocomplcache
+if !exists('g:neocomplcache_omni_patterns')
+	let g:neocomplcache_omni_patterns = {}
+endif
 let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
 " unite
 let g:unite_enable_start_insert = 1
