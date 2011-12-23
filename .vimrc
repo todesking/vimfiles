@@ -66,6 +66,10 @@ endif
 let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
 " unite
 let g:unite_enable_start_insert = 1
+augroup unite-keybind
+	autocmd!
+	autocmd FileType unite nmap <buffer><silent><Esc> q
+augroup END
 
 "statusline
 let &statusline = '%< %F%=%m%y%{"[".(&fenc!=""?&fenc:&enc).",".&ff."]"}[%{GetB()}] %3l,%3c %3p%%'
