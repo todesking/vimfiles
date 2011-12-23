@@ -35,29 +35,29 @@ endif
 
 
 " keymap
-nnoremap ,n :tabnew<CR>
-nnoremap ,h :tabprevious<CR>
-nnoremap ,l :tabnext<CR>
+nnoremap <silent>,n :tabnew<CR>
+nnoremap <silent>,h :tabprevious<CR>
+nnoremap <silent>,l :tabnext<CR>
 
-nnoremap ,bd :bdelete<CR>
+nnoremap <silent>,bd :bdelete<CR>
 
-inoremap <C-L> <C-X><C-L>
+inoremap <silent><C-L> <C-X><C-L>
 
-nmap n nzz
-nmap N Nzz
-nmap * *zz
-nmap # #zz
-nmap g* g*zz
-nmap g# g#zz
-nmap { {zz
-nmap } }zz
-nmap <C-I> <C-I>zz
-nmap <C-O> <C-O>zz
-nmap <C-T> <C-T>zz
-nmap <C-]> <C-]>zz
+nmap <silent>n nzz
+nmap <silent>N Nzz
+nmap <silent>* *zz
+nmap <silent># #zz
+nmap <silent>g* g*zz
+nmap <silent>g# g#zz
+nmap <silent>{ {zz
+nmap <silent>} }zz
+nmap <silent><C-I> <C-I>zz
+nmap <silent><C-O> <C-O>zz
+nmap <silent><C-T> <C-T>zz
+nmap <silent><C-]> <C-]>zz
 
-nnoremap _ :let &hlsearch=!&hlsearch<CR>
-nnoremap <C-S> :Unite buffer file_mru<CR>
+nnoremap <silent>_ :let &hlsearch=!&hlsearch<CR>
+nnoremap <silent><C-S> :Unite buffer file_mru<CR>
 
 " neocomplcache
 if !exists('g:neocomplcache_omni_patterns')
