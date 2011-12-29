@@ -24,6 +24,7 @@ set completeopt=menuone,preview
 set hidden
 
 set history=500
+set nobackup
 
 set tags+=./tags,../tags,../../tags,../../../tags,../../../../tags
 

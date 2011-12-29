@@ -3,7 +3,7 @@ if has('gui')
 	MenuLang en_US.UTF-8
 	augroup gvimrc-auto-transparency
 		autocmd!
-		autocmd FocusGained * set transparency=10
+		autocmd FocusGained * set transparency=5
 		autocmd FocusLost * set transparency=30
 	augroup END
 endif
