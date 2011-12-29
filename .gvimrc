@@ -1,5 +1,9 @@
 if has('gui')
 	set guifont=Osaka-Mono:h18
 	MenuLang en_US.UTF-8
-	set transparency=15
+	augroup gvimrc-auto-transparency
+		autocmd!
+		autocmd FocusGained * set transparency=10
+		autocmd FocusLost * set transparency=30
+	augroup END
 endif
