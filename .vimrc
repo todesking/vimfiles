@@ -59,6 +59,7 @@ nmap <silent><C-]> <C-]>zz
 
 nnoremap <silent>_ :let &hlsearch=!&hlsearch<CR>
 nnoremap <silent><C-S> :Unite buffer file_mru<CR>
+nnoremap <silent><C-T> :Unite tag<CR>
 
 " neocomplcache
 if !exists('g:neocomplcache_omni_patterns')
@@ -67,6 +68,7 @@ endif
 let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
 " unite
 let g:unite_enable_start_insert = 1
+let g:unite_update_time = 100
 augroup unite-keybind
 	autocmd!
 	autocmd FileType unite nmap <buffer><silent><Esc> q
