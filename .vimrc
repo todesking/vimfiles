@@ -60,6 +60,11 @@ nmap <silent><C-]> <C-]>zz
 nnoremap <silent>_ :let &hlsearch=!&hlsearch<CR>
 nnoremap <silent><C-S> :Unite buffer file_mru<CR>
 nnoremap <silent><C-T> :Unite tag<CR>
+" C-] to unite-tag
+autocmd BufEnter *
+			\   if empty(&buftype)
+			\|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately tag<CR>
+			\|  endif
 
 " neocomplcache
 if !exists('g:neocomplcache_omni_patterns')
@@ -72,11 +77,6 @@ let g:unite_update_time = 100
 augroup unite-keybind
 	autocmd!
 	autocmd FileType unite nmap <buffer><silent><Esc> q
-	" C-] to unite-tag
-    autocmd BufEnter *
-    \   if empty(&buftype)
-    \|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately tag<CR>
-    \|  endif
 augroup END
 
 "statusline
