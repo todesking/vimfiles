@@ -70,6 +70,11 @@ let g:unite_enable_start_insert = 1
 augroup unite-keybind
 	autocmd!
 	autocmd FileType unite nmap <buffer><silent><Esc> q
+	" C-] to unite-tag
+    autocmd BufEnter *
+    \   if empty(&buftype)
+    \|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately tag<CR>
+    \|  endif
 augroup END
 
 "statusline

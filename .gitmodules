@@ -25,3 +25,6 @@
 [submodule "bundle/vim-surround"]
 	path = bundle/vim-surround
 	url = https://github.com/tpope/vim-surround.git
+[submodule "bundle/unite-tag"]
+	path = bundle/unite-tag
+	url = https://github.com/tsukkee/unite-tag.git
