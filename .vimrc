@@ -44,22 +44,31 @@ nnoremap <silent>,bd :bdelete<CR>
 
 inoremap <silent><C-L> <C-X><C-L>
 
-nmap <silent>n nzz
-nmap <silent>N Nzz
-nmap <silent>* *zz
-nmap <silent># #zz
-nmap <silent>g* g*zz
-nmap <silent>g# g#zz
-nmap <silent>{ {zz
-nmap <silent>} }zz
-nmap <silent><C-I> <C-I>zz
-nmap <silent><C-O> <C-O>zz
-nmap <silent><C-T> <C-T>zz
-nmap <silent><C-]> <C-]>zz
+function! s:register_jump_key(key)
+	exec 'nnoremap' '<silent>'.a:key
+				\ a:key.':call <SID>auto_cursorline(''CursorHold'')<CR>'
+endfunction
+
+call s:register_jump_key('n')
+call s:register_jump_key('N')
+call s:register_jump_key('*')
+call s:register_jump_key('#')
+call s:register_jump_key('g*')
+call s:register_jump_key('g#')
+call s:register_jump_key('{')
+call s:register_jump_key('}')
+call s:register_jump_key('<C-I>')
+call s:register_jump_key('<C-O>')
+" call s:register_jump_key('<C-T>')
+" call s:register_jump_key('<C-]>')
 
 nnoremap <silent>_ :let &hlsearch=!&hlsearch<CR>
 nnoremap <silent><C-S> :Unite buffer file_mru<CR>
-nnoremap <silent><C-T> :Unite tag<CR>
+
+nnoremap <silent>,ut :Unite tag<CR>
+nnoremap <silent>,uo :Unite outline<CR>
+nnoremap <silent>,ub :Unite buffer<CR>
+
 " C-] to unite-tag
 autocmd BufEnter *
 			\   if empty(&buftype)
@@ -77,6 +86,7 @@ let g:unite_update_time = 100
 augroup unite-keybind
 	autocmd!
 	autocmd FileType unite nmap <buffer><silent><Esc> q
+	autocmd FileType unite imap <buffer><silent><Esc> <ESC>q
 augroup END
 
 "statusline
