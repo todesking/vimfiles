@@ -16,8 +16,6 @@ set autoindent
 set tabstop=4
 set shiftwidth=4
 
-set clipboard=unnamed
-
 set wildmode=list:longest
 set completeopt=menuone,preview
 
@@ -59,6 +57,10 @@ call s:register_jump_key('{')
 call s:register_jump_key('}')
 call s:register_jump_key('<C-I>')
 call s:register_jump_key('<C-O>')
+call s:register_jump_key('zz')
+call s:register_jump_key('H')
+call s:register_jump_key('M')
+call s:register_jump_key('L')
 " call s:register_jump_key('<C-T>')
 " call s:register_jump_key('<C-]>')
 
@@ -68,6 +70,8 @@ nnoremap <silent><C-S> :Unite buffer file_mru<CR>
 nnoremap <silent>,ut :Unite tag<CR>
 nnoremap <silent>,uo :Unite outline<CR>
 nnoremap <silent>,ub :Unite buffer<CR>
+
+nmap <silent> ,p <Plug>ToggleProject
 
 " C-] to unite-tag
 autocmd BufEnter *
