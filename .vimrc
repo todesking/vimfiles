@@ -84,6 +84,7 @@ if !exists('g:neocomplcache_omni_patterns')
 	let g:neocomplcache_omni_patterns = {}
 endif
 let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
+
 " unite
 let g:unite_enable_start_insert = 1
 let g:unite_update_time = 100
@@ -92,6 +93,9 @@ augroup unite-keybind
 	autocmd FileType unite nmap <buffer><silent><Esc> q
 	autocmd FileType unite imap <buffer><silent><Esc> <ESC>q
 augroup END
+
+" align
+let g:Align_xstrlen=3
 
 "statusline
 let &statusline = '%< %F%=%m%y%{"[".(&fenc!=""?&fenc:&enc).",".&ff."]"}[%{GetB()}] %3l,%3c %3p%%'
