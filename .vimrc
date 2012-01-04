@@ -44,7 +44,14 @@ inoremap <silent><C-L> <C-X><C-L>
 
 function! s:register_jump_key(key)
 	exec 'nnoremap' '<silent>'.a:key
-				\ a:key.':call <SID>auto_cursorline(''CursorHold'')<CR>zo'
+				\ a:key.':call <SID>auto_cursorline(''CursorHold'')'
+				\   .'<CR>:call <SID>open_current_fold()<CR>'
+endfunction
+
+function! s:open_current_fold()
+	if foldclosed(line(".")) != -1
+		normal! zo
+	endif
 endfunction
 
 call s:register_jump_key('n')
