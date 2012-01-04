@@ -44,7 +44,7 @@ inoremap <silent><C-L> <C-X><C-L>
 
 function! s:register_jump_key(key)
 	exec 'nnoremap' '<silent>'.a:key
-				\ a:key.':call <SID>auto_cursorline(''CursorHold'')<CR>'
+				\ a:key.':call <SID>auto_cursorline(''CursorHold'')<CR>zo'
 endfunction
 
 call s:register_jump_key('n')
