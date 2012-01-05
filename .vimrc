@@ -77,6 +77,7 @@ nnoremap <silent><C-S> :Unite buffer file_mru<CR>
 nnoremap <silent>,ut :Unite tag<CR>
 nnoremap <silent>,uo :Unite outline<CR>
 nnoremap <silent>,ub :Unite buffer<CR>
+nnoremap <silent>,u <ESC>
 
 nmap <silent> ,p <Plug>ToggleProject
 
