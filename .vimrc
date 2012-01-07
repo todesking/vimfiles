@@ -24,6 +24,9 @@ set hidden
 set history=500
 set nobackup
 
+set foldtext=My_foldtext()
+let s:foldcolumn_default=10
+
 set tags+=./tags,../tags,../../tags,../../../tags,../../../../tags
 
 if(has('gui'))
@@ -78,6 +81,15 @@ nnoremap <silent>,ut :Unite tag<CR>
 nnoremap <silent>,uo :Unite outline<CR>
 nnoremap <silent>,ub :Unite buffer<CR>
 nnoremap <silent>,u <ESC>
+
+nnoremap <silent>,f :call <SID>toggle_fold_column()<CR>
+function! s:toggle_fold_column()
+	if &foldcolumn == 0
+		let &foldcolumn=s:foldcolumn_default
+	else
+		let &foldcolumn=0
+	endif
+endfunction
 
 nmap <silent> ,p <Plug>ToggleProject
 
@@ -186,3 +198,47 @@ augroup vimrc-auto-mkdir  " {{{
     endif
   endfunction  " }}}
 augroup END  " }}}
+
+" http://d.hatena.ne.jp/leafcage/20111223/1324705686
+" https://github.com/LeafCage/foldCC/blob/master/plugin/foldCC.vim
+" folding look
+function! My_foldtext()
+  "表示するテキストの作成（折り畳みマーカーを除去）
+  let line = s:rm_CmtAndFmr(v:foldstart)
+
+  "切り詰めサイズをウィンドウに合わせる"{{{
+  let regardMultibyte =strlen(line) -strdisplaywidth(line)
+
+  let line_width = winwidth(0) - &foldcolumn
+  if &number == 1 "行番号表示オンのとき
+      let line_width -= max([&numberwidth, len(line('$'))])
+  endif
+
+  if line_width >77
+    let line_width =77
+  endif
+  let alignment = line_width - 15 - 4 + regardMultibyte
+    "15はprintf()で消費する分、4はfolddasesを使うための余白
+    "issue:regardMultibyteで足される分が多い （61桁をオーバーして切り詰められてる場合
+  "}}}alignment
+
+  return printf('%-'.alignment.'.'.alignment.'s   [%4d  Lv%-2d]%s', line,v:foldend-v:foldstart+1,v:foldlevel,v:folddashes)
+endfunction
+function! s:rm_CmtAndFmr(lnum)"{{{
+  let line = getline(a:lnum)
+  let comment = split(&commentstring, '%s')
+  let comment_end =''
+  if len(comment) >1
+    let comment_end=comment[1]
+  endif
+  let foldmarkers = split(&foldmarker, ',')
+
+  return substitute(line,'\V\%('.comment[0].'\)\?\s\*'.foldmarkers[0].'\%(\d\+\)\?\s\*\%('.comment_end.'\)\?', '','')
+endfunction"}}}
+
+function! s:surgery_line(lnum)"{{{
+  let line = substitute(s:rm_CmtAndFmr(a:lnum),'\V\s','','g')
+  let regardMultibyte = len(line) - strdisplaywidth(line)
+  let alignment = 60 + regardMultibyte
+  return line[:alignment]
+endfunction"}}}
