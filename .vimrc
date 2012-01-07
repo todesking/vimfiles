@@ -82,6 +82,15 @@ nnoremap <silent>,uo :Unite outline<CR>
 nnoremap <silent>,ub :Unite buffer<CR>
 nnoremap <silent>,u <ESC>
 
+nnoremap <silent><SPACE> :call <SID>toggle_folding()<CR>
+function! s:toggle_folding()
+	if foldclosed(line('.'))==-1
+		normal zc
+	else
+		normal zo
+	end
+endfunction
+
 nnoremap <silent>,f :call <SID>toggle_fold_column()<CR>
 function! s:toggle_fold_column()
 	if &foldcolumn == 0
