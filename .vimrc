@@ -164,33 +164,43 @@ autocmd InsertLeave * highlight StatusLine guifg=#2E4340 guibg=#ccdc90
 augroup END
 
 
-" normalでしばらく放置するとcursorline
-augroup vimrc-auto-cursorline
+" しばらく放置/よそから復帰したときのフック
+function! s:hello_again_enter()
+	setlocal cursorline
+	redraw
+	echo <SID>fold_navi()
+endfunction
+function! s:hello_again_leave()
+	setlocal nocursorline
+endfunction
+augroup vimrc-hello-again
   autocmd!
-  autocmd CursorMoved * call s:auto_cursorline('CursorMoved')
-  autocmd CursorHold * call s:auto_cursorline('CursorHold')
-  autocmd WinEnter * call s:auto_cursorline('WinEnter')
-  autocmd WinLeave * call s:auto_cursorline('WinLeave')
+  autocmd CursorMoved * call s:hello_again_hook('CursorMoved')
+  autocmd CursorHold * call s:hello_again_hook('CursorHold')
+  autocmd WinEnter * call s:hello_again_hook('WinEnter')
+  autocmd WinLeave * call s:hello_again_hook('WinLeave')
+  autocmd FocusGained * call s:hello_again_hook('WinEnter')
+  autocmd FocusLost * call s:hello_again_hook('WinLeave')
 
-  let s:cursorline_lock = 0
-  function! s:auto_cursorline(event)
+  let s:hello_again_state=0
+  function! s:hello_again_hook(event)
     if a:event ==# 'WinEnter'
-      setlocal cursorline
-      let s:cursorline_lock = 2
+      call <SID>hello_again_enter()
+      let s:hello_again_state = 2
     elseif a:event ==# 'WinLeave'
-      setlocal nocursorline
+      call <SID>hello_again_leave()
     elseif a:event ==# 'CursorMoved'
-      if s:cursorline_lock
-        if 1 < s:cursorline_lock
-          let s:cursorline_lock = 1
+      if s:hello_again_state
+        if 1 < s:hello_again_state
+          let s:hello_again_state = 1
         else
-          setlocal nocursorline
-          let s:cursorline_lock = 0
+          call <SID>hello_again_leave()
+          let s:hello_again_state = 0
         endif
       endif
     elseif a:event ==# 'CursorHold'
-      setlocal cursorline
-      let s:cursorline_lock = 1
+      call <SID>hello_again_enter()
+      let s:hello_again_state = 1
     endif
   endfunction
 augroup END
@@ -231,8 +241,42 @@ function! My_foldtext()
     "issue:regardMultibyteで足される分が多い （61桁をオーバーして切り詰められてる場合
   "}}}alignment
 
-  return printf('%-'.alignment.'.'.alignment.'s   [%4d  Lv%-2d]%s', line,v:foldend-v:foldstart+1,v:foldlevel,v:folddashes)
+  return printf('%-'.alignment.'.'.alignment.'s   [%4d  Lv%-2d]%s',line.'...',v:foldend-v:foldstart+1,v:foldlevel,v:folddashes)
 endfunction
+function! s:fold_navi() "{{{
+if foldlevel('.')
+  let save_csr=winsaveview()
+  let parentList=[]
+
+  "カーソル行が折り畳まれているとき"{{{
+  let whtrClosed = foldclosed('.')
+  if whtrClosed !=-1
+    call insert(parentList, s:surgery_line(whtrClosed) )
+    if foldlevel('.') == 1
+      call winrestview(save_csr)
+      return join(parentList,' > ')
+    endif
+
+    normal! [z
+    if foldclosed('.') ==whtrClosed
+      call winrestview(save_csr)
+      return join(parentList,' > ')
+    endif
+  endif"}}}
+
+  "折畳を再帰的に戻れるとき"{{{
+  while 1
+    normal! [z
+    call insert(parentList, s:surgery_line('.') )
+    if foldlevel('.') == 1
+      break
+    endif
+  endwhile
+  call winrestview(save_csr)
+  return join(parentList,' > ')"}}}
+endif
+endfunction
+
 function! s:rm_CmtAndFmr(lnum)"{{{
   let line = getline(a:lnum)
   let comment = split(&commentstring, '%s')
@@ -246,8 +290,9 @@ function! s:rm_CmtAndFmr(lnum)"{{{
 endfunction"}}}
 
 function! s:surgery_line(lnum)"{{{
-  let line = substitute(s:rm_CmtAndFmr(a:lnum),'\V\s','','g')
+  let line = substitute(s:rm_CmtAndFmr(a:lnum),'\V\^\s\*\|\s\*\$','','g')
   let regardMultibyte = len(line) - strdisplaywidth(line)
   let alignment = 60 + regardMultibyte
   return line[:alignment]
 endfunction"}}}
+
