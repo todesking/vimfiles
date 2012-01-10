@@ -84,7 +84,9 @@ nnoremap <silent>,u <ESC>
 
 nnoremap <silent><SPACE> :call <SID>toggle_folding()<CR>
 function! s:toggle_folding()
-	if foldclosed(line('.'))==-1
+	if foldlevel(line('.'))==0
+		return
+	elseif foldclosed(line('.'))==-1
 		normal zc
 	else
 		normal zo
@@ -236,12 +238,17 @@ function! My_foldtext()
   if line_width >77
     let line_width =77
   endif
-  let alignment = line_width - 15 - 4 + regardMultibyte
+  let footer_length=9
+  let alignment = line_width - footer_length - 4 + regardMultibyte
     "15はprintf()で消費する分、4はfolddasesを使うための余白
     "issue:regardMultibyteで足される分が多い （61桁をオーバーして切り詰められてる場合
   "}}}alignment
 
-  return printf('%-'.alignment.'.'.alignment.'s   [%4d  Lv%-2d]%s',line.'...',v:foldend-v:foldstart+1,v:foldlevel,v:folddashes)
+  let foldlength=v:foldend-v:foldstart+1
+  let dots=repeat('.',float2nr(ceil(foldlength/10.0)+2))
+
+  return printf('%-'.alignment.'.'.alignment.'s %3d ',line.' '.dots,foldlength)
+  return printf('%-'.alignment.'.'.alignment.'s   [%4d  Lv%-2d]%s',line.'...',foldlength,v:foldlevel,v:folddashes)
 endfunction
 function! s:fold_navi() "{{{
 if foldlevel('.')
@@ -281,6 +288,9 @@ function! s:rm_CmtAndFmr(lnum)"{{{
   let line = getline(a:lnum)
   let comment = split(&commentstring, '%s')
   let comment_end =''
+  if len(comment) == 0
+	  return line
+  endif
   if len(comment) >1
     let comment_end=comment[1]
   endif
