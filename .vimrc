@@ -47,7 +47,7 @@ inoremap <silent><C-L> <C-X><C-L>
 
 function! s:register_jump_key(key)
 	exec 'nnoremap' '<silent>'.a:key
-				\ a:key.':call <SID>auto_cursorline(''CursorHold'')'
+				\ a:key.':call <SID>hello_again_hook(''CursorHold'')'
 				\   .'<CR>:call <SID>open_current_fold()<CR>'
 endfunction
 
@@ -75,10 +75,10 @@ call s:register_jump_key('L')
 " call s:register_jump_key('<C-]>')
 
 nnoremap <silent>_ :let &hlsearch=!&hlsearch<CR>
-nnoremap <silent><C-S> :Unite buffer file_mru<CR>
+nnoremap <silent><C-S> :Unite outline buffer file_mru<CR>
 
 nnoremap <silent>,ut :Unite tag<CR>
-nnoremap <silent>,uo :Unite outline<CR>
+nnoremap <silent>,uo :Unite outline -no-start-insert<CR>
 nnoremap <silent>,ub :Unite buffer<CR>
 nnoremap <silent>,u <ESC>
 
@@ -170,7 +170,8 @@ augroup END
 function! s:hello_again_enter()
 	setlocal cursorline
 	redraw
-	echo <SID>fold_navi()
+	let status_line_width=winwidth(0)
+	echo printf('%'.status_line_width.'.'.status_line_width.'s',<SID>fold_navi())
 endfunction
 function! s:hello_again_leave()
 	setlocal nocursorline
