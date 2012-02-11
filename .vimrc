@@ -78,6 +78,7 @@ nnoremap <silent>_ :let &hlsearch=!&hlsearch<CR>
 nnoremap <silent><C-S> :Unite outline buffer file_mru<CR>
 
 nnoremap <silent>,ut :Unite tag<CR>
+nnoremap <silent>,uf :Unite file_rec<CR>
 nnoremap <silent>,uo :Unite outline -no-start-insert<CR>
 nnoremap <silent>,ub :Unite buffer<CR>
 nnoremap <silent>,u <ESC>
