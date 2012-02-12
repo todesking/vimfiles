@@ -83,14 +83,23 @@ nnoremap <silent>,uo :Unite outline -no-start-insert<CR>
 nnoremap <silent>,ub :Unite buffer<CR>
 nnoremap <silent>,u <ESC>
 
-nnoremap <silent><SPACE> :call <SID>toggle_folding()<CR>
-function! s:toggle_folding()
+nnoremap <silent><SPACE> :call <SID>toggle_folding(0)<CR>
+nnoremap <silent><S-SPACE> :call <SID>toggle_folding(1)<CR>
+function! s:toggle_folding(deep)
 	if foldlevel(line('.'))==0
 		return
 	elseif foldclosed(line('.'))==-1
-		normal zc
+		if a:deep
+			normal zC
+		else
+			normal zc
+		endif
 	else
-		normal zo
+		if a:deep
+			normal zO
+		else
+			normal zo
+		endif
 	end
 endfunction
 
