@@ -75,7 +75,7 @@ call s:register_jump_key('L')
 " call s:register_jump_key('<C-]>')
 
 nnoremap <silent>_ :let &hlsearch=!&hlsearch<CR>
-nnoremap <silent><C-S> :Unite outline buffer file_mru<CR>
+nnoremap <silent><C-S> :Unite buffer file_mru<CR>
 
 nnoremap <silent>,ut :Unite tag<CR>
 nnoremap <silent>,uf :Unite file_rec<CR>
@@ -140,6 +140,7 @@ augroup unite-keybind
 	autocmd!
 	autocmd FileType unite nmap <buffer><silent><Esc> q
 	autocmd FileType unite imap <buffer><silent><Esc> <ESC>q
+	autocmd FileType unite NeoComplCacheLock
 augroup END
 
 " align
