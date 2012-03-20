@@ -127,6 +127,10 @@ autocmd BufEnter *
 			\|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately tag<CR>
 			\|  endif
 
+" C-q to outline
+nnoremap <C-Q> :<C-u>Unite outline<CR>
+
+
 " neocomplcache
 if !exists('g:neocomplcache_omni_patterns')
 	let g:neocomplcache_omni_patterns = {}
