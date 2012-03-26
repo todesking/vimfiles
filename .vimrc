@@ -24,6 +24,8 @@ set hidden
 set history=500
 set nobackup
 
+set directory=$HOME/.vim/swp
+
 set foldtext=My_foldtext()
 let s:foldcolumn_default=10
 
