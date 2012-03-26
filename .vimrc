@@ -127,8 +127,8 @@ autocmd BufEnter *
 			\|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately tag<CR>
 			\|  endif
 
-" C-q to outline
-nnoremap <C-Q> :<C-u>Unite outline<CR>
+nnoremap <C-Q>o :<C-u>Unite outline<CR>
+nnoremap <C-Q>p :<C-u>exec 'Unite file_rec:'.b:rails_root<CR>
 
 
 " neocomplcache
