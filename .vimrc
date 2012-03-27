@@ -131,6 +131,7 @@ autocmd BufEnter *
 
 nnoremap <C-Q>o :<C-u>Unite outline<CR>
 nnoremap <C-Q>p :<C-u>exec 'Unite file_rec:'.b:rails_root<CR>
+nnoremap <C-Q>t :<C-u>Unite tag<CR>
 
 
 " neocomplcache
@@ -145,7 +146,6 @@ let g:unite_update_time = 100
 augroup unite-keybind
 	autocmd!
 	autocmd FileType unite nmap <buffer><silent><Esc> q
-	autocmd FileType unite imap <buffer><silent><Esc> <ESC>q
 	autocmd FileType unite NeoComplCacheLock
 augroup END
 
