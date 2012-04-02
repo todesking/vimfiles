@@ -131,6 +131,27 @@ nnoremap <C-Q>o :<C-u>Unite outline<CR>
 nnoremap <C-Q>p :<C-u>exec 'Unite file_rec:'.b:rails_root<CR>
 nnoremap <C-Q>t :<C-u>Unite tag<CR>
 
+" unite-neco
+" from: https://github.com/ujihisa/config/blob/master/_vimrc
+let s:unite_source = {'name': 'neco'}
+function! s:unite_source.gather_candidates(args, context)
+  let necos = [
+        \ "~(-'_'-) goes right",
+        \ "~(-'_'-) goes right and left",
+        \ "~(-'_'-) goes right quickly",
+        \ "~(-'_'-) skips right",
+        \ "~(-'_'-)  -8(*'_'*) go right and left",
+        \ "(=' .' ) ~w",
+        \ ]
+  return map(necos, '{
+        \ "word": v:val,
+        \ "source": "neco",
+        \ "kind": "command",
+        \ "action__command": "Neco " . v:key,
+        \ }')
+endfunction
+
+call unite#define_source(s:unite_source)
 
 " neocomplcache
 if !exists('g:neocomplcache_omni_patterns')
