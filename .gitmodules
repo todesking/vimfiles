@@ -40,3 +40,6 @@
 [submodule "bundle/unite-qf"]
 	path = bundle/unite-qf
 	url = https://github.com/sgur/unite-qf.git
+[submodule "bundle/unite-rails"]
+	path = bundle/unite-rails
+	url = https://github.com/basyura/unite-rails.git
