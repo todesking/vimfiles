@@ -130,6 +130,10 @@ nnoremap <C-Q>  <ESC>
 nnoremap <C-Q>o :<C-u>Unite outline<CR>
 nnoremap <C-Q>p :<C-u>exec 'Unite file_rec:'.b:rails_root<CR>
 nnoremap <C-Q>t :<C-u>Unite tag<CR>
+nnoremap <C-Q>r <ESC>
+nnoremap <C-Q>rm :<C-u>Unite rails/model<CR>
+nnoremap <C-Q>rc :<C-u>Unite rails/controller<CR>
+nnoremap <C-Q>rv :<C-u>Unite rails/view<CR>
 
 " unite-neco
 " from: https://github.com/ujihisa/config/blob/master/_vimrc
