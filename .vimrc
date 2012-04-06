@@ -130,6 +130,7 @@ nnoremap <C-Q>  <ESC>
 nnoremap <C-Q>o :<C-u>Unite outline<CR>
 nnoremap <C-Q>p :<C-u>exec 'Unite file_rec:'.b:rails_root<CR>
 nnoremap <C-Q>t :<C-u>Unite tag<CR>
+nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert<CR>
 nnoremap <C-Q>r <ESC>
 nnoremap <C-Q>rm :<C-u>Unite rails/model<CR>
 nnoremap <C-Q>rc :<C-u>Unite rails/controller<CR>
@@ -293,7 +294,7 @@ function! My_foldtext()
   "}}}alignment
 
   let foldlength=v:foldend-v:foldstart+1
-  let dots=repeat('.',float2nr(ceil(foldlength/10.0)+2))
+  let dots=repeat('.',float2nr(ceil(foldlength/10.0)))
 
   return printf('%-'.alignment.'.'.alignment.'s %3d ',line.' '.dots,foldlength)
   return printf('%-'.alignment.'.'.alignment.'s   [%4d  Lv%-2d]%s',line.'...',foldlength,v:foldlevel,v:folddashes)
