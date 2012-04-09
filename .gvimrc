@@ -8,4 +8,6 @@ if has('gui')
 		autocmd FocusGained * set transparency=5
 		autocmd FocusLost * set transparency=50
 	augroup END
+	set lines=49
+	set columns=100
 endif
