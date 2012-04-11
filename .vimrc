@@ -130,12 +130,11 @@ nnoremap <C-Q>  <ESC>
 nnoremap <C-Q>o :<C-u>Unite outline<CR>
 nnoremap <C-Q>p :<C-u>exec 'Unite file_rec:'.b:rails_root<CR>
 nnoremap <C-Q>t :<C-u>Unite tag<CR>
-nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert<CR>
+nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview<CR>
 nnoremap <C-Q>r <ESC>
 nnoremap <C-Q>rm :<C-u>Unite rails/model<CR>
 nnoremap <C-Q>rc :<C-u>Unite rails/controller<CR>
 nnoremap <C-Q>rv :<C-u>Unite rails/view<CR>
-
 " unite-neco
 " from: https://github.com/ujihisa/config/blob/master/_vimrc
 let s:unite_source = {'name': 'neco'}
@@ -172,6 +171,8 @@ augroup unite-keybind
 	autocmd FileType unite nmap <buffer><silent><Esc> q
 	autocmd FileType unite NeoComplCacheLock
 augroup END
+
+let g:unite_source_file_mru_limit=300
 
 " align
 let g:Align_xstrlen=3
