@@ -172,6 +172,23 @@ augroup unite-keybind
 	autocmd FileType unite NeoComplCacheLock
 augroup END
 
+let s:converter_tag = {
+			\ 'name': 'converter_tag',
+			\ 'description': 'strip location info for tag',
+			\ }
+function s:converter_tag.filter(candidates,context)
+	let candidates = copy(a:candidates)
+	for cand in candidates
+		let cand.abbr = substitute(cand.abbr, ' pat:.*', '', '')
+	endfor
+	return candidates
+endfunction
+
+call unite#define_filter(s:converter_tag)
+unlet s:converter_tag
+
+call unite#custom_filters('tag',['matcher_glob', 'sorter_nothing', 'converter_tag'])
+
 let g:unite_source_file_mru_limit=300
 
 " align
