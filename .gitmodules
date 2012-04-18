@@ -43,3 +43,6 @@
 [submodule "bundle/unite-rails"]
 	path = bundle/unite-rails
 	url = https://github.com/basyura/unite-rails.git
+[submodule "bundle/linediff"]
+	path = bundle/linediff
+	url = https://github.com/AndrewRadev/linediff.vim
