@@ -31,13 +31,6 @@ let s:foldcolumn_default=10
 
 set tags+=./tags,../tags,../../tags,../../../tags,../../../../tags
 
-if(has('gui'))
-	set noballooneval
-	set guifont=Osaka-Mono:h18
-	set guioptions=erL
-endif
-
-
 " keymap
 nnoremap <silent>,n :tabnew<CR>
 nnoremap <silent>,h :tabprevious<CR>
