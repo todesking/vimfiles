@@ -69,6 +69,10 @@ call s:register_jump_key('L')
 " call s:register_jump_key('<C-T>')
 " call s:register_jump_key('<C-]>')
 
+nunmap <leader>w=
+nnoremap <silent> <leader>w :let &wrap=!&wrap<CR>:set wrap?<CR>
+
+
 nnoremap <silent>_ :let &hlsearch=!&hlsearch<CR>
 nnoremap <silent><C-S> :Unite buffer file_mru<CR>
 
