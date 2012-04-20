@@ -122,6 +122,11 @@ endfunction
 autocmd InsertEnter * if !exists('w:last_fdm') | let w:last_fdm=&foldmethod | setlocal foldmethod=manual | endif
 autocmd InsertLeave,WinLeave * if exists('w:last_fdm') | let &l:foldmethod=w:last_fdm | unlet w:last_fdm | endif
 
+augroup vimrc-lazy-folding
+	autocmd FileType ruby set foldmethod=syntax | set foldmethod=manual
+augroup END
+
+
 " indent-guides
 let g:indent_guides_start_level=2
 let g:indent_guides_guide_size=1
