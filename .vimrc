@@ -69,8 +69,13 @@ call s:register_jump_key('L')
 " call s:register_jump_key('<C-T>')
 " call s:register_jump_key('<C-]>')
 
-nunmap <leader>w=
+try
+	nunmap <leader>w=
+catch
+endtry
 nnoremap <silent> <leader>w :let &wrap=!&wrap<CR>:set wrap?<CR>
+
+nnoremap <leader>f :set foldmethod=syntax<CR>:set foldmethod=manual<CR>
 
 
 nnoremap <silent>_ :let &hlsearch=!&hlsearch<CR>
@@ -116,6 +121,11 @@ endfunction
 " screwing up folding when switching between windows.
 autocmd InsertEnter * if !exists('w:last_fdm') | let w:last_fdm=&foldmethod | setlocal foldmethod=manual | endif
 autocmd InsertLeave,WinLeave * if exists('w:last_fdm') | let &l:foldmethod=w:last_fdm | unlet w:last_fdm | endif
+
+" indent-guides
+let g:indent_guides_start_level=2
+let g:indent_guides_guide_size=1
+let g:indent_guides_level_per_guide=2
 
 " C-] to unite-tag
 autocmd BufEnter *
