@@ -203,6 +203,9 @@ call unite#custom_filters('tag',['matcher_glob', 'sorter_nothing', 'converter_ta
 
 let g:unite_source_file_mru_limit=300
 
+" yankring
+let g:yankring_max_element_length = 1000*10 " 4M
+
 " align
 let g:Align_xstrlen=3
 
