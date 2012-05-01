@@ -31,6 +31,13 @@ let s:foldcolumn_default=10
 
 set tags+=./tags,../tags,../../tags,../../../tags,../../../../tags
 
+" abbrev
+augroup vimrc-ft-erb
+	autocmd!
+	autocmd FileType eruby iabbrev {{ <%
+	autocmd FileType eruby iabbrev }} %>
+augroup END
+
 " keymap
 nnoremap <silent>,n :tabnew<CR>
 nnoremap <silent>,h :tabprevious<CR>
