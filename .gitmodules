@@ -49,3 +49,6 @@
 [submodule "bundle/indent-guides"]
 	path = bundle/indent-guides
 	url = https://github.com/todesking/vim-indent-guides.git
+[submodule "bundle/extradite"]
+	path = bundle/extradite
+	url = https://github.com/int3/vim-extradite.git
