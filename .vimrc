@@ -47,6 +47,9 @@ nnoremap <silent>,bd :bdelete<CR>
 
 inoremap <silent><C-L> <C-X><C-L>
 
+nnoremap j gj
+nnoremap k gk
+
 function! s:register_jump_key(key)
 	exec 'nnoremap' '<silent>'.a:key
 				\ a:key.':call <SID>hello_again_hook(''CursorHold'')'
