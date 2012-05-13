@@ -47,6 +47,9 @@ nnoremap <silent>,bd :bdelete<CR>
 
 inoremap <silent><C-L> <C-X><C-L>
 
+nnoremap j gj
+nnoremap k gk
+
 function! s:register_jump_key(key)
 	exec 'nnoremap' '<silent>'.a:key
 				\ a:key.':call <SID>hello_again_hook(''CursorHold'')'
@@ -266,9 +269,9 @@ augroup END
 " しばらく放置/よそから復帰したときのフック
 function! s:hello_again_enter()
 	setlocal cursorline
-	redraw
-	let status_line_width=winwidth(0)
-	echo printf('%'.status_line_width.'.'.status_line_width.'s',<SID>fold_navi())
+	" redraw
+	" let status_line_width=winwidth(0)
+	" echo printf('%'.status_line_width.'.'.status_line_width.'s',<SID>fold_navi())
 endfunction
 function! s:hello_again_leave()
 	setlocal nocursorline
@@ -283,7 +286,14 @@ augroup vimrc-hello-again
   autocmd FocusLost * call s:hello_again_hook('WinLeave')
 
   let s:hello_again_state=0
+  let s:hello_again_last_fired_by_cursorhold = reltime()
   function! s:hello_again_hook(event)
+    if a:event ==# 'CursorHold'
+      if str2float(reltimestr(reltime(s:hello_again_last_fired_by_cursorhold))) < 2.0
+		  return
+	  endif
+    endif
+    let s:hello_again_last_fired_by_cursorhold = reltime()
     if a:event ==# 'WinEnter'
       call <SID>hello_again_enter()
       let s:hello_again_state = 2
