@@ -50,6 +50,12 @@ inoremap <silent><C-L> <C-X><C-L>
 nnoremap j gj
 nnoremap k gk
 
+try
+	nunmap <Leader>cc
+catch
+endtry
+nnoremap <Leader>cc :%s/\s\+$//<CR>
+
 function! s:register_jump_key(key)
 	exec 'nnoremap' '<silent>'.a:key
 				\ a:key.':call <SID>hello_again_hook(''CursorHold'')'
