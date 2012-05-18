@@ -43,7 +43,11 @@ nnoremap <silent>,n :tabnew<CR>
 nnoremap <silent>,h :tabprevious<CR>
 nnoremap <silent>,l :tabnext<CR>
 
-nnoremap <silent>,bd :bdelete<CR>
+nnoremap <silent>,bd :call <SID>delete_buffer_preserve_window()<CR>
+function! s:delete_buffer_preserve_window()
+	let nr=bufnr('%')
+	call feedkeys("\<C-^>:bdelete ".nr."\<CR>",'n')
+endfunction
 
 inoremap <silent><C-L> <C-X><C-L>
 
