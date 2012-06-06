@@ -34,8 +34,9 @@ set tags+=./tags,../tags,../../tags,../../../tags,../../../../tags
 " abbrev
 augroup vimrc-ft-erb
 	autocmd!
-	autocmd FileType eruby iabbrev {{ <%
-	autocmd FileType eruby iabbrev }} %>
+	autocmd FileType eruby inoremap <buffer> {{ <%
+	autocmd FileType eruby inoremap <buffer> }} %>
+	autocmd FileType eruby inoremap <buffer> {{e <% end %>
 augroup END
 
 " keymap
