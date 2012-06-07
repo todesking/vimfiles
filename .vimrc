@@ -159,9 +159,19 @@ autocmd BufEnter *
 			\|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately tag<CR>
 			\|  endif
 
+function! s:current_project_dir()
+	if exists('b:rails_root')
+		return b:rails_root
+	elseif expand('%:p:h') =~ '.*/lib\(/.*\)\?' && expand('%:p:h') !~ '/usr/.*'
+		return substitute(expand('%:p:h'), '/lib\(/.\{-}\)\?$', '', '')
+	else
+		return expand('%:p:h')
+	endif
+endfunction
+
 nnoremap <C-Q>  <ESC>
 nnoremap <C-Q>o :<C-u>Unite outline<CR>
-nnoremap <C-Q>p :<C-u>exec 'Unite file_rec:'.b:rails_root<CR>
+nnoremap <C-Q>p :<C-u>exec 'Unite file_rec:'.<SID>current_project_dir()<CR>
 nnoremap <C-Q>t :<C-u>Unite tag<CR>
 nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview<CR>
 nnoremap <C-Q>r <ESC>
