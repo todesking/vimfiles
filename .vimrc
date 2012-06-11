@@ -99,6 +99,24 @@ nnoremap <silent> <leader>w :let &wrap=!&wrap<CR>:set wrap?<CR>
 nnoremap <leader>f :set foldmethod=syntax<CR>:set foldmethod=manual<CR>
 
 
+highlight WhitespaceEOL ctermbg=red guibg=red
+
+function! s:toggle_eol_space_highlight()
+	if !exists('b:highlight_eol_space')
+		let b:highlight_eol_space = 0
+	endif
+	if b:highlight_eol_space
+		let b:highlight_eol_space = 0
+		match none WhitespaceEOL
+		echo 'Trailing space highlight off'
+	else
+		let b:highlight_eol_space = 1
+		match WhitespaceEOL /\s\+$/
+		echo 'Trailing space highlight on'
+	endif
+endfunction
+nnoremap <silent><leader>e :call <SID>toggle_eol_space_highlight()<CR>
+
 nnoremap <silent>_ :let &hlsearch=!&hlsearch<CR>
 nnoremap <silent><C-S> :Unite buffer file_mru<CR>
 
