@@ -37,6 +37,7 @@ augroup vimrc-ft-erb
 	autocmd FileType eruby inoremap <buffer> {{ <%
 	autocmd FileType eruby inoremap <buffer> }} %>
 	autocmd FileType eruby inoremap <buffer> {{e <% end %>
+	autocmd FileType eruby runtime closetag.vim
 augroup END
 
 " keymap
