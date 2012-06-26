@@ -12,5 +12,9 @@ if has('gui')
 		autocmd FocusLost * set transparency=10
 	augroup END
 	set lines=49
-	set columns=100
+	if hostname() == 'OR12119245.local'
+		set columns=177
+	else
+		set columns=100
+	endif
 endif

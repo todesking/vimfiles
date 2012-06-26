@@ -188,6 +188,9 @@ function! s:current_project_dir()
 	endif
 endfunction
 
+" e-in-current-project
+command! -nargs=1 Pe :exec ':e '.<SID>current_project_dir().'/'."<args>"
+
 nnoremap <C-Q>  <ESC>
 nnoremap <C-Q>o :<C-u>Unite outline<CR>
 nnoremap <C-Q>p :<C-u>exec 'Unite file_rec:'.<SID>current_project_dir()<CR>
@@ -233,6 +236,13 @@ augroup unite-keybind
 	autocmd FileType unite nmap <buffer><silent><Esc> q
 	autocmd FileType unite NeoComplCacheLock
 augroup END
+
+
+
+let g:unite_source_file_rec_ignore_pattern =
+      \'\%(^\|/\)\.$\|\~$\|\.\%(o\|exe\|dll\|bak\|sw[po]\|class\)$'.
+      \'\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'.
+	  \'\|\.\%(\gif\|jpg\|png\|swf\)$'
 
 let s:converter_tag = {
 			\ 'name': 'converter_tag',
