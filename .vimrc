@@ -191,6 +191,10 @@ endfunction
 " e-in-current-project
 command! -nargs=1 Pe :exec ':e '.<SID>current_project_dir().'/'."<args>"
 
+" rename file
+" http://vim-users.jp/2009/05/hack17/
+command! -nargs=1 -complete=file Rename f <args>|call delete(expand('#'))
+
 nnoremap <C-Q>  <ESC>
 nnoremap <C-Q>o :<C-u>Unite outline<CR>
 nnoremap <C-Q>p :<C-u>exec 'Unite file_rec:'.<SID>current_project_dir()<CR>
