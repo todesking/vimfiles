@@ -200,6 +200,8 @@ nnoremap <C-Q>r <ESC>
 nnoremap <C-Q>rm :<C-u>Unite rails/model<CR>
 nnoremap <C-Q>rc :<C-u>Unite rails/controller<CR>
 nnoremap <C-Q>rv :<C-u>Unite rails/view<CR>
+nnoremap <C-Q>ri :<C-u>Unite rails/migration<CR>
+nnoremap <C-Q>u :UniteResume<CR>
 " unite-neco
 " from: https://github.com/ujihisa/config/blob/master/_vimrc
 let s:unite_source = {'name': 'neco'}
@@ -315,6 +317,10 @@ autocmd InsertEnter * highlight StatusLine guifg=#ccdc90 guibg=#2E4340
 autocmd InsertLeave * highlight StatusLine guifg=#2E4340 guibg=#ccdc90
 augroup END
 
+augroup vimrc-disable-ime-in-normal-mode
+	autocmd!
+	autocmd FocusGained * call feedkeys("\<ESC>\<ESC>\<ESC>:\<ESC>")
+augroup END
 
 " しばらく放置/よそから復帰したときのフック
 function! s:hello_again_enter()
