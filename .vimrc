@@ -37,6 +37,7 @@ augroup vimrc-ft-erb
 	autocmd FileType eruby inoremap <buffer> {{ <%
 	autocmd FileType eruby inoremap <buffer> }} %>
 	autocmd FileType eruby inoremap <buffer> {{e <% end %>
+	autocmd FileType eruby inoremap <buffer> {b <br />
 	autocmd FileType eruby runtime closetag.vim
 augroup END
 
@@ -193,7 +194,7 @@ command! -nargs=1 Pe :exec ':e '.<SID>current_project_dir().'/'."<args>"
 
 " rename file
 " http://vim-users.jp/2009/05/hack17/
-command! -nargs=1 -complete=file Rename f <args>|call delete(expand('#'))
+command! -nargs=1 -complete=file Rename f <args>|call delete(expand('#'))|w
 
 nnoremap <C-Q>  <ESC>
 nnoremap <C-Q>o :<C-u>Unite outline<CR>
@@ -321,9 +322,14 @@ autocmd InsertEnter * highlight StatusLine guifg=#ccdc90 guibg=#2E4340
 autocmd InsertLeave * highlight StatusLine guifg=#2E4340 guibg=#ccdc90
 augroup END
 
+function! s:disable_im_if_normal_mode()
+	if mode() == 'n'
+		call feedkeys('zz') " I don't know how it works but it works
+	endif
+endfunction
 augroup vimrc-disable-ime-in-normal-mode
 	autocmd!
-	autocmd FocusGained * call feedkeys("\<ESC>\<ESC>\<ESC>:\<ESC>")
+	autocmd FocusGained * call <SID>disable_im_if_normal_mode()
 augroup END
 
 " しばらく放置/よそから復帰したときのフック
