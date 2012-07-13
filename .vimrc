@@ -31,13 +31,17 @@ let s:foldcolumn_default=10
 
 set tags+=./tags,../tags,../../tags,../../../tags,../../../../tags
 
+if exists(':IndentGuidesEnable') == 2
+	IndentGuidesEnable
+endif
+
 " abbrev
 augroup vimrc-ft-erb
 	autocmd!
 	autocmd FileType eruby inoremap <buffer> {{ <%
 	autocmd FileType eruby inoremap <buffer> }} %>
-	autocmd FileType eruby inoremap <buffer> {{e <% end %>
-	autocmd FileType eruby inoremap <buffer> {b <br />
+	autocmd FileType eruby inoremap <buffer> {{e <% end %><ESC>
+	autocmd FileType eruby inoremap <buffer> {b <br /><ESC>
 	autocmd FileType eruby runtime closetag.vim
 augroup END
 
