@@ -124,7 +124,7 @@ endfunction
 nnoremap <silent><leader>e :call <SID>toggle_eol_space_highlight()<CR>
 
 nnoremap <silent>_ :let &hlsearch=!&hlsearch<CR>
-nnoremap <silent><C-S> :Unite buffer file_mru<CR>
+nnoremap <silent><C-S> :Unite file_mru<CR>
 
 nnoremap <silent>,ut :Unite tag<CR>
 nnoremap <silent>,uf :Unite file_rec<CR>
