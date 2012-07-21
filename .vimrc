@@ -8,10 +8,6 @@ if has('vim_starting')
 	call neobundle#rc(expand('~/.vim/bundle/'))
 endif
 
-" recommended to install
-NeoBundle 'Shougo/vimproc'
-" }}}
-
 " basic settings {{{
 filetype on
 filetype plugin indent on
@@ -49,6 +45,8 @@ set tags+=./tags,../tags,../../tags,../../../tags,../../../../tags
 " }}}
 
 " plugins {{{
+
+NeoBundle 'Shougo/vimproc'
 
 " Unite {{{
 NeoBundle 'Shougo/unite.vim'
