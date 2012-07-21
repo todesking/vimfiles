@@ -1,3 +1,5 @@
+" vim:foldmethod=marker
+
 " NeoBundle {{{
 set nocompatible               " be iMproved
 filetype off                   " required!
