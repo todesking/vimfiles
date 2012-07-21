@@ -1,3 +1,17 @@
+" NeoBundle {{{
+set nocompatible               " be iMproved
+filetype off                   " required!
+filetype plugin indent off     " required!
+
+if has('vim_starting')
+	set runtimepath+=~/.vim/bundle/neobundle.vim/
+	call neobundle#rc(expand('~/.vim/bundle/'))
+endif
+
+" recommended to install
+NeoBundle 'Shougo/vimproc'
+" }}}
+
 call pathogen#runtime_append_all_bundles()
 
 set smartcase
@@ -31,9 +45,15 @@ let s:foldcolumn_default=10
 
 set tags+=./tags,../tags,../../tags,../../../tags,../../../../tags
 
-if exists(':IndentGuidesEnable') == 2
-	IndentGuidesEnable
-endif
+" plugins {{{
+NeoBundle 'Shougo/unite.vim'
+" }}}
+
+
+" closetag/       linediff/       project/        unite-tag/      vim-matchit/    vim-surround/
+" extradite/      neko-ghc/       unite-outline/  unite.vim/      vim-pathogen/   vimbuddy/
+" fugitive/       neocomplcache/  unite-qf/       vim-align/      vim-quickrun/   yankring/
+" indent-guides/  nerdcommenter/  unite-rails/    vim-easymotion/ vim-rails/      zoom/
 
 " abbrev
 augroup vimrc-ft-erb
@@ -44,6 +64,11 @@ augroup vimrc-ft-erb
 	autocmd FileType eruby inoremap <buffer> {b <br /><ESC>
 	autocmd FileType eruby runtime closetag.vim
 augroup END
+
+" indent guides
+if exists(':IndentGuidesEnable') == 2
+	IndentGuidesEnable
+endif
 
 " keymap
 nnoremap <silent>,n :tabnew<CR>

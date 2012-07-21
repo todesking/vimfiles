@@ -52,3 +52,6 @@
 [submodule "bundle/extradite"]
 	path = bundle/extradite
 	url = https://github.com/int3/vim-extradite.git
+[submodule "/Users/t/.vim/bundle/neobundle"]
+	path = /Users/t/.vim/bundle/neobundle
+	url = git://github.com/Shougo/neobundle.vim
