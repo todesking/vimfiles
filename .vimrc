@@ -12,8 +12,9 @@ endif
 NeoBundle 'Shougo/vimproc'
 " }}}
 
-call pathogen#runtime_append_all_bundles()
-
+" basic settings {{{
+filetype on
+filetype plugin indent on
 set smartcase
 set wrapscan
 set incsearch
@@ -45,15 +46,36 @@ let s:foldcolumn_default=10
 
 set tags+=./tags,../tags,../../tags,../../../tags,../../../../tags
 
-" plugins {{{
-NeoBundle 'Shougo/unite.vim'
 " }}}
 
+" plugins {{{
 
-" closetag/       linediff/       project/        unite-tag/      vim-matchit/    vim-surround/
-" extradite/      neko-ghc/       unite-outline/  unite.vim/      vim-pathogen/   vimbuddy/
-" fugitive/       neocomplcache/  unite-qf/       vim-align/      vim-quickrun/   yankring/
-" indent-guides/  nerdcommenter/  unite-rails/    vim-easymotion/ vim-rails/      zoom/
+" Unite {{{
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'tsukkee/unite-tag'
+NeoBundle 'h1mesuke/unite-outline'
+NeoBundle 'sgur/unite-qf'
+NeoBundle 'basyura/unite-rails'
+" }}}
+
+NeoBundle 'Shougo/neocomplcache'
+
+NeoBundle 'closetag.vim'
+NeoBundle 'Align'
+NeoBundle 'YankRing.vim'
+NeoBundle 'AndrewRadev/linediff.vim'
+NeoBundle 'tsaleh/vim-matchit'
+
+NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
+highlight IndentGuidesEven ctermbg=NONE guibg=NONE`
+" }}}
+NeoBundle 'taku-o/vim-zoom'
+
+NeoBundle 'rails.vim'
+
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'int3/vim-extradite'
+" }}}
 
 " abbrev
 augroup vimrc-ft-erb
@@ -307,7 +329,7 @@ let g:Align_xstrlen=3
 
 "statusline
 let &statusline =
-			\  '%{VimBuddy()} '
+			\  ''
 			\. '%<'
 			\. '%F'
 			\. '%= '
