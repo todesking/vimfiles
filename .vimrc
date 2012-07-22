@@ -61,6 +61,9 @@ NeoBundle 'basyura/unite-rails'
 let g:unite_enable_start_insert = 1
 let g:unite_update_time = 100
 
+
+call unite#filters#sorter_default#use(['sorter_smart'])
+
 " unite-tag {{{
 let g:unite_source_file_rec_ignore_pattern =
       \'\%(^\|/\)\.$\|\~$\|\.\%(o\|exe\|dll\|bak\|sw[po]\|class\)$'.
@@ -144,6 +147,42 @@ function! s:unite_source.gather_candidates(args, context)
 endfunction
 call unite#define_source(s:unite_source)
 " }}}
+" }}}
+
+" Sorter {{{
+let s:sorter_smart = {
+			\ 'name': 'sorter_smart',
+			\ 'description': 'smart sorter',
+			\ }
+" SPEC
+"  keyword is 'user'
+"   first is better  : user > active_user
+"   file > directory : user.rb > user/active_user.rb
+"   alphabetical     : a_user.rb > b_user.rb
+function! s:sorter_smart.filter(candidates, context)
+	let keywords = split(a:context.input, '\s\+')
+	for candidate in a:candidates
+		let candidate.filter__sort_val =
+					\ s:sorter_smart_sort_val(candidate.word, keywords)
+	endfor
+	return unite#util#sort_by(a:candidates, 'v:val.filter__sort_val')
+endfunction
+function! s:sorter_smart_sort_val(text, keywords)
+	let sort_val = ''
+	let text_without_keywords = a:text
+	for kw in a:keywords
+		let sort_val .=stridx(a:text, kw).'_'
+		let text_without_keywords =
+					\ substitute(text_without_keywords, kw, '', 'g')
+	endfor
+	let sort_val .= text_without_keywords
+	return sort_val
+endfunction
+function! g:hoge(text, keywords)
+	return s:sorter_smart_sort_val(a:text, a:keywords)
+endfunction
+call unite#define_filter(s:sorter_smart)
+unlet s:sorter_smart
 " }}}
 
 " }}}
