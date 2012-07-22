@@ -433,6 +433,15 @@ command! -nargs=1 Pe :exec ':e '.<SID>current_project_dir().'/'."<args>"
 command! -nargs=1 -complete=file Rename f <args>|call delete(expand('#'))|w
 " }}}
 
+" Helptags {{{
+command! Helptags call s:helptags('~/.vim/bundle/*/doc')
+function! s:helptags(pat)
+	for dir in expand(a:pat, 0, 1)
+		execute 'helptags '.dir
+	endfor
+endfunction
+" }}}
+
 " Status line {{{
 let &statusline =
 			\  ''
