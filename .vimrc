@@ -150,12 +150,14 @@ call unite#define_source(s:unite_source)
 " }}}
 
 " Sorter {{{
+" sorter_smart {{{
 let s:sorter_smart = {
 			\ 'name': 'sorter_smart',
 			\ 'description': 'smart sorter',
 			\ }
 " SPEC
 "  keyword is 'user'
+"   more is better   : user/user.rb > user/aaa.rb
 "   first is better  : user > active_user
 "   file > directory : user.rb > user/active_user.rb
 "   alphabetical     : a_user.rb > b_user.rb
@@ -171,18 +173,28 @@ function! s:sorter_smart_sort_val(text, keywords)
 	let sort_val = ''
 	let text_without_keywords = a:text
 	for kw in a:keywords
-		let sort_val .=stridx(a:text, kw).'_'
+		let sort_val .= printf('%03d', 100 - s:matches(a:text, kw)).':'
+		let sort_val .= stridx(a:text, kw).'_'
 		let text_without_keywords =
 					\ substitute(text_without_keywords, kw, '', 'g')
 	endfor
 	let sort_val .= text_without_keywords
+	echo sort_val
 	return sort_val
 endfunction
-function! g:hoge(text, keywords)
-	return s:sorter_smart_sort_val(a:text, a:keywords)
+function! s:matches(str, pat_str)
+	let pat = escape(a:pat_str, '\')
+	let n = 0
+	let i = match(a:str, pat, 0)
+	while i != -1
+		let n += 1
+		let i = match(a:str, pat, i + strlen(a:pat_str))
+	endwhile
+	return n
 endfunction
 call unite#define_filter(s:sorter_smart)
 unlet s:sorter_smart
+" }}}
 " }}}
 
 " }}}
