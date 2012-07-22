@@ -246,6 +246,7 @@ nnoremap <silent> <leader>w :let &wrap=!&wrap<CR>:set wrap?<CR>
 nnoremap <leader>f :set foldmethod=syntax<CR>:set foldmethod=manual<CR>
 nnoremap <silent>_ :let &hlsearch=!&hlsearch<CR>
 
+autocmd FileType * setlocal formatoptions-=ro
 " }}}
 
 " Trailing spaces {{{
