@@ -172,6 +172,9 @@ function! s:sorter_smart.filter(candidates, context)
 		return a:candidates
 	endif
 	let keywords = split(a:context.input, '\s\+')
+	if a:context.source.name == 'file_mru' && len(keywords) < 2
+		return a:candidates
+	end
 	for candidate in a:candidates
 		let candidate.filter__sort_val =
 					\ s:sorter_smart_sort_val(candidate.word, keywords)
