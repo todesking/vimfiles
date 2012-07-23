@@ -474,10 +474,13 @@ augroup END
 
 " Current project dir {{{
 function! s:current_project_dir()
+	let project_marker_dirs = ['lib', 'autoload', 'plugins']
+	let project_replace_pattern = '/\('.join(project_marker_dirs,'\|').'\)\(/.\{-}\)\?$'
+	let project_pattern = '.*'.project_replace_pattern
 	if exists('b:rails_root')
 		return b:rails_root
-	elseif expand('%:p:h') =~ '.*/lib\(/.*\)\?' && expand('%:p:h') !~ '/usr/.*'
-		return substitute(expand('%:p:h'), '/lib\(/.\{-}\)\?$', '', '')
+	elseif expand('%:p:h') =~ project_pattern && expand('%:p:h') !~ '/usr/.*'
+		return substitute(expand('%:p:h'), project_replace_pattern, '', '')
 	else
 		return expand('%:p:h')
 	endif
