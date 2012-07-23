@@ -47,6 +47,13 @@ set tags+=./tags,../tags,../../tags,../../../tags,../../../../tags
 
 " }}}
 
+" Auto lcd {{{
+augroup vimrc-auto-lcd
+	autocmd!
+	autocmd BufRead * lcd %:h
+augroup END
+" }}}
+
 " plugins {{{
 NeoBundle 'Shougo/vimproc'
 
@@ -61,15 +68,14 @@ NeoBundle 'basyura/unite-rails'
 let g:unite_enable_start_insert = 1
 let g:unite_update_time = 100
 
-
-call unite#filters#sorter_default#use(['sorter_smart'])
-
-" unite-tag {{{
 let g:unite_source_file_rec_ignore_pattern =
       \'\%(^\|/\)\.$\|\~$\|\.\%(o\|exe\|dll\|bak\|sw[po]\|class\)$'.
       \'\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'.
 	  \'\|\.\%(\gif\|jpg\|png\|swf\)$'
 
+call unite#filters#sorter_default#use(['sorter_smart'])
+
+" unite-tag {{{
 let s:converter_tag = {
 			\ 'name': 'converter_tag',
 			\ 'description': 'strip location info for tag',
@@ -85,10 +91,10 @@ endfunction
 call unite#define_filter(s:converter_tag)
 unlet s:converter_tag
 
-call unite#custom_filters('tag',['matcher_glob', 'sorter_nothing', 'converter_tag'])
+call unite#custom_filters('tag',['matcher_default', 'sorter_default', 'converter_tag'])
 " }}}
-" unite-mru {{{
-let g:unite_source_file_mru_limit=300
+" unite-file_mru {{{
+let g:unite_source_file_mru_limit=500
 " }}}
 " }}}
 
@@ -162,6 +168,9 @@ let s:sorter_smart = {
 "   file > directory : user.rb > user/active_user.rb
 "   alphabetical     : a_user.rb > b_user.rb
 function! s:sorter_smart.filter(candidates, context)
+	if len(a:context.input) == 0
+		return a:candidates
+	endif
 	let keywords = split(a:context.input, '\s\+')
 	for candidate in a:candidates
 		let candidate.filter__sort_val =
@@ -173,8 +182,8 @@ function! s:sorter_smart_sort_val(text, keywords)
 	let sort_val = ''
 	let text_without_keywords = a:text
 	for kw in a:keywords
-		let sort_val .= printf('%03d', 100 - s:matches(a:text, kw)).':'
-		let sort_val .= stridx(a:text, kw).'_'
+		let sort_val .= printf('%05d', 100 - s:matches(a:text, kw)).'_'
+		let sort_val .= printf('%05d', stridx(a:text, kw)).'_'
 		let text_without_keywords =
 					\ substitute(text_without_keywords, kw, '', 'g')
 	endfor
@@ -219,7 +228,7 @@ NeoBundle 'tsaleh/vim-matchit'
 NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
 	if exists(':IndentGuidesEnable') == 2
 		IndentGuidesEnable
-		highlight IndentGuidesEven ctermbg=NONE guibg=NONE
+		highlight IndentGuidesEven guifg=NONE guibg=NONE
 		let g:indent_guides_start_level=1
 		let g:indent_guides_guide_size=1
 	endif
