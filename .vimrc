@@ -231,7 +231,7 @@ NeoBundle 'tsaleh/vim-matchit'
 NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
 	augroup vimrc-indentguide
 		autocmd!
-		autocmd BufWinEnter * highlight IndentGuidesOdd guifg=NONE guibg=NONE
+		autocmd BufWinEnter,BufNew * highlight IndentGuidesOdd guifg=NONE guibg=NONE
 	augroup END
 	let g:indent_guides_enable_on_vim_startup=1
 	let g:indent_guides_start_level=1
