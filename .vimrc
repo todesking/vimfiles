@@ -125,10 +125,13 @@ nnoremap <C-Q>rv :<C-u>Unite rails/view<CR>
 nnoremap <C-Q>ri :<C-u>Unite rails/migration<CR>
 
 " C-] to unite tag jump
-autocmd BufEnter *
-			\   if empty(&buftype)
-			\|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately tag<CR>
-			\|  endif
+augroup vimrc-tagjump-unite
+	autocmd!
+	autocmd BufEnter *
+				\   if empty(&buftype)
+				\|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately outline tag<CR>
+				\|  endif
+augroup END
 " }}}
 
 " Sources {{{
@@ -227,6 +230,7 @@ let g:yankring_max_history_element_length = 1000 * 10
 " }}}
 NeoBundle 'AndrewRadev/linediff.vim'
 NeoBundle 'tsaleh/vim-matchit'
+NeoBundle 'tpope/vim-surround'
 
 NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
 	augroup vimrc-indentguide
@@ -243,6 +247,13 @@ NeoBundle 'tpope/vim-rails'
 
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'int3/vim-extradite'
+" }}}
+
+" Ruby {{{
+augroup vimrc-filetype-ruby
+	autocmd!
+	autocmd FileType ruby set omnifunc=
+augroup END
 " }}}
 
 " Rails {{{
