@@ -179,7 +179,6 @@ function! s:sorter_smart_sort_val(text, keywords)
 					\ substitute(text_without_keywords, kw, '', 'g')
 	endfor
 	let sort_val .= text_without_keywords
-	echo sort_val
 	return sort_val
 endfunction
 function! s:matches(str, pat_str)
