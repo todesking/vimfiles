@@ -226,16 +226,17 @@ NeoBundle 'AndrewRadev/linediff.vim'
 NeoBundle 'tsaleh/vim-matchit'
 
 NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
-	if exists(':IndentGuidesEnable') == 2
-		IndentGuidesEnable
-		highlight IndentGuidesEven guifg=NONE guibg=NONE
-		let g:indent_guides_start_level=1
-		let g:indent_guides_guide_size=1
-	endif
+	augroup vimrc-indentguide
+		autocmd!
+		autocmd BufWinEnter * highlight IndentGuidesOdd guifg=NONE guibg=NONE
+	augroup END
+	let g:indent_guides_enable_on_vim_startup=1
+	let g:indent_guides_start_level=1
+	let g:indent_guides_guide_size=1
 " }}}
 NeoBundle 'taku-o/vim-zoom'
 
-NeoBundle 'rails.vim'
+NeoBundle 'tpope/vim-rails'
 
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'int3/vim-extradite'
