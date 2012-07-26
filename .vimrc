@@ -50,7 +50,7 @@ set tags+=./tags,../tags,../../tags,../../../tags,../../../../tags
 " Auto lcd {{{
 augroup vimrc-auto-lcd
 	autocmd!
-	autocmd BufRead * lcd %:h
+	autocmd BufRead * if expand('%') != ''|lcd %:h|endif
 augroup END
 " }}}
 
@@ -220,7 +220,9 @@ endif
 let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
 " }}}
 
-NeoBundle 'closetag.vim'
+NeoBundle 'closetag.vim' " {{{
+   autocmd Filetype html,xml,xsl,eruby runtime plugin/closetag.vim
+" }}}
 NeoBundle 'Align' " {{{
 let g:Align_xstrlen=3
 " }}}
@@ -233,13 +235,15 @@ NeoBundle 'tsaleh/vim-matchit'
 NeoBundle 'tpope/vim-surround'
 
 NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
-	augroup vimrc-indentguide
-		autocmd!
-		autocmd BufWinEnter,BufNew * highlight IndentGuidesOdd guifg=NONE guibg=NONE
-	augroup END
-	let g:indent_guides_enable_on_vim_startup=1
-	let g:indent_guides_start_level=1
-	let g:indent_guides_guide_size=1
+	if has('gui')
+		augroup vimrc-indentguide
+			autocmd!
+			autocmd BufWinEnter,BufNew * highlight IndentGuidesOdd guifg=NONE guibg=NONE
+		augroup END
+		let g:indent_guides_enable_on_vim_startup=1
+		let g:indent_guides_start_level=1
+		let g:indent_guides_guide_size=1
+	endif
 " }}}
 NeoBundle 'taku-o/vim-zoom'
 
@@ -263,7 +267,6 @@ augroup vimrc-filetype-erb
 	autocmd FileType eruby inoremap <buffer> }} %>
 	autocmd FileType eruby inoremap <buffer> {{e <% end %><ESC>
 	autocmd FileType eruby inoremap <buffer> {b <br /><ESC>
-	autocmd FileType eruby runtime closetag.vim
 augroup END
 
 " }}}
