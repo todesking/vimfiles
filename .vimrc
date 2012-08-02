@@ -47,13 +47,6 @@ set tags+=./tags,../tags,../../tags,../../../tags,../../../../tags
 
 " }}}
 
-" Auto lcd {{{
-augroup vimrc-auto-lcd
-	autocmd!
-	autocmd BufRead * if expand('%') != ''|lcd %:h|endif
-augroup END
-" }}}
-
 " plugins {{{
 NeoBundle 'Shougo/vimproc'
 
@@ -103,7 +96,6 @@ let g:unite_source_file_mru_limit=500
 augroup unite-keybind
 	autocmd!
 	autocmd FileType unite nmap <buffer><silent><Esc> q
-	autocmd FileType unite NeoComplCacheLock
 augroup END
 " }}}
 
@@ -122,7 +114,7 @@ nnoremap <C-Q>r <ESC>
 nnoremap <C-Q>rm :<C-u>Unite rails/model<CR>
 nnoremap <C-Q>rc :<C-u>Unite rails/controller<CR>
 nnoremap <C-Q>rv :<C-u>Unite rails/view<CR>
-nnoremap <C-Q>ri :<C-u>Unite rails/migration<CR>
+nnoremap <C-Q>rd :<C-u>Unite rails/db<CR>
 
 " C-] to unite tag jump
 augroup vimrc-tagjump-unite
@@ -218,6 +210,7 @@ if !exists('g:neocomplcache_omni_patterns')
 	let g:neocomplcache_omni_patterns = {}
 endif
 let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
+let g:neocomplcache_lock_buffer_name_pattern='\*unite\*'
 " }}}
 
 NeoBundle 'closetag.vim' " {{{
@@ -254,9 +247,12 @@ NeoBundle 'int3/vim-extradite'
 " }}}
 
 " Ruby {{{
+if has("ruby")
+  silent! ruby nil
+endif
 augroup vimrc-filetype-ruby
 	autocmd!
-	autocmd FileType ruby set omnifunc=
+	"autocmd FileType ruby set omnifunc=
 augroup END
 " }}}
 
