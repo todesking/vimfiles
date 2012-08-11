@@ -247,6 +247,7 @@ NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'int3/vim-extradite'
 
 NeoBundle 'thinca/vim-ref'
+NeoBundle 'grep.vim'
 " }}}
 
 " Ruby {{{
