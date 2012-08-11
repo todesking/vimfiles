@@ -240,7 +240,7 @@ NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
 " }}}
 NeoBundle 'taku-o/vim-zoom'
 
-NeoBundle 'vim-ruby/vim-ruby'
+NeoBundle 'todesking/vim-ruby', {'rev': 'my-custom'}
 NeoBundle 'tpope/vim-rails'
 
 NeoBundle 'tpope/vim-fugitive'
