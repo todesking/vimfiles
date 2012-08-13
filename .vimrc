@@ -246,7 +246,7 @@ NeoBundle 'tpope/vim-rails'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'int3/vim-extradite'
 
-NeoBundle 'thinca/vim-ref' "{{{
+NeoBundle 'todesking/vim-ref', {'rev': 'fix-refe'} "{{{
 	let g:ref_refe_cmd="~/local/bin/refe"
 "}}}
 NeoBundle 'grep.vim'
