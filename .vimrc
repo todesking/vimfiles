@@ -357,7 +357,6 @@ function! s:set_eol_space_highlight(op)
 	endif
 endfunction
 
-end
 augroup vimrc-trailing-spaces
 	autocmd!
 	autocmd FileType * highlight WhitespaceEOL ctermbg=red guibg=#FF0000| call <SID>set_eol_space_highlight('on')
@@ -513,8 +512,20 @@ function! s:current_project_dir()
 endfunction
 
 " e-in-current-project
-command! -nargs=1 Pe :exec ':e '.<SID>current_project_dir().'/'."<args>"
-
+command! -complete=customlist,Vimrc_complete_current_project_files -nargs=1 Pe :exec ':e '.<SID>current_project_dir().'/'."<args>"
+function! Vimrc_complete_current_project_files(ArgLead, CmdLine, CursorPos)
+	let prefix = s:current_project_dir() . '/'
+	let candidates = glob(prefix.a:ArgLead.'*', 1, 1)
+	let result = []
+	for c in candidates
+		if isdirectory(c)
+			call add(result, substitute(c, prefix, '', '').'/')
+		else
+			call add(result, substitute(c, prefix, '', ''))
+		endif
+	endfor
+	return result
+endfunction
 " }}}
 
 " Rename file {{{
