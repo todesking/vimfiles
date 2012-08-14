@@ -248,6 +248,7 @@ NeoBundle 'int3/vim-extradite'
 
 NeoBundle 'todesking/vim-ref', {'rev': 'fix-refe'} "{{{
 	let g:ref_refe_cmd="~/local/bin/refe"
+	command! -nargs=1 Man :Ref man <args>
 "}}}
 NeoBundle 'grep.vim'
 " }}}
@@ -340,6 +341,10 @@ nnoremap <silent><leader>e :call <SID>set_eol_space_highlight('toggle')<CR>
 function! s:set_eol_space_highlight(op)
 	if !exists('b:highlight_eol_space')
 		let b:highlight_eol_space = 0
+	endif
+	if (b:highlight_eol_space == 0 && a:op == 'off')
+				\ || (b:highlight_eol_space == 1 && a:op == 'on')
+		return
 	endif
 	if a:op == 'off' || (a:op == 'toggle' && b:highlight_eol_space)
 		let b:highlight_eol_space = 0
