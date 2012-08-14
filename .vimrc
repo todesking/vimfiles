@@ -335,25 +335,27 @@ try
 catch
 endtry
 nnoremap <Leader>cc :%s/\s\+$//<CR>
-nnoremap <silent><leader>e :call <SID>toggle_eol_space_highlight()<CR>
+nnoremap <silent><leader>e :call <SID>set_eol_space_highlight('toggle')<CR>
 
-function! s:toggle_eol_space_highlight()
+function! s:set_eol_space_highlight(op)
 	if !exists('b:highlight_eol_space')
 		let b:highlight_eol_space = 0
 	endif
-	if b:highlight_eol_space
+	if a:op == 'off' || (a:op == 'toggle' && b:highlight_eol_space)
 		let b:highlight_eol_space = 0
 		match none WhitespaceEOL
-		echo 'Trailing space highlight off'
+		echo 'EOL space highlight OFF'
 	else
 		let b:highlight_eol_space = 1
 		match WhitespaceEOL /\s\+$/
-		echo 'Trailing space highlight on'
+		echo 'EOL space highlight ON'
 	endif
 endfunction
+
+end
 augroup vimrc-trailing-spaces
 	autocmd!
-	autocmd FileType * highlight WhitespaceEOL ctermbg=red guibg=red| call <SID>toggle_eol_space_highlight()
+	autocmd FileType * highlight WhitespaceEOL ctermbg=red guibg=#FF0000| call <SID>set_eol_space_highlight('on')
 augroup END
 " }}}
 
