@@ -337,7 +337,6 @@ endtry
 nnoremap <Leader>cc :%s/\s\+$//<CR>
 nnoremap <silent><leader>e :call <SID>toggle_eol_space_highlight()<CR>
 
-highlight WhitespaceEOL ctermbg=red guibg=red
 function! s:toggle_eol_space_highlight()
 	if !exists('b:highlight_eol_space')
 		let b:highlight_eol_space = 0
@@ -354,7 +353,7 @@ function! s:toggle_eol_space_highlight()
 endfunction
 augroup vimrc-trailing-spaces
 	autocmd!
-	autocmd * call <SID>toggle_eol_space_highlight()
+	autocmd FileType * highlight WhitespaceEOL ctermbg=red guibg=red| call <SID>toggle_eol_space_highlight()
 augroup END
 " }}}
 
