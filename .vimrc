@@ -359,7 +359,7 @@ endfunction
 
 augroup vimrc-trailing-spaces
 	autocmd!
-	autocmd FileType * highlight WhitespaceEOL ctermbg=red guibg=#FF0000| call <SID>set_eol_space_highlight('on')
+	autocmd FileType * highlight WhitespaceEOL ctermbg=red guibg=#550000| call <SID>set_eol_space_highlight('on')
 augroup END
 " }}}
 
