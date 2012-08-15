@@ -6,11 +6,6 @@ if has('gui')
 
 	colorscheme molokai
 	MenuLang en_US.UTF-8
-	augroup gvimrc-auto-transparency
-		autocmd!
-		autocmd FocusGained * set transparency=5
-		autocmd FocusLost * set transparency=10
-	augroup END
 	set lines=49
 	if hostname() == 'OR12119245.local'
 		set columns=177
