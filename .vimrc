@@ -214,7 +214,7 @@ let g:neocomplcache_lock_buffer_name_pattern='\*unite\*'
 let g:neocomplcache_enable_prefetch = 1
 let g:neocomplcache_lock_iminsert = 1
 let g:neocomplcache_use_vimproc = 1
-let g:neocomplcache_enable_at_startup = 0
+let g:neocomplcache_enable_at_startup = 1
 " }}}
 
 NeoBundle 'closetag.vim' " {{{
