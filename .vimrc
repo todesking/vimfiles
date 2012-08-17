@@ -230,6 +230,7 @@ let g:yankring_max_history_element_length = 1000 * 10
 NeoBundle 'AndrewRadev/linediff.vim'
 NeoBundle 'tsaleh/vim-matchit'
 NeoBundle 'tpope/vim-surround'
+NeoBundle 'Lokaltog/vim-easymotion'
 
 NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
 	if has('gui')
