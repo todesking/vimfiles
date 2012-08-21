@@ -253,6 +253,7 @@ NeoBundle 'int3/vim-extradite'
 NeoBundle 'todesking/vim-ref', {'rev': 'fix-refe'} "{{{
 	let g:ref_refe_cmd="~/local/bin/refe"
 	command! -nargs=1 Man :Ref man <args>
+	command! -nargs=1 Refe :Ref refe <args>
 "}}}
 NeoBundle 'grep.vim'
 " }}}
@@ -283,6 +284,10 @@ nnoremap <silent>,n :tabnew<CR>
 nnoremap <silent>,h :tabprevious<CR>
 nnoremap <silent>,l :tabnext<CR>
 
+inoremap <C-E> <End>
+inoremap <C-A> <Home>
+
+" not works well but I leave it
 nnoremap <silent>,bd :call <SID>delete_buffer_preserve_window()<CR>
 function! s:delete_buffer_preserve_window()
 	let nr=bufnr('%')
