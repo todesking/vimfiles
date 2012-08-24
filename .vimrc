@@ -344,7 +344,7 @@ endtry
 nnoremap <Leader>cc :%s/\s\+$//<CR>
 nnoremap <silent><leader>e :call <SID>set_eol_space_highlight('toggle', 1)<CR>
 
-function! s:set_eol_space_highlight(op, echo)
+function! s:set_eol_space_highlight(op, show_message)
 	if !exists('b:highlight_eol_space')
 		let b:highlight_eol_space = 0
 	endif
@@ -355,13 +355,13 @@ function! s:set_eol_space_highlight(op, echo)
 	if a:op == 'off' || (a:op == 'toggle' && b:highlight_eol_space)
 		let b:highlight_eol_space = 0
 		match none WhitespaceEOL
-		if a:echo
+		if a:show_message
 			echo 'EOL space highlight OFF'
 		endif
 	else
 		let b:highlight_eol_space = 1
 		match WhitespaceEOL /\s\+$/
-		if a:echo
+		if a:show_message
 			echo 'EOL space highlight ON'
 		endif
 	endif
