@@ -230,7 +230,10 @@ let g:yankring_max_history_element_length = 1000 * 10
 NeoBundle 'AndrewRadev/linediff.vim'
 NeoBundle 'tsaleh/vim-matchit'
 NeoBundle 'tpope/vim-surround'
-NeoBundle 'Lokaltog/vim-easymotion'
+NeoBundle 'Lokaltog/vim-easymotion' "{{{
+	nmap W <Leader><leader>w
+	nmap B <Leader><Leader>b
+"}}}
 NeoBundle 'kana/vim-textobj-user'
 
 NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
@@ -256,6 +259,7 @@ NeoBundle 'todesking/vim-ref', {'rev': 'fix-refe'} "{{{
 	let g:ref_refe_cmd="~/local/bin/refe"
 	command! -nargs=1 Man :Ref man <args>
 "}}}
+NeoBundle 'taka84u9/vim-ref-ri'
 NeoBundle 'grep.vim'
 " }}}
 
