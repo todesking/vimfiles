@@ -231,6 +231,7 @@ NeoBundle 'AndrewRadev/linediff.vim'
 NeoBundle 'tsaleh/vim-matchit'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'Lokaltog/vim-easymotion'
+NeoBundle 'kana/vim-textobj-user'
 
 NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
 	if has('gui')
@@ -330,7 +331,7 @@ catch
 endtry
 nnoremap <silent> <leader>w :let &wrap=!&wrap<CR>:set wrap?<CR>
 nnoremap <leader>f :set foldmethod=syntax<CR>:set foldmethod=manual<CR>
-nnoremap <silent>_ :let &hlsearch=!&hlsearch<CR>
+nnoremap <silent>_ :let &hlsearch=!&hlsearch<CR>:set hlsearch?<CR>
 
 autocmd FileType * setlocal formatoptions-=ro
 " }}}
