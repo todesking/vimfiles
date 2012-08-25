@@ -231,8 +231,8 @@ NeoBundle 'AndrewRadev/linediff.vim'
 NeoBundle 'tsaleh/vim-matchit'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'Lokaltog/vim-easymotion' "{{{
-	nmap W <Leader><leader>w
-	nmap B <Leader><Leader>b
+	nmap <C-J> <Leader><Leader>w
+	nmap <C-K> <Leader><Leader>b
 "}}}
 NeoBundle 'kana/vim-textobj-user'
 
