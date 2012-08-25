@@ -262,7 +262,7 @@ NeoBundle 'todesking/vim-ref', {'rev': 'fix-refe'} "{{{
 	let g:ref_refe_cmd="~/local/bin/refe"
 	command! -nargs=1 Man :Ref man <args>
 "}}}
-NeoBundle 'taka84u9/vim-ref-ri' "{{{
+NeoBundle 'todesking/vim-ref-ri', {'rev': 'my-custom'} "{{{
 	command! -nargs=1 Ri :Ref ri <args>
 "}}}
 
