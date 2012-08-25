@@ -249,6 +249,7 @@ NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
 " }}}
 NeoBundle 'taku-o/vim-zoom'
 
+NeoBundle 'tpope/vim-rvm'
 NeoBundle 'todesking/vim-ruby', {'rev': 'my-custom'}
 NeoBundle 'tpope/vim-rails'
 
