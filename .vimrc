@@ -230,6 +230,11 @@ let g:yankring_max_history_element_length = 1000 * 10
 NeoBundle 'AndrewRadev/linediff.vim'
 NeoBundle 'tsaleh/vim-matchit'
 NeoBundle 'tpope/vim-surround'
+NeoBundle 'Lokaltog/vim-easymotion' "{{{
+	nmap <C-J> <Leader><Leader>w
+	nmap <C-K> <Leader><Leader>b
+"}}}
+NeoBundle 'kana/vim-textobj-user'
 
 NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
 	if has('gui')
@@ -244,6 +249,9 @@ NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
 " }}}
 NeoBundle 'taku-o/vim-zoom'
 
+NeoBundle 'tpope/vim-rvm' "{{{
+  autocmd BufEnter * Rvm
+"}}}
 NeoBundle 'todesking/vim-ruby', {'rev': 'my-custom'}
 NeoBundle 'tpope/vim-rails'
 
@@ -258,6 +266,10 @@ NeoBundle 'todesking/vim-ref', {'rev': 'fix-refe'} "{{{
 NeoBundle 'grep.vim' "{{{
 	let Grep_OpenQuickfixWindow = 0
 "}}}
+NeoBundle 'todesking/vim-ref-ri', {'rev': 'my-custom'} "{{{
+	command! -nargs=1 Ri :Ref ri <args>
+"}}}
+
 " }}}
 
 " Ruby {{{
@@ -336,7 +348,7 @@ catch
 endtry
 nnoremap <silent> <leader>w :let &wrap=!&wrap<CR>:set wrap?<CR>
 nnoremap <leader>f :set foldmethod=syntax<CR>:set foldmethod=manual<CR>
-nnoremap <silent>_ :let &hlsearch=!&hlsearch<CR>
+nnoremap <silent>_ :let &hlsearch=!&hlsearch<CR>:set hlsearch?<CR>
 
 autocmd FileType * setlocal formatoptions-=ro
 " }}}
@@ -556,6 +568,13 @@ function! s:helptags(pat)
 	endfor
 endfunction
 " }}}
+
+" Syntax trace {{{
+" from http://vim.wikia.com/wiki/Identify_the_syntax_highlighting_group_used_at_the_cursor
+command! SyntaxTrace echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"
+"}}}
 
 " Status line {{{
 let &statusline =
