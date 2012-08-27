@@ -214,7 +214,7 @@ let g:neocomplcache_lock_buffer_name_pattern='\*unite\*'
 let g:neocomplcache_enable_prefetch = 1
 let g:neocomplcache_lock_iminsert = 1
 let g:neocomplcache_use_vimproc = 1
-let g:neocomplcache_enable_at_startup = 0
+let g:neocomplcache_enable_at_startup = 1
 " }}}
 
 NeoBundle 'closetag.vim' " {{{
@@ -255,7 +255,9 @@ NeoBundle 'todesking/vim-ref', {'rev': 'fix-refe'} "{{{
 	command! -nargs=1 Man :Ref man <args>
 	command! -nargs=1 Refe :Ref refe <args>
 "}}}
-NeoBundle 'grep.vim'
+NeoBundle 'grep.vim' "{{{
+	let Grep_OpenQuickfixWindow = 0
+"}}}
 " }}}
 
 " Ruby {{{
