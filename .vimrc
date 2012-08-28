@@ -233,6 +233,8 @@ NeoBundle 'tpope/vim-surround'
 NeoBundle 'Lokaltog/vim-easymotion' "{{{
 	nmap <C-J> <Leader><Leader>w
 	nmap <C-K> <Leader><Leader>b
+	vmap <C-J> <Leader><Leader>w
+	vmap <C-K> <Leader><Leader>b
 "}}}
 NeoBundle 'kana/vim-textobj-user'
 
