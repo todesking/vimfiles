@@ -53,7 +53,7 @@ NeoBundle 'Shougo/vimproc'
 " Unite {{{
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'tsukkee/unite-tag'
-NeoBundle 'h1mesuke/unite-outline'
+NeoBundle 'Shougo/unite-outline'
 NeoBundle 'sgur/unite-qf'
 NeoBundle 'basyura/unite-rails'
 
@@ -527,7 +527,7 @@ augroup END
 
 " Current project dir {{{
 function! s:current_project_dir()
-	let project_marker_dirs = ['lib', 'autoload', 'plugins']
+	let project_marker_dirs = ['lib', 'spec', 'bin', 'autoload', 'plugins']
 	let project_replace_pattern = '/\('.join(project_marker_dirs,'\|').'\)\(/.\{-}\)\?$'
 	let project_pattern = '.*'.project_replace_pattern
 	if exists('b:rails_root')

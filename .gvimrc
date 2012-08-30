@@ -7,9 +7,5 @@ if has('gui')
 	colorscheme molokai
 	MenuLang en_US.UTF-8
 	set lines=49
-	if hostname() == 'OR12119245.local'
-		set columns=177
-	else
-		set columns=100
-	endif
+	set columns=177
 endif
