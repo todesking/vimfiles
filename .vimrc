@@ -385,9 +385,11 @@ function! s:set_eol_space_highlight(op, show_message)
 	endif
 endfunction
 
+highlight WhitespaceEOL ctermbg=red guibg=#550000
+
 augroup vimrc-trailing-spaces
 	autocmd!
-	autocmd FileType * highlight WhitespaceEOL ctermbg=red guibg=#550000| call <SID>set_eol_space_highlight('on', 0)
+	autocmd InsertEnter * if !exists('b:highlight_eol_space')|call <SID>set_eol_space_highlight('on', 0)|endif
 augroup END
 " }}}
 
