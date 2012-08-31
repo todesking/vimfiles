@@ -235,6 +235,7 @@ NeoBundle 'Lokaltog/vim-easymotion' "{{{
 	nmap <C-K> <Leader><Leader>b
 	vmap <C-J> <Leader><Leader>w
 	vmap <C-K> <Leader><Leader>b
+	let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvwxyz'
 "}}}
 NeoBundle 'kana/vim-textobj-user'
 
