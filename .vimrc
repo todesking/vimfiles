@@ -235,6 +235,7 @@ NeoBundle 'Lokaltog/vim-easymotion' "{{{
 	nmap <C-K> <Leader><Leader>b
 	vmap <C-J> <Leader><Leader>w
 	vmap <C-K> <Leader><Leader>b
+	let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvwxyz'
 "}}}
 NeoBundle 'kana/vim-textobj-user'
 
@@ -279,7 +280,7 @@ if has("ruby")
 endif
 augroup vimrc-filetype-ruby
 	autocmd!
-	"autocmd FileType ruby set omnifunc=
+	autocmd FileType ruby inoremap <buffer> <c-]> end
 augroup END
 " }}}
 
@@ -295,6 +296,8 @@ augroup END
 " }}}
 
 " General keymap {{{
+nnoremap <CR> :call append(line('.'),'')<CR>
+
 nnoremap <silent>,n :tabnew<CR>
 nnoremap <silent>,h :tabprevious<CR>
 nnoremap <silent>,l :tabnext<CR>
