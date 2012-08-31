@@ -295,6 +295,8 @@ augroup END
 " }}}
 
 " General keymap {{{
+nnoremap <CR> :call append(line('.'),'')<CR>
+
 nnoremap <silent>,n :tabnew<CR>
 nnoremap <silent>,h :tabprevious<CR>
 nnoremap <silent>,l :tabnext<CR>
