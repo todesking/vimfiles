@@ -279,7 +279,7 @@ if has("ruby")
 endif
 augroup vimrc-filetype-ruby
 	autocmd!
-	"autocmd FileType ruby set omnifunc=
+	autocmd FileType ruby inoremap <buffer> <c-]> end
 augroup END
 " }}}
 
