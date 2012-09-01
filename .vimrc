@@ -104,7 +104,7 @@ nnoremap <silent><C-S> :Unite file_mru<CR>
 nnoremap <C-Q>  <ESC>
 
 nnoremap <C-Q>u :UniteResume<CR>
-nnoremap <C-Q>o :<C-u>Unite outline<CR>
+nnoremap <C-Q>o m':<C-u>Unite outline<CR>
 nnoremap <C-Q>p :<C-u>exec 'Unite file_rec:'.<SID>current_project_dir()<CR>
 nnoremap <C-Q>t :<C-u>Unite tag<CR>
 nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview<CR>
