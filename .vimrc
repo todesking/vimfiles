@@ -56,6 +56,9 @@ NeoBundle 'tsukkee/unite-tag'
 NeoBundle 'Shougo/unite-outline'
 NeoBundle 'sgur/unite-qf'
 NeoBundle 'basyura/unite-rails'
+NeoBundle 'osyo-manga/unite-fold' " {{{
+	call unite#custom_filters('fold',['matcher_default', 'sorter_nothing', 'converter_default'])
+"}}}
 
 " Settings {{{
 let g:unite_enable_start_insert = 1
@@ -108,6 +111,7 @@ nnoremap <C-Q>o m':<C-u>Unite outline<CR>
 nnoremap <C-Q>p :<C-u>exec 'Unite file_rec:'.<SID>current_project_dir()<CR>
 nnoremap <C-Q>t :<C-u>Unite tag<CR>
 nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview<CR>
+nnoremap <C-Q>d :<C-u>Unite fold<CR>
 
 " unite-rails
 nnoremap <C-Q>r <ESC>
@@ -281,6 +285,7 @@ endif
 augroup vimrc-filetype-ruby
 	autocmd!
 	autocmd FileType ruby inoremap <buffer> <c-]> end
+	autocmd FileType ruby set foldmethod=syntax | set foldmethod=manual
 augroup END
 " }}}
 
@@ -388,11 +393,9 @@ function! s:set_eol_space_highlight(op, show_message)
 	endif
 endfunction
 
-highlight WhitespaceEOL ctermbg=red guibg=#550000
-
 augroup vimrc-trailing-spaces
 	autocmd!
-	autocmd InsertEnter * if !exists('b:highlight_eol_space')|call <SID>set_eol_space_highlight('on', 0)|endif
+	autocmd InsertEnter * if !exists('b:highlight_eol_space')|highlight WhitespaceEOL ctermbg=red guibg=#550000|call <SID>set_eol_space_highlight('on', 0)|endif
 augroup END
 " }}}
 
@@ -523,10 +526,6 @@ endfunction"}}}
 " screwing up folding when switching between windows.
 autocmd InsertEnter * if !exists('w:last_fdm') | let w:last_fdm=&foldmethod | setlocal foldmethod=manual | endif
 autocmd InsertLeave,WinLeave * if exists('w:last_fdm') | let &l:foldmethod=w:last_fdm | unlet w:last_fdm | endif
-
-augroup vimrc-lazy-folding
-	autocmd FileType ruby set foldmethod=syntax | set foldmethod=manual
-augroup END
 
 " }}}
 
