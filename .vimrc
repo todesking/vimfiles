@@ -43,7 +43,7 @@ set directory=$HOME/.vim/swp
 set foldtext=My_foldtext()
 let s:foldcolumn_default=10
 
-set tags+=./tags,../tags,../../tags,../../../tags,../../../../tags
+set tags+=./tags,./../tags,./../../tags,./../../../tags,./../../../../tags
 
 " }}}
 
