@@ -51,15 +51,7 @@ set tags+=./tags,../tags,../../tags,../../../tags,../../../../tags
 NeoBundle 'Shougo/vimproc'
 
 " Unite {{{
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'tsukkee/unite-tag'
-NeoBundle 'Shougo/unite-outline'
-NeoBundle 'sgur/unite-qf'
-NeoBundle 'basyura/unite-rails'
-NeoBundle 'osyo-manga/unite-fold' " {{{
-	call unite#custom_filters('fold',['matcher_default', 'sorter_nothing', 'converter_default'])
-"}}}
-
+NeoBundle 'Shougo/unite.vim' "{{{
 " Settings {{{
 let g:unite_enable_start_insert = 1
 let g:unite_update_time = 100
@@ -70,8 +62,12 @@ let g:unite_source_file_rec_ignore_pattern =
 	  \'\|\.\%(\gif\|jpg\|png\|swf\)$'
 
 call unite#filters#sorter_default#use(['sorter_smart'])
-
-" unite-tag {{{
+" }}}
+" unite-file_mru {{{
+let g:unite_source_file_mru_limit=500
+" }}}
+"}}}
+NeoBundle 'tsukkee/unite-tag' "{{{
 let s:converter_tag = {
 			\ 'name': 'converter_tag',
 			\ 'description': 'strip location info for tag',
@@ -88,11 +84,13 @@ call unite#define_filter(s:converter_tag)
 unlet s:converter_tag
 
 call unite#custom_filters('tag',['matcher_default', 'sorter_default', 'converter_tag'])
-" }}}
-" unite-file_mru {{{
-let g:unite_source_file_mru_limit=500
-" }}}
-" }}}
+"}}}
+NeoBundle 'Shougo/unite-outline'
+NeoBundle 'sgur/unite-qf'
+NeoBundle 'basyura/unite-rails'
+NeoBundle 'osyo-manga/unite-fold' " {{{
+	call unite#custom_filters('fold',['matcher_default', 'sorter_nothing', 'converter_default'])
+"}}}
 
 " Keymap {{{
 " in-unite {{{
@@ -284,9 +282,20 @@ if has("ruby")
 endif
 augroup vimrc-filetype-ruby
 	autocmd!
-	autocmd FileType ruby inoremap <buffer> <c-]> end
+	autocmd FileType ruby inoremap <buffer> <c-]> end<ESC>O
 	autocmd FileType ruby set foldmethod=syntax | set foldmethod=manual
 augroup END
+
+" To avoid ultra-heavy movement when Ruby insert mode {{{
+
+" Don't screw up folds when inserting text that might affect them, until
+" leaving insert mode. Foldmethod is local to the window. Protect against
+" screwing up folding when switching between windows.
+autocmd InsertEnter * if !exists('w:last_fdm') | let w:last_fdm=&foldmethod | setlocal foldmethod=manual | endif
+autocmd InsertLeave,WinLeave * if exists('w:last_fdm') | let &l:foldmethod=w:last_fdm | unlet w:last_fdm | endif
+
+" }}}
+
 " }}}
 
 " Rails {{{
@@ -367,7 +376,7 @@ try
 	nunmap <Leader>cc
 catch
 endtry
-nnoremap <Leader>cc :%s/\s\+$//<CR>
+nnoremap <Leader>cc :<C-U>%s/\s\+$//<CR>:<C-U>nohlsearch<CR>
 nnoremap <silent><leader>e :call <SID>set_eol_space_highlight('toggle', 1)<CR>
 
 function! s:set_eol_space_highlight(op, show_message)
@@ -517,16 +526,6 @@ function! s:surgery_line(lnum)"{{{
 endfunction"}}}
 
 " }}}
-" }}}
-
-" To avoid ultra-heavy movement when Ruby insert mode {{{
-
-" Don't screw up folds when inserting text that might affect them, until
-" leaving insert mode. Foldmethod is local to the window. Protect against
-" screwing up folding when switching between windows.
-autocmd InsertEnter * if !exists('w:last_fdm') | let w:last_fdm=&foldmethod | setlocal foldmethod=manual | endif
-autocmd InsertLeave,WinLeave * if exists('w:last_fdm') | let &l:foldmethod=w:last_fdm | unlet w:last_fdm | endif
-
 " }}}
 
 " Current project dir {{{
