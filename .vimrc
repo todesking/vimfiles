@@ -274,6 +274,11 @@ NeoBundle 'todesking/vim-ref-ri', {'rev': 'my-custom'} "{{{
 	command! -nargs=1 Ri :Ref ri <args>
 "}}}
 
+" RSense.vim {{{
+let g:rsenseHome = expand('~/local/rsense/')
+let g:rsenseUseOmniFunc = 1
+"}}}
+
 " }}}
 
 " Ruby {{{
