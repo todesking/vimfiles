@@ -5,6 +5,7 @@ if has('gui')
 	set guioptions=erL
 
 	colorscheme molokai
+	highlight VertSplit guifg=#ffff00
 	MenuLang en_US.UTF-8
 	set lines=49
 	set columns=177
