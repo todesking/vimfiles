@@ -64,7 +64,7 @@ let g:unite_source_file_rec_ignore_pattern =
 call unite#filters#sorter_default#use(['sorter_smart'])
 " }}}
 " unite-file_mru {{{
-let g:unite_source_file_mru_limit=500
+let g:unite_source_file_mru_limit=1000
 " }}}
 "}}}
 NeoBundle 'tsukkee/unite-tag' "{{{
@@ -288,7 +288,7 @@ endif
 augroup vimrc-filetype-ruby
 	autocmd!
 	autocmd FileType ruby inoremap <buffer> <c-]> end<ESC>O
-	autocmd FileType ruby set foldmethod=syntax
+	autocmd FileType ruby set foldmethod=manual
 augroup END
 
 " To avoid ultra-heavy movement when Ruby insert mode {{{
