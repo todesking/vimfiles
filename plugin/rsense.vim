@@ -153,6 +153,10 @@ function! RSenseExit()
     call s:rsenseCommand(['exit'])
 endfunction
 
+function! RSenseInstalled()
+	return filereadable(s:rsenseProgram())
+endfunction
+
 command! -narg=0 RSenseTypeHelp         echo RSenseTypeHelp()
 command! -narg=0 RSenseJumpToDefinition call RSenseJumpToDefinition()
 command! -narg=0 RSenseWhereIs          call RSenseWhereIs()
