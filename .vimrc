@@ -276,7 +276,7 @@ NeoBundle 'todesking/vim-ref-ri', {'rev': 'my-custom'} "{{{
 
 " RSense.vim {{{
 let g:rsenseHome = expand('~/local/rsense/')
-if RSenseInstalled()
+if exists('*RSenseInstalled') && RSenseInstalled()
 	let g:rsenseUseOmniFunc = 1
 endif
 "}}}
