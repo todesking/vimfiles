@@ -1,6 +1,6 @@
 if has('gui')
 	let g:molokai_original=1
-	set guifont=Osaka-Mono:h16
+	set guifont=Source\ Code\ Pro:h14,Osaka-Mono:h16
 	set noballooneval
 	set guioptions=erL
 
