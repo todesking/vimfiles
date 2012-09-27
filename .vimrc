@@ -712,3 +712,120 @@ augroup vimrc-auto-mkdir  " {{{
   endfunction  " }}}
 augroup END  " }}}
 " }}}
+
+" todo.vim {{{
+augroup vimrc-todo
+	autocmd FileType TODO call s:todo_syntax()
+	autocmd FileType TODO call s:todo_keymap()
+augroup END
+
+function! s:todo_keymap()
+	nnoremap <leader>d :<C-U>call <SID>todo_done()<CR>
+	nnoremap <leader>x :<C-U>call <SID>todo_discard()<CR>
+	nnoremap <leader>i :<C-U>call <SID>todo_doing()<CR>
+	nnoremap <leader>r :<C-U>call <SID>todo_reorder_buffer()<CR>
+endfunction
+
+function! s:todo_syntax()
+endfunction
+
+function! s:todo_doing()
+	call s:set_mark('.', '>')
+endfunction
+
+function! s:todo_discard()
+	call s:set_mark('.', 'x')
+endfunction
+
+function! s:todo_done()
+	call s:set_mark('.', '*')
+endfunction
+
+function! s:set_mark(lnum, mark)
+	let line = getline(a:lnum)
+	let marked_line = substitute(s:strip_mark(line), '^\(\s\+\)\(.*\)', '\1'.a:mark.' \2', '')
+	if line == marked_line
+		return
+	endif
+	call setline(a:lnum, marked_line)
+endfunction
+
+function! s:strip_mark(line)
+	return substitute(a:line, '\v^\s+\zs[*>x] \ze.*', '', '')
+endfunction
+
+function! s:get_mark(line)
+	return match(a:line, '\v^\s+\zs[*>x ]\ze .*') || ' '
+endfunction
+
+function! s:mark_priority(mark)
+	{'>':0, ' ':1, '*': 3, 'x':4}[a:mark]
+endfunction
+
+function! s:todo_reorder_buffer()
+	let todo = s:create_sorted_todo_structure_from_current_buffer()
+	echo todo
+	return
+	" normal! ggdG
+	call s:emit_todo(todo)
+endfunction
+
+function! s:emit_todo(todo)
+	call append(a:todo.line, line('$'))
+	for c in a:todo.children
+		call s:emit(c)
+	endfor
+endfunction
+
+function! s:todo_ordering(a,b)
+	return s:mark_priority(s:get_mark(a:a.line)) - s:mark_priority(s:get_mark(a:b.line))
+endfunction
+
+let g:todo_debug = []
+
+function! s:create_sorted_todo_structure_from_current_buffer()
+	let structure = []
+	let stack = [s:new_todo_structure('ROOT')]
+	let lnum = 1
+	let prev_indent_level = -1
+	while lnum <= line('$')
+		let line = getline(lnum)
+		let lnum += 1
+
+		if line =~# ''
+			continue
+		endif
+
+		call add(g:todo_debug, line)
+
+		let cur = new_todo_structure(line)
+		let indent_level = indent(lnum) / &shiftwidth
+		if prev_indent_level == indent_level
+			let s=call remove(stack, -1)
+			call sort(s.children, function('s:todo_ordering'))
+			call add(stack[-1].children, cur)
+			call add(stack, cur)
+		elseif prev_indent_level < indent_level
+			call add(stack[-1].children, cur)
+			call add(stack, cur)
+		else " prev_indent_level > indent_level
+			let pop_count = prev_indent_level - indent_level
+			let removed= remove(stack, -pop_count)
+			for s in removed
+				call sort(s.children, function('s:todo_ordering'))
+			endfor
+			call add(stack[-1].children, cur)
+			call add(stack, cur)
+		end
+		let prev_indent_level = indent_level
+	endwhile
+	for s in stack
+		call sort(s.children, function('s:todo_ordering'))
+	endfor
+	return stack[0]
+endfunction
+
+function! s:new_todo_structure(line)
+	return {'line': a:line, 'children': []}
+endfunction
+"}}}
