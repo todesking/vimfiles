@@ -326,6 +326,9 @@ nnoremap <silent>,l :tabnext<CR>
 inoremap <C-E> <End>
 inoremap <C-A> <Home>
 
+cnoremap <C-E> <End>
+cnoremap <C-A> <Home>
+
 " not works well but I leave it
 nnoremap <silent>,bd :call <SID>delete_buffer_preserve_window()<CR>
 function! s:delete_buffer_preserve_window()
