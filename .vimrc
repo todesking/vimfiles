@@ -142,7 +142,7 @@ augroup vimrc-tagjump-unite
 	autocmd!
 	autocmd BufEnter *
 				\   if empty(&buftype)
-				\|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately outline tag<CR>
+				\|      nnoremap <buffer> <C-]> m':<C-u>UniteWithCursorWord -immediately outline tag<CR>
 				\|  endif
 augroup END
 " }}}
@@ -308,7 +308,7 @@ if has("ruby")
 endif
 augroup vimrc-filetype-ruby
 	autocmd!
-	autocmd FileType ruby inoremap <buffer> <c-]> end<ESC>O
+	autocmd FileType ruby inoremap <buffer> <c-]> end<ESC>
 	autocmd FileType ruby set foldmethod=manual
 augroup END
 
@@ -344,6 +344,7 @@ nnoremap <silent>,l :tabnext<CR>
 
 inoremap <C-E> <End>
 inoremap <C-A> <Home>
+inoremap <C-K> <C-O>D
 
 cnoremap <C-E> <End>
 cnoremap <C-A> <Home>
@@ -530,7 +531,7 @@ function! s:current_project_dir()
 	elseif expand('%:p:h') =~ project_pattern && expand('%:p:h') !~ '/usr/.*'
 		return substitute(expand('%:p:h'), project_replace_pattern, '', '')
 	else
-		return expand('%:p:h')
+		return ''
 	endif
 endfunction
 
@@ -538,6 +539,9 @@ endfunction
 command! -complete=customlist,Vimrc_complete_current_project_files -nargs=1 Pe :exec ':e '.<SID>current_project_dir().'/'."<args>"
 function! Vimrc_complete_current_project_files(ArgLead, CmdLine, CursorPos)
 	let prefix = s:current_project_dir() . '/'
+	if prefix == '/'
+		return []
+	endif
 	let candidates = glob(prefix.a:ArgLead.'*', 1, 1)
 	let result = []
 	for c in candidates
@@ -573,10 +577,19 @@ command! SyntaxTrace echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") 
 "}}}
 
 " Status line {{{
+function! Vimrc_statusline_current_file()
+	let cur = s:current_project_dir()
+	if !cur
+		return ''
+	endif
+	return 1
+endfunction
+
 let &statusline =
 			\  ''
 			\. '%<'
 			\. '%F'
+			\. ': %{Vimrc_statusline_current_file()}'
 			\. '%= '
 			\. '%m'
 			\. '%{&filetype}'
@@ -725,7 +738,7 @@ endfunction
 
 function! s:set_mark(lnum, mark)
 	let line = getline(a:lnum)
-	let marked_line = substitute(s:strip_mark(line), '^\(\s\+\)\(.*\)', '\1'.a:mark.' \2', '')
+	let marked_line = substitute(s:strip_mark(line), '^\v(\s*)(.*)', '\1'.a:mark.' \2', '')
 	if line == marked_line
 		return
 	endif
@@ -733,7 +746,7 @@ function! s:set_mark(lnum, mark)
 endfunction
 
 function! s:strip_mark(line)
-	return substitute(a:line, '\v^\s+\zs[*>x] \ze.*', '', '')
+	return substitute(a:line, '\v^\s*\zs[*>x] \ze.*', '', '')
 endfunction
 
 function! s:get_mark(line)
