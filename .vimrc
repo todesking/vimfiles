@@ -47,6 +47,25 @@ set tags+=./tags,./../tags,./../../tags,./../../../tags,./../../../../tags
 
 " }}}
 
+" Visible spaces {{{
+" http://blog.remora.cx/2011/08/display-invisible-characters-on-vim.html
+set list
+set listchars=tab:»-,trail:x,extends:»,precedes:«,nbsp:%
+
+if has("syntax")
+    " PODバグ対策
+    syn sync fromstart
+    function! ActivateInvisibleIndicator()
+        syntax match InvisibleJISX0208Space "　" display containedin=ALL
+        highlight InvisibleJISX0208Space term=underline ctermbg=Blue guibg=darkgray gui=underline
+    endf
+    augroup invisible
+        autocmd! invisible
+        autocmd BufNew,BufRead * call ActivateInvisibleIndicator()
+    augroup END
+endif
+" }}}
+
 " plugins {{{
 NeoBundle 'Shougo/vimproc'
 
@@ -379,43 +398,6 @@ nnoremap <leader>f :set foldmethod=syntax<CR>:set foldmethod=manual<CR>
 nnoremap <silent>_ :let &hlsearch=!&hlsearch<CR>:set hlsearch?<CR>
 
 autocmd FileType * setlocal formatoptions-=ro
-" }}}
-
-" Trailing spaces {{{
-try
-	nunmap <Leader>cc
-catch
-endtry
-nnoremap <Leader>cc :<C-U>%s/\s\+$//<CR>:<C-U>nohlsearch<CR>
-nnoremap <silent><leader>e :call <SID>set_eol_space_highlight('toggle', 1)<CR>
-
-function! s:set_eol_space_highlight(op, show_message)
-	if !exists('b:highlight_eol_space')
-		let b:highlight_eol_space = 0
-	endif
-	if (b:highlight_eol_space == 0 && a:op == 'off')
-				\ || (b:highlight_eol_space == 1 && a:op == 'on')
-		return
-	endif
-	if a:op == 'off' || (a:op == 'toggle' && b:highlight_eol_space)
-		let b:highlight_eol_space = 0
-		match none WhitespaceEOL
-		if a:show_message
-			echo 'EOL space highlight OFF'
-		endif
-	else
-		let b:highlight_eol_space = 1
-		match WhitespaceEOL /\s\+$/
-		if a:show_message
-			echo 'EOL space highlight ON'
-		endif
-	endif
-endfunction
-
-augroup vimrc-trailing-spaces
-	autocmd!
-	autocmd InsertEnter * if !exists('b:highlight_eol_space')|highlight WhitespaceEOL ctermbg=red guibg=#550000|call <SID>set_eol_space_highlight('on', 0)|endif
-augroup END
 " }}}
 
 " Folding {{{
