@@ -756,11 +756,15 @@ function! s:strip_mark(line)
 endfunction
 
 function! s:get_mark(line)
-	return match(a:line, '\v^\s+\zs[*>x ]\ze .*') || ' '
+	let mark = matchstr(a:line, '\v^\s+\zs[*>x ]\ze .*')
+	if !mark
+		let mark = ' '
+	endif
+	return mark
 endfunction
 
 function! s:mark_priority(mark)
-	{'>':0, ' ':1, '*': 3, 'x':4}[a:mark]
+	return {'>':0, ' ':1, '*': 3, 'x':4}[a:mark]
 endfunction
 
 function! s:todo_reorder_buffer()
@@ -793,16 +797,14 @@ function! s:create_sorted_todo_structure_from_current_buffer()
 		let line = getline(lnum)
 		let lnum += 1
 
-		if line =~# ''
+		if line == ''
 			continue
 		endif
 
-		call add(g:todo_debug, line)
-
-		let cur = new_todo_structure(line)
+		let cur = s:new_todo_structure(line)
 		let indent_level = indent(lnum) / &shiftwidth
 		if prev_indent_level == indent_level
-			let s=call remove(stack, -1)
+			let s=remove(stack, -1)
 			call sort(s.children, function('s:todo_ordering'))
 			call add(stack[-1].children, cur)
 			call add(stack, cur)
@@ -811,7 +813,7 @@ function! s:create_sorted_todo_structure_from_current_buffer()
 			call add(stack, cur)
 		else " prev_indent_level > indent_level
 			let pop_count = prev_indent_level - indent_level
-			let removed= remove(stack, -pop_count)
+			let removed = remove(stack, -pop_count, -1)
 			for s in removed
 				call sort(s.children, function('s:todo_ordering'))
 			endfor
