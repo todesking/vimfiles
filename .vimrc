@@ -756,29 +756,30 @@ function! s:strip_mark(line)
 endfunction
 
 function! s:get_mark(line)
-	let mark = matchstr(a:line, '\v^\s+\zs[*>x ]\ze .*')
-	if !mark
+	let mark = matchstr(a:line, '\v^\s*\zs[*>x ]\ze .*')
+	if mark == ''
 		let mark = ' '
 	endif
 	return mark
 endfunction
 
 function! s:mark_priority(mark)
-	return {'>':0, ' ':1, '*': 3, 'x':4}[a:mark]
+	let definition = {'>':0, ' ':1, '*': 3, 'x':4}
+	return definition[a:mark]
 endfunction
 
 function! s:todo_reorder_buffer()
 	let todo = s:create_sorted_todo_structure_from_current_buffer()
-	echo todo
-	return
-	" normal! ggdG
+	normal! G
 	call s:emit_todo(todo)
 endfunction
 
 function! s:emit_todo(todo)
-	call append(a:todo.line, line('$'))
+	if !a:todo.root
+		call append(line('$') - 1, a:todo.line)
+	endif
 	for c in a:todo.children
-		call s:emit(c)
+		call s:emit_todo(c)
 	endfor
 endfunction
 
@@ -791,13 +792,15 @@ let g:todo_debug = []
 function! s:create_sorted_todo_structure_from_current_buffer()
 	let structure = []
 	let stack = [s:new_todo_structure('ROOT')]
+	let stack[-1].root = 1
 	let lnum = 1
 	let prev_indent_level = -1
+
 	while lnum <= line('$')
 		let line = getline(lnum)
-		let lnum += 1
 
 		if line == ''
+			let lnum += 1
 			continue
 		endif
 
@@ -820,15 +823,19 @@ function! s:create_sorted_todo_structure_from_current_buffer()
 			call add(stack[-1].children, cur)
 			call add(stack, cur)
 		end
+
 		let prev_indent_level = indent_level
+		let lnum += 1
 	endwhile
+
 	for s in stack
 		call sort(s.children, function('s:todo_ordering'))
 	endfor
+
 	return stack[0]
 endfunction
 
 function! s:new_todo_structure(line)
-	return {'line': a:line, 'children': []}
+	return {'root': 0, 'line': a:line, 'children': []}
 endfunction
 "}}}
