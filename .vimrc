@@ -47,6 +47,25 @@ set tags+=./tags,./../tags,./../../tags,./../../../tags,./../../../../tags
 
 " }}}
 
+" Visible spaces {{{
+" http://blog.remora.cx/2011/08/display-invisible-characters-on-vim.html
+set list
+set listchars=tab:»-,trail:x,extends:»,precedes:«,nbsp:%
+
+if has("syntax")
+    " PODバグ対策
+    syn sync fromstart
+    function! ActivateInvisibleIndicator()
+        syntax match InvisibleJISX0208Space "　" display containedin=ALL
+        highlight InvisibleJISX0208Space term=underline ctermbg=Blue guibg=darkgray gui=underline
+    endf
+    augroup invisible
+        autocmd! invisible
+        autocmd BufNew,BufRead * call ActivateInvisibleIndicator()
+    augroup END
+endif
+" }}}
+
 " plugins {{{
 NeoBundle 'Shougo/vimproc'
 
@@ -123,7 +142,7 @@ augroup vimrc-tagjump-unite
 	autocmd!
 	autocmd BufEnter *
 				\   if empty(&buftype)
-				\|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately outline tag<CR>
+				\|      nnoremap <buffer> <C-]> m':<C-u>UniteWithCursorWord -immediately outline tag<CR>
 				\|  endif
 augroup END
 " }}}
@@ -326,6 +345,7 @@ nnoremap <silent>,l :tabnext<CR>
 
 inoremap <C-E> <End>
 inoremap <C-A> <Home>
+inoremap <C-K> <C-O>D
 
 cnoremap <C-E> <End>
 cnoremap <C-A> <Home>
@@ -380,43 +400,6 @@ nnoremap <leader>f :set foldmethod=syntax<CR>:set foldmethod=manual<CR>
 nnoremap <silent>_ :let &hlsearch=!&hlsearch<CR>:set hlsearch?<CR>
 
 autocmd FileType * setlocal formatoptions-=ro
-" }}}
-
-" Trailing spaces {{{
-try
-	nunmap <Leader>cc
-catch
-endtry
-nnoremap <Leader>cc :<C-U>%s/\s\+$//<CR>:<C-U>nohlsearch<CR>
-nnoremap <silent><leader>e :call <SID>set_eol_space_highlight('toggle', 1)<CR>
-
-function! s:set_eol_space_highlight(op, show_message)
-	if !exists('b:highlight_eol_space')
-		let b:highlight_eol_space = 0
-	endif
-	if (b:highlight_eol_space == 0 && a:op == 'off')
-				\ || (b:highlight_eol_space == 1 && a:op == 'on')
-		return
-	endif
-	if a:op == 'off' || (a:op == 'toggle' && b:highlight_eol_space)
-		let b:highlight_eol_space = 0
-		match none WhitespaceEOL
-		if a:show_message
-			echo 'EOL space highlight OFF'
-		endif
-	else
-		let b:highlight_eol_space = 1
-		match WhitespaceEOL /\s\+$/
-		if a:show_message
-			echo 'EOL space highlight ON'
-		endif
-	endif
-endfunction
-
-augroup vimrc-trailing-spaces
-	autocmd!
-	autocmd InsertEnter * if !exists('b:highlight_eol_space')|highlight WhitespaceEOL ctermbg=red guibg=#550000|call <SID>set_eol_space_highlight('on', 0)|endif
-augroup END
 " }}}
 
 " Folding {{{
@@ -549,7 +532,7 @@ function! s:current_project_dir()
 	elseif expand('%:p:h') =~ project_pattern && expand('%:p:h') !~ '/usr/.*'
 		return substitute(expand('%:p:h'), project_replace_pattern, '', '')
 	else
-		return expand('%:p:h')
+		return ''
 	endif
 endfunction
 
@@ -557,6 +540,9 @@ endfunction
 command! -complete=customlist,Vimrc_complete_current_project_files -nargs=1 Pe :exec ':e '.<SID>current_project_dir().'/'."<args>"
 function! Vimrc_complete_current_project_files(ArgLead, CmdLine, CursorPos)
 	let prefix = s:current_project_dir() . '/'
+	if prefix == '/'
+		return []
+	endif
 	let candidates = glob(prefix.a:ArgLead.'*', 1, 1)
 	let result = []
 	for c in candidates
@@ -592,10 +578,19 @@ command! SyntaxTrace echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") 
 "}}}
 
 " Status line {{{
+function! Vimrc_statusline_current_file()
+	let cur = s:current_project_dir()
+	if !cur
+		return ''
+	endif
+	return 1
+endfunction
+
 let &statusline =
 			\  ''
 			\. '%<'
 			\. '%F'
+			\. ': %{Vimrc_statusline_current_file()}'
 			\. '%= '
 			\. '%m'
 			\. '%{&filetype}'
@@ -744,7 +739,7 @@ endfunction
 
 function! s:set_mark(lnum, mark)
 	let line = getline(a:lnum)
-	let marked_line = substitute(s:strip_mark(line), '^\(\s\+\)\(.*\)', '\1'.a:mark.' \2', '')
+	let marked_line = substitute(s:strip_mark(line), '^\v(\s*)(.*)', '\1'.a:mark.' \2', '')
 	if line == marked_line
 		return
 	endif
@@ -752,7 +747,7 @@ function! s:set_mark(lnum, mark)
 endfunction
 
 function! s:strip_mark(line)
-	return substitute(a:line, '\v^\s+\zs[*>x] \ze.*', '', '')
+	return substitute(a:line, '\v^\s*\zs[*>x] \ze.*', '', '')
 endfunction
 
 function! s:get_mark(line)
