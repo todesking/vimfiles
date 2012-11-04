@@ -709,6 +709,15 @@ augroup vimrc-auto-mkdir  " {{{
 augroup END  " }}}
 " }}}
 
+" vimrc's SID {{{
+function! Vimrc_sid()
+	return s:vimrc_sid()
+endfunction
+function! s:vimrc_sid()
+	return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_vimrc_sid$')
+endfunction
+" }}}
+
 " todo.vim {{{
 augroup vimrc-todo
 	autocmd FileType TODO call s:todo_syntax()
@@ -784,6 +793,13 @@ endfunction
 
 let g:todo_debug = []
 
+function! s:print_todo_structure(todo, indent_level)
+	echo repeat(' ', a:indent_level * 2) . matchstr(a:todo.line, '\v^\s*\zs.*\ze$')
+	for c in a:todo.children
+		call s:print_todo_structure(c, a:indent_level + 1)
+	endfor
+endfunction
+
 function! s:create_sorted_todo_structure_from_current_buffer()
 	let structure = []
 	let stack = [s:new_todo_structure('ROOT')]
@@ -811,7 +827,7 @@ function! s:create_sorted_todo_structure_from_current_buffer()
 			call add(stack, cur)
 		else " prev_indent_level > indent_level
 			let pop_count = prev_indent_level - indent_level
-			let removed = remove(stack, -pop_count, -1)
+			let removed = remove(stack, -pop_count - 1, -1)
 			for s in removed
 				call sort(s.children, function('s:todo_ordering'))
 			endfor
