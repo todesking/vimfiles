@@ -244,6 +244,8 @@ NeoBundle 'closetag.vim' " {{{
 " }}}
 NeoBundle 'Align' " {{{
 let g:Align_xstrlen=3
+map (trashbox-leader-rwp) <Plug>RestoreWinPosn
+map (trashbox-leader-swp) <Plug>SaveWinPosn
 " }}}
 NeoBundle 'todesking/YankRing.vim' " {{{
 let g:yankring_max_element_length = 0
@@ -728,7 +730,7 @@ augroup END
 function! s:todo_keymap()
 	nnoremap <leader>d :<C-U>call <SID>todo_done()<CR>
 	nnoremap <leader>x :<C-U>call <SID>todo_discard()<CR>
-	nnoremap <leader>i :<C-U>call <SID>todo_doing()<CR>
+	nnoremap <leader>a :<C-U>call <SID>todo_doing()<CR>
 	nnoremap <leader>r :<C-U>call <SID>todo_reorder_buffer()<CR>
 endfunction
 
@@ -798,11 +800,14 @@ function! s:stable_sort(list, func)
 	return a:list
 endfunction
 
-function! s:todo_reorder_buffer()
+function! s:todo_reorder_buffer() abort
 	let todo = s:create_todo_structure_from_current_buffer()
-	call s:sort_todo_structure(todo, function('s:todo_ordering'))
+	let sorted_todo = s:sort_todo_structure(deepcopy(todo), function('s:todo_ordering'))
+	if todo == sorted_todo
+		return
+	endif
 	normal! ggdG
-	call s:emit_todo(todo)
+	call s:emit_todo(sorted_todo)
 	normal! gg
 endfunction
 
@@ -815,11 +820,12 @@ function! s:emit_todo(todo)
 	endfor
 endfunction
 
-function! s:sort_todo_structure(todo, func)
+function! s:sort_todo_structure(todo, func) abort
 	call s:stable_sort(a:todo.children, a:func)
 	for c in a:todo.children
 		call s:sort_todo_structure(c, a:func)
 	endfor
+	return a:todo
 endfunction
 
 function! s:todo_ordering(a,b)
