@@ -733,6 +733,14 @@ function! s:todo_keymap()
 endfunction
 
 function! s:todo_syntax()
+	highlight TodoDone guifg=darkgray
+	highlight TodoDisabled guifg=gray
+	highlight TodoNormal guifg=lightgreen
+	highlight link TodoDoing Todo
+	syntax match TodoDone  /^\s*\zs\* .*\ze/
+	syntax match TodoDoing /^\s*\zs> .*\ze/
+	syntax match TodoDisabled /^\s*\zsx .*\ze/
+	syntax match TodoNormal /^\(\s*. \)\@!\s*\zs.*\ze/
 endfunction
 
 function! s:todo_doing()
