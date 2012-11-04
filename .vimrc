@@ -129,6 +129,7 @@ nnoremap <C-Q>p :<C-u>exec 'Unite file_rec:'.<SID>current_project_dir()<CR>
 nnoremap <C-Q>t :<C-u>Unite tag<CR>
 nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview<CR>
 nnoremap <C-Q>d :<C-u>Unite fold<CR>
+nnoremap <C-Q>l :<C-u>Unite line<CR>
 
 " unite-rails
 nnoremap <C-Q>r <ESC>
@@ -310,7 +311,7 @@ augroup vimrc-filetype-ruby
 	autocmd!
 	autocmd FileType ruby inoremap <buffer> <c-]> end<ESC>
 	autocmd FileType ruby set foldmethod=manual
-	autocmd FileType ruby set iskeyword=a-z,A-Z,?,!,@-@,_
+	autocmd FileType ruby setlocal iskeyword=a-z,A-Z,?,!,@-@,_
 augroup END
 
 " To avoid ultra-heavy movement when Ruby insert mode {{{
