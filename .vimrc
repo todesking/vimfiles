@@ -773,10 +773,29 @@ function! s:mark_priority(mark)
 	return definition[a:mark]
 endfunction
 
+function! s:stable_sort(list, func)
+	let i = 0
+	while i < len(a:list)
+		let j = len(a:list) - 1
+		while j > i
+			if a:func(a:list[j - 1], a:list[j]) > 0
+					let tmp = a:list[j]
+					let a:list[j] = a:list[j - 1]
+					let a:list[j - 1] = tmp
+			endif
+			let j -= 1
+		endwhile
+		let i += 1
+	endwhile
+	return a:list
+endfunction
+
 function! s:todo_reorder_buffer()
-	let todo = s:create_sorted_todo_structure_from_current_buffer()
-	normal! G
+	let todo = s:create_todo_structure_from_current_buffer()
+	call s:sort_todo_structure(todo, function('s:todo_ordering'))
+	normal! ggdG
 	call s:emit_todo(todo)
+	normal! gg
 endfunction
 
 function! s:emit_todo(todo)
@@ -785,6 +804,13 @@ function! s:emit_todo(todo)
 	endif
 	for c in a:todo.children
 		call s:emit_todo(c)
+	endfor
+endfunction
+
+function! s:sort_todo_structure(todo, func)
+	call s:stable_sort(a:todo.children, a:func)
+	for c in a:todo.children
+		call s:sort_todo_structure(c, a:func)
 	endfor
 endfunction
 
@@ -801,7 +827,7 @@ function! s:print_todo_structure(todo, indent_level)
 	endfor
 endfunction
 
-function! s:create_sorted_todo_structure_from_current_buffer()
+function! s:create_todo_structure_from_current_buffer()
 	let structure = []
 	let stack = [s:new_todo_structure('ROOT')]
 	let stack[-1].root = 1
@@ -820,7 +846,6 @@ function! s:create_sorted_todo_structure_from_current_buffer()
 		let indent_level = indent(lnum) / &shiftwidth
 		if prev_indent_level == indent_level
 			let s=remove(stack, -1)
-			call sort(s.children, function('s:todo_ordering'))
 			call add(stack[-1].children, cur)
 			call add(stack, cur)
 		elseif prev_indent_level < indent_level
@@ -829,9 +854,6 @@ function! s:create_sorted_todo_structure_from_current_buffer()
 		else " prev_indent_level > indent_level
 			let pop_count = prev_indent_level - indent_level
 			let removed = remove(stack, -pop_count - 1, -1)
-			for s in removed
-				call sort(s.children, function('s:todo_ordering'))
-			endfor
 			call add(stack[-1].children, cur)
 			call add(stack, cur)
 		end
@@ -839,10 +861,6 @@ function! s:create_sorted_todo_structure_from_current_buffer()
 		let prev_indent_level = indent_level
 		let lnum += 1
 	endwhile
-
-	for s in stack
-		call sort(s.children, function('s:todo_ordering'))
-	endfor
 
 	return stack[0]
 endfunction
