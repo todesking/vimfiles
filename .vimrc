@@ -50,7 +50,7 @@ set tags+=./tags,./../tags,./../../tags,./../../../tags,./../../../../tags
 " Visible spaces {{{
 " http://blog.remora.cx/2011/08/display-invisible-characters-on-vim.html
 set list
-set listchars=tab:»-,trail:x,extends:»,precedes:«,nbsp:%
+set listchars=tab:»\ ,trail:_,extends:»,precedes:«,nbsp:%
 
 if has("syntax")
     " PODバグ対策
@@ -188,7 +188,7 @@ function! s:sorter_smart.filter(candidates, context)
 		return a:candidates
 	endif
 	let keywords = split(a:context.input, '\s\+')
-	if a:context.source.name == 'file_mru' && len(keywords) < 2
+	if a:context.source.name == 'file_mru'
 		return a:candidates
 	end
 	for candidate in a:candidates
