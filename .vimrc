@@ -246,6 +246,7 @@ NeoBundle 'Align' " {{{
 let g:Align_xstrlen=3
 map (trashbox-leader-rwp) <Plug>RestoreWinPosn
 map (trashbox-leader-swp) <Plug>SaveWinPosn
+let g:loaded_AlignMapsPlugin = 1
 " }}}
 NeoBundle 'todesking/YankRing.vim' " {{{
 let g:yankring_max_element_length = 0
@@ -732,6 +733,9 @@ function! s:todo_keymap()
 	nnoremap <leader>x :<C-U>call <SID>todo_discard()<CR>
 	nnoremap <leader>a :<C-U>call <SID>todo_doing()<CR>
 	nnoremap <leader>r :<C-U>call <SID>todo_reorder_buffer()<CR>
+	nnoremap <leader><Space> :<C-U>call <SID>todo_clear_mark()<CR>
+	nnoremap <leader>j :<C-U>call <SID>todo_move_up()<CR>
+	nnoremap <leader>k :<C-U>call <SID>todo_move_down()<CR>
 endfunction
 
 function! s:todo_syntax()
@@ -746,20 +750,32 @@ function! s:todo_syntax()
 endfunction
 
 function! s:todo_doing()
-	call s:set_mark('.', '>')
+	call s:set_mark('.', '> ')
 endfunction
 
 function! s:todo_discard()
-	call s:set_mark('.', 'x')
+	call s:set_mark('.', 'x ')
 endfunction
 
 function! s:todo_done()
-	call s:set_mark('.', '*')
+	call s:set_mark('.', '* ')
+endfunction
+
+function! s:todo_clear_mark()
+	call s:set_mark('.', '')
+endfunction
+
+function! s:todo_move_up()
+	let todo_id = line('.')
+	let parent = s:todo_parent_of(todo_id)
+endfunction
+
+function! s:todo_move_down()
 endfunction
 
 function! s:set_mark(lnum, mark)
 	let line = getline(a:lnum)
-	let marked_line = substitute(s:strip_mark(line), '^\v(\s*)(.*)', '\1'.a:mark.' \2', '')
+	let marked_line = substitute(s:strip_mark(line), '^\v(\s*)(.*)', '\1'.a:mark.'\2', '')
 	if line == marked_line
 		return
 	endif
@@ -806,18 +822,18 @@ function! s:todo_reorder_buffer() abort
 	if todo == sorted_todo
 		return
 	endif
-	normal! ggdG
 	call s:emit_todo(sorted_todo)
-	normal! gg
 endfunction
 
-function! s:emit_todo(todo)
+function! s:emit_todo(todo) abort
+	normal! ggdG
 	if !a:todo.root
 		call append(line('$') - 1, a:todo.line)
 	endif
 	for c in a:todo.children
 		call s:emit_todo(c)
 	endfor
+	normal! gg
 endfunction
 
 function! s:sort_todo_structure(todo, func) abort
@@ -843,7 +859,7 @@ endfunction
 
 function! s:create_todo_structure_from_current_buffer()
 	let structure = []
-	let stack = [s:new_todo_structure('ROOT')]
+	let stack = [s:new_todo_structure(0, 'ROOT')]
 	let stack[-1].root = 1
 	let lnum = 1
 	let prev_indent_level = -1
@@ -856,7 +872,7 @@ function! s:create_todo_structure_from_current_buffer()
 			continue
 		endif
 
-		let cur = s:new_todo_structure(line)
+		let cur = s:new_todo_structure(lnum, line)
 		let indent_level = indent(lnum) / &shiftwidth
 		if prev_indent_level == indent_level
 			let s=remove(stack, -1)
@@ -879,7 +895,7 @@ function! s:create_todo_structure_from_current_buffer()
 	return stack[0]
 endfunction
 
-function! s:new_todo_structure(line)
-	return {'root': 0, 'line': a:line, 'children': []}
+function! s:new_todo_structure(lnum, line)
+	return {'line_num': lnum, 'root': 0, 'line': a:line, 'children': []}
 endfunction
 "}}}
