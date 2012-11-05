@@ -734,6 +734,8 @@ function! s:todo_keymap()
 	nnoremap <leader>a :<C-U>call <SID>todo_doing()<CR>
 	nnoremap <leader>r :<C-U>call <SID>todo_reorder_buffer()<CR>
 	nnoremap <leader><Space> :<C-U>call <SID>todo_clear_mark()<CR>
+	nnoremap <leader>k :<C-U>call <SID>todo_move_up()<CR>
+	nnoremap <leader>j :<C-U>call <SID>todo_move_down()<CR>
 endfunction
 
 function! s:todo_syntax()
@@ -804,6 +806,74 @@ function! s:stable_sort(list, func)
 		let i += 1
 	endwhile
 	return a:list
+endfunction
+
+function! s:todo_move_up() abort
+	let todo = s:create_todo_structure_from_current_buffer()
+	let todo_orig = deepcopy(todo)
+	let lnum = line('.')
+	let lnum =  s:todo_move(todo, lnum, -1)
+	if todo != todo_orig
+		call s:todo_redraw(todo)
+		call cursor(lnum, 0)
+	endif
+endfunction
+
+function! s:todo_move_down() abort
+	let todo = s:create_todo_structure_from_current_buffer()
+	let todo_orig = deepcopy(todo)
+	let lnum = line('.')
+	let lnum = s:todo_move(todo, lnum, 1)
+	if todo != todo_orig
+		call s:todo_redraw(todo)
+		call cursor(lnum, 0)
+	endif
+endfunction
+
+function! s:todo_move(todo, lnum, distance) abort
+	let parent = s:todo_parent_of(a:todo, a:lnum)
+	let i = 0
+	while i < len(parent.children)
+		if i + a:distance >= 0 && parent.children[i].lnum == a:lnum
+			let tmp = parent.children[i]
+			let parent.children[i] = parent.children[i + a:distance]
+			let parent.children[i + a:distance] = tmp
+			call s:todo_renumber(parent)
+			return tmp.lnum
+		endif
+		let i += 1
+	endwhile
+endfunction
+
+" return: next lnum
+function! s:todo_renumber(todo) abort
+	let lnum = a:todo.lnum + 1
+	for c in a:todo.children
+		let c.lnum = lnum
+		let lnum = s:todo_renumber(c)
+	endfor
+	return lnum
+endfunction
+
+function! s:todo_line_count(todo) abort
+	let count = 1
+	for c in a:todo.children
+		let count += s:todo_line_count(c)
+	endfor
+	return count
+endfunction
+
+function! s:todo_parent_of(todo, lnum) abort
+	for c in a:todo.children
+		if c.lnum == a:lnum
+			return a:todo
+		endif
+		let found = s:todo_parent_of(c, a:lnum)
+		if found != {}
+			return found
+		endif
+	endfor
+	return {}
 endfunction
 
 function! s:todo_reorder_buffer() abort
@@ -893,6 +963,6 @@ function! s:create_todo_structure_from_current_buffer() abort
 endfunction
 
 function! s:new_todo_structure(lnum, line) abort
-	return {'line_num': a:lnum, 'root': 0, 'line': a:line, 'children': []}
+	return {'lnum': a:lnum, 'root': 0, 'line': a:line, 'children': []}
 endfunction
 "}}}
