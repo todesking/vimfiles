@@ -129,6 +129,7 @@ nnoremap <C-Q>p :<C-u>exec 'Unite file_rec:'.<SID>current_project_dir()<CR>
 nnoremap <C-Q>t :<C-u>Unite tag<CR>
 nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview<CR>
 nnoremap <C-Q>d :<C-u>Unite fold<CR>
+nnoremap <C-Q>l :<C-u>Unite line<CR>
 
 " unite-rails
 nnoremap <C-Q>r <ESC>
@@ -243,6 +244,8 @@ NeoBundle 'closetag.vim' " {{{
 " }}}
 NeoBundle 'Align' " {{{
 let g:Align_xstrlen=3
+map (trashbox-leader-rwp) <Plug>RestoreWinPosn
+map (trashbox-leader-swp) <Plug>SaveWinPosn
 " }}}
 NeoBundle 'todesking/YankRing.vim' " {{{
 let g:yankring_max_element_length = 0
@@ -310,6 +313,7 @@ augroup vimrc-filetype-ruby
 	autocmd!
 	autocmd FileType ruby inoremap <buffer> <c-]> end<ESC>
 	autocmd FileType ruby set foldmethod=manual
+	autocmd FileType ruby setlocal iskeyword=a-z,A-Z,?,!,@-@,_
 augroup END
 
 " To avoid ultra-heavy movement when Ruby insert mode {{{
@@ -708,6 +712,15 @@ augroup vimrc-auto-mkdir  " {{{
 augroup END  " }}}
 " }}}
 
+" vimrc's SID {{{
+function! Vimrc_sid()
+	return s:vimrc_sid()
+endfunction
+function! s:vimrc_sid()
+	return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_vimrc_sid$')
+endfunction
+" }}}
+
 " todo.vim {{{
 augroup vimrc-todo
 	autocmd FileType TODO call s:todo_syntax()
@@ -717,11 +730,19 @@ augroup END
 function! s:todo_keymap()
 	nnoremap <leader>d :<C-U>call <SID>todo_done()<CR>
 	nnoremap <leader>x :<C-U>call <SID>todo_discard()<CR>
-	nnoremap <leader>i :<C-U>call <SID>todo_doing()<CR>
+	nnoremap <leader>a :<C-U>call <SID>todo_doing()<CR>
 	nnoremap <leader>r :<C-U>call <SID>todo_reorder_buffer()<CR>
 endfunction
 
 function! s:todo_syntax()
+	highlight TodoDone guifg=darkgray
+	highlight TodoDisabled guifg=gray
+	highlight TodoNormal guifg=lightgreen
+	highlight link TodoDoing Todo
+	syntax match TodoDone  /^\s*\zs\* .*\ze/
+	syntax match TodoDoing /^\s*\zs> .*\ze/
+	syntax match TodoDisabled /^\s*\zsx .*\ze/
+	syntax match TodoNormal /^\(\s*. \)\@!\s*\zs.*\ze/
 endfunction
 
 function! s:todo_doing()
@@ -750,26 +771,61 @@ function! s:strip_mark(line)
 endfunction
 
 function! s:get_mark(line)
-	return match(a:line, '\v^\s+\zs[*>x ]\ze .*') || ' '
+	let mark = matchstr(a:line, '\v^\s*\zs[*>x ]\ze .*')
+	if mark == ''
+		let mark = ' '
+	endif
+	return mark
 endfunction
 
 function! s:mark_priority(mark)
-	{'>':0, ' ':1, '*': 3, 'x':4}[a:mark]
+	let definition = {'>':0, ' ':1, '*': 3, 'x':4}
+	return definition[a:mark]
 endfunction
 
-function! s:todo_reorder_buffer()
-	let todo = s:create_sorted_todo_structure_from_current_buffer()
-	echo todo
-	return
-	" normal! ggdG
-	call s:emit_todo(todo)
+function! s:stable_sort(list, func)
+	let i = 0
+	while i < len(a:list)
+		let j = len(a:list) - 1
+		while j > i
+			if a:func(a:list[j - 1], a:list[j]) > 0
+					let tmp = a:list[j]
+					let a:list[j] = a:list[j - 1]
+					let a:list[j - 1] = tmp
+			endif
+			let j -= 1
+		endwhile
+		let i += 1
+	endwhile
+	return a:list
+endfunction
+
+function! s:todo_reorder_buffer() abort
+	let todo = s:create_todo_structure_from_current_buffer()
+	let sorted_todo = s:sort_todo_structure(deepcopy(todo), function('s:todo_ordering'))
+	if todo == sorted_todo
+		return
+	endif
+	normal! ggdG
+	call s:emit_todo(sorted_todo)
+	normal! gg
 endfunction
 
 function! s:emit_todo(todo)
-	call append(a:todo.line, line('$'))
+	if !a:todo.root
+		call append(line('$') - 1, a:todo.line)
+	endif
 	for c in a:todo.children
-		call s:emit(c)
+		call s:emit_todo(c)
 	endfor
+endfunction
+
+function! s:sort_todo_structure(todo, func) abort
+	call s:stable_sort(a:todo.children, a:func)
+	for c in a:todo.children
+		call s:sort_todo_structure(c, a:func)
+	endfor
+	return a:todo
 endfunction
 
 function! s:todo_ordering(a,b)
@@ -778,26 +834,32 @@ endfunction
 
 let g:todo_debug = []
 
-function! s:create_sorted_todo_structure_from_current_buffer()
+function! s:print_todo_structure(todo, indent_level)
+	echo repeat(' ', a:indent_level * 2) . matchstr(a:todo.line, '\v^\s*\zs.*\ze$')
+	for c in a:todo.children
+		call s:print_todo_structure(c, a:indent_level + 1)
+	endfor
+endfunction
+
+function! s:create_todo_structure_from_current_buffer()
 	let structure = []
 	let stack = [s:new_todo_structure('ROOT')]
+	let stack[-1].root = 1
 	let lnum = 1
 	let prev_indent_level = -1
+
 	while lnum <= line('$')
 		let line = getline(lnum)
-		let lnum += 1
 
-		if line =~# ''
+		if line == ''
+			let lnum += 1
 			continue
 		endif
 
-		call add(g:todo_debug, line)
-
-		let cur = new_todo_structure(line)
+		let cur = s:new_todo_structure(line)
 		let indent_level = indent(lnum) / &shiftwidth
 		if prev_indent_level == indent_level
-			let s=call remove(stack, -1)
-			call sort(s.children, function('s:todo_ordering'))
+			let s=remove(stack, -1)
 			call add(stack[-1].children, cur)
 			call add(stack, cur)
 		elseif prev_indent_level < indent_level
@@ -805,22 +867,19 @@ function! s:create_sorted_todo_structure_from_current_buffer()
 			call add(stack, cur)
 		else " prev_indent_level > indent_level
 			let pop_count = prev_indent_level - indent_level
-			let removed= remove(stack, -pop_count)
-			for s in removed
-				call sort(s.children, function('s:todo_ordering'))
-			endfor
+			let removed = remove(stack, -pop_count - 1, -1)
 			call add(stack[-1].children, cur)
 			call add(stack, cur)
 		end
+
 		let prev_indent_level = indent_level
+		let lnum += 1
 	endwhile
-	for s in stack
-		call sort(s.children, function('s:todo_ordering'))
-	endfor
+
 	return stack[0]
 endfunction
 
 function! s:new_todo_structure(line)
-	return {'line': a:line, 'children': []}
+	return {'root': 0, 'line': a:line, 'children': []}
 endfunction
 "}}}
