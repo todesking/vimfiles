@@ -734,8 +734,6 @@ function! s:todo_keymap()
 	nnoremap <leader>a :<C-U>call <SID>todo_doing()<CR>
 	nnoremap <leader>r :<C-U>call <SID>todo_reorder_buffer()<CR>
 	nnoremap <leader><Space> :<C-U>call <SID>todo_clear_mark()<CR>
-	nnoremap <leader>j :<C-U>call <SID>todo_move_up()<CR>
-	nnoremap <leader>k :<C-U>call <SID>todo_move_down()<CR>
 endfunction
 
 function! s:todo_syntax()
@@ -763,14 +761,6 @@ endfunction
 
 function! s:todo_clear_mark()
 	call s:set_mark('.', '')
-endfunction
-
-function! s:todo_move_up()
-	let todo_id = line('.')
-	let parent = s:todo_parent_of(todo_id)
-endfunction
-
-function! s:todo_move_down()
 endfunction
 
 function! s:set_mark(lnum, mark)
@@ -822,18 +812,25 @@ function! s:todo_reorder_buffer() abort
 	if todo == sorted_todo
 		return
 	endif
-	call s:emit_todo(sorted_todo)
+	call s:todo_redraw(sorted_todo)
 endfunction
 
-function! s:emit_todo(todo) abort
+function! s:todo_redraw(todo)
+	let lazyredraw = &lazyredraw
+	set lazyredraw
 	normal! ggdG
+	call s:todo_emit(a:todo)
+	normal! gg
+	let &lazyredraw=lazyredraw
+endfunction
+
+function! s:todo_emit(todo) abort
 	if !a:todo.root
 		call append(line('$') - 1, a:todo.line)
 	endif
 	for c in a:todo.children
 		call s:emit_todo(c)
 	endfor
-	normal! gg
 endfunction
 
 function! s:sort_todo_structure(todo, func) abort
@@ -857,7 +854,7 @@ function! s:print_todo_structure(todo, indent_level)
 	endfor
 endfunction
 
-function! s:create_todo_structure_from_current_buffer()
+function! s:create_todo_structure_from_current_buffer() abort
 	let structure = []
 	let stack = [s:new_todo_structure(0, 'ROOT')]
 	let stack[-1].root = 1
@@ -895,7 +892,7 @@ function! s:create_todo_structure_from_current_buffer()
 	return stack[0]
 endfunction
 
-function! s:new_todo_structure(lnum, line)
-	return {'line_num': lnum, 'root': 0, 'line': a:line, 'children': []}
+function! s:new_todo_structure(lnum, line) abort
+	return {'line_num': a:lnum, 'root': 0, 'line': a:line, 'children': []}
 endfunction
 "}}}
