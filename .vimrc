@@ -899,7 +899,7 @@ function! s:todo_emit(todo) abort
 		call append(line('$') - 1, a:todo.line)
 	endif
 	for c in a:todo.children
-		call s:emit_todo(c)
+		call s:todo_emit(c)
 	endfor
 endfunction
 
