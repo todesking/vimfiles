@@ -787,7 +787,7 @@ function! s:get_mark(line)
 endfunction
 
 function! s:mark_priority(mark)
-	let definition = {'>':0, ' ':1, '*': 3, 'x':4}
+	let definition = {'>':0, ' ':1, '*': 3, 'x':3}
 	return definition[a:mark]
 endfunction
 
