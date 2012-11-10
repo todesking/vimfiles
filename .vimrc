@@ -724,6 +724,7 @@ endfunction
 
 " todo.vim {{{
 augroup vimrc-todo
+	autocmd BufNewFile,BufRead TODO set filetype=todo
 	autocmd FileType TODO call s:todo_syntax()
 	autocmd FileType TODO call s:todo_keymap()
 augroup END
