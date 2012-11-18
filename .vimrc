@@ -243,7 +243,7 @@ NeoBundle 'closetag.vim' " {{{
    autocmd Filetype html,xml,xsl,eruby runtime plugin/closetag.vim
 " }}}
 NeoBundle 'Align' " {{{
-let g:Align_xstrlen=3
+let g:Align_xstrlen='strwidth'
 map (trashbox-leader-rwp) <Plug>RestoreWinPosn
 map (trashbox-leader-swp) <Plug>SaveWinPosn
 let g:loaded_AlignMapsPlugin = 1
