@@ -750,13 +750,31 @@ augroup vimrc-todo
 augroup END
 
 function! s:todo_keymap()
-	nnoremap <leader>d :<C-U>call <SID>todo_done()<CR>
-	nnoremap <leader>x :<C-U>call <SID>todo_discard()<CR>
-	nnoremap <leader>a :<C-U>call <SID>todo_doing()<CR>
-	nnoremap <leader>r :<C-U>call <SID>todo_reorder_buffer()<CR>
-	nnoremap <leader><Space> :<C-U>call <SID>todo_clear_mark()<CR>
-	nnoremap <leader>k :<C-U>call <SID>todo_move_up()<CR>
-	nnoremap <leader>j :<C-U>call <SID>todo_move_down()<CR>
+	nnoremap <Plug>(todo-mark-done)    :<C-U>call <SID>todo_done()<CR>
+	nnoremap <Plug>(todo_mark-discard) :<C-U>call <SID>todo_discard()<CR>
+	nnoremap <Plug>(todo-mark-doing)   :<C-U>call <SID>todo_doing()<CR>
+	nnoremap <Plug>(todo-mark-clear)   :<C-U>call <SID>todo_clear_mark()<CR>
+	nnoremap <Plug>(todo-reorder)      :<C-U>call <SID>todo_reorder_buffer()<CR>
+	nnoremap <Plug>(todo-move-up)      :<C-U>call <SID>todo_move_up()<CR>
+	nnoremap <Plug>(todo-move-down)    :<C-U>call <SID>todo_move_down()<CR>
+
+	nmap <leader>d       <Plug>(todo-mark-done)
+	nmap <leader>x       <Plug>(todo-mark-discard)
+	nmap <leader>a       <Plug>(todo-mark-doing)
+	nmap <leader>r       <Plug>(todo-reorder)
+	nmap <leader><Space> <Plug>(todo-mark-clear)
+	nmap <leader>k       <Plug>(todo-move-up)
+	nmap <leader>j       <Plug>(todo-move-down)
+endfunction
+
+function! s:todo_move_mode()
+	nnoremap j <Plug>(todo-move-up)
+	nnoremap k <Plug>(todo-move-down)
+	nnoremap <ESC> <Plug>(todo-exit-move-mode)
+endfunction
+
+function! s:todo_exit_move_mode()
+	augroup
 endfunction
 
 function! s:todo_syntax()
@@ -771,28 +789,33 @@ function! s:todo_syntax()
 endfunction
 
 function! s:todo_doing()
-	call s:set_mark('.', '> ')
+	call s:todo_set_mark_buffer('.', '>')
 endfunction
 
 function! s:todo_discard()
-	call s:set_mark('.', 'x ')
+	call s:todo_set_mark_buffer('.', 'x')
 endfunction
 
 function! s:todo_done()
-	call s:set_mark('.', '* ')
+	call s:todo_set_mark_buffer('.', '*')
 endfunction
 
 function! s:todo_clear_mark()
-	call s:set_mark('.', '')
+	call s:todo_set_mark_buffer('.', '')
 endfunction
 
-function! s:set_mark(lnum, mark)
+function! s:todo_set_mark_buffer(lnum, mark)
 	let line = getline(a:lnum)
-	let marked_line = substitute(s:strip_mark(line), '^\v(\s*)(.*)', '\1'.a:mark.'\2', '')
+	let marked_line = s:todo_set_mark(line, a:mark)
 	if line == marked_line
 		return
 	endif
 	call setline(a:lnum, marked_line)
+endfunction
+
+function! s:todo_set_mark(line, mark)
+	let prefix = (a:mark == '') ? '' : a:mark . ' '
+	return substitute(s:strip_mark(a:line), '^\v(\s*)(.*)', '\1'.prefix.'\2', '')
 endfunction
 
 function! s:strip_mark(line)
@@ -897,9 +920,29 @@ function! s:todo_parent_of(todo, lnum) abort
 	return {}
 endfunction
 
+function! s:update_todo_doing_status(todo)
+	call s:todo_clear_doing_mark_all(a:todo)
+	call s:sort_todo_structure(a:todo, function('s:todo_ordering'))
+	if empty(a:todo.children)
+		return a:todo
+	endif
+	let cur = a:todo.children[0]
+	while 1
+		let mark = s:get_mark(cur.line)
+		if mark == ' '
+			let cur.line = s:todo_set_mark(cur.line, '>')
+		endif
+		if empty(cur.children)
+			break
+		endif
+		let cur = cur.children[0]
+	endwhile
+	return a:todo
+endfunction
+
 function! s:todo_reorder_buffer() abort
 	let todo = s:create_todo_structure_from_current_buffer()
-	let sorted_todo = s:sort_todo_structure(deepcopy(todo), function('s:todo_ordering'))
+	let sorted_todo = s:update_todo_doing_status(deepcopy(todo))
 	if todo == sorted_todo
 		return
 	endif
@@ -921,6 +964,15 @@ function! s:todo_emit(todo) abort
 	endif
 	for c in a:todo.children
 		call s:todo_emit(c)
+	endfor
+endfunction
+
+function! s:todo_clear_doing_mark_all(todo)
+	if s:get_mark(a:todo.line) == '>'
+		let a:todo.line = s:todo_set_mark(a:todo.line, '')
+	endif
+	for c in a:todo.children
+		call s:todo_clear_doing_mark_all(c)
 	endfor
 endfunction
 
