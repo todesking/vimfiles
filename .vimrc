@@ -657,6 +657,10 @@ autocmd InsertLeave * highlight StatusLine guifg=#2E4340 guibg=#ccdc90
 augroup END
 " }}}
 
+" Title string {{{
+let &titlestring='%m%F%( %a%) %{g:todo_current_doing}'
+"}}}
+
 " IM hack(disable im if normal mode) {{{
 function! s:disable_im_if_normal_mode()
 	if mode() == 'n'
@@ -749,10 +753,11 @@ augroup vimrc-todo
 	autocmd FileType TODO call s:todo_keymap()
 augroup END
 
+let g:todo_current_doing='(none)'
+
 function! s:todo_keymap()
 	nnoremap <Plug>(todo-mark-done)    :<C-U>call <SID>todo_done()<CR>
-	nnoremap <Plug>(todo_mark-discard) :<C-U>call <SID>todo_discard()<CR>
-	nnoremap <Plug>(todo-mark-doing)   :<C-U>call <SID>todo_doing()<CR>
+	nnoremap <Plug>(todo-mark-discard) :<C-U>call <SID>todo_discard()<CR>
 	nnoremap <Plug>(todo-mark-clear)   :<C-U>call <SID>todo_clear_mark()<CR>
 	nnoremap <Plug>(todo-reorder)      :<C-U>call <SID>todo_reorder_buffer()<CR>
 	nnoremap <Plug>(todo-move-up)      :<C-U>call <SID>todo_move_up()<CR>
@@ -760,7 +765,6 @@ function! s:todo_keymap()
 
 	nmap <leader>d       <Plug>(todo-mark-done)
 	nmap <leader>x       <Plug>(todo-mark-discard)
-	nmap <leader>a       <Plug>(todo-mark-doing)
 	nmap <leader>r       <Plug>(todo-reorder)
 	nmap <leader><Space> <Plug>(todo-mark-clear)
 	nmap <leader>k       <Plug>(todo-move-up)
@@ -786,10 +790,6 @@ function! s:todo_syntax()
 	syntax match TodoDoing /^\s*\zs> .*\ze/
 	syntax match TodoDisabled /^\s*\zsx .*\ze/
 	syntax match TodoNormal /^\(\s*. \)\@!\s*\zs.*\ze/
-endfunction
-
-function! s:todo_doing()
-	call s:todo_set_mark_buffer('.', '>')
 endfunction
 
 function! s:todo_discard()
@@ -940,9 +940,23 @@ function! s:update_todo_doing_status(todo)
 	return a:todo
 endfunction
 
+function! s:todo_current_doing(todo) abort
+	if a:todo.root || s:get_mark(a:todo.line) == '>'
+		for c in a:todo.children
+			let doing = s:todo_current_doing(c)
+			if doing != ''
+				return doing
+			endif
+		endfor
+		return a:todo.root ? '' : substitute(s:todo_set_mark(a:todo.line, ''), '^\s\+', '', '')
+	end
+	return ''
+endfunction
+
 function! s:todo_reorder_buffer() abort
 	let todo = s:create_todo_structure_from_current_buffer()
 	let sorted_todo = s:update_todo_doing_status(deepcopy(todo))
+	let g:todo_current_doing = s:todo_current_doing(sorted_todo)
 	if todo == sorted_todo
 		return
 	endif
