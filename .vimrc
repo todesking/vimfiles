@@ -943,16 +943,17 @@ function! s:update_todo_doing_status(todo)
 endfunction
 
 function! s:todo_current_doing(todo) abort
+	let current_doing = ''
 	if a:todo.root || s:get_mark(a:todo.line) == '>'
+		let current_doing = a:todo.root ? '' : substitute(s:todo_set_mark(a:todo.line, ''), '^\s\+', '', '')
 		for c in a:todo.children
-			let doing = s:todo_current_doing(c)
-			if doing != ''
-				return doing
+			let child_doing = s:todo_current_doing(c)
+			if child_doing != ''
+				let current_doing = current_doing . ' > ' . child_doing
 			endif
 		endfor
-		return a:todo.root ? '' : substitute(s:todo_set_mark(a:todo.line, ''), '^\s\+', '', '')
 	end
-	return ''
+	return substitute(current_doing, '^ > ', '', '')
 endfunction
 
 function! s:todo_reorder_buffer() abort
