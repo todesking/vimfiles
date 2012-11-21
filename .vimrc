@@ -137,7 +137,8 @@ nnoremap <C-Q>r <ESC>
 nnoremap <C-Q>rm :<C-u>Unite rails/model<CR>
 nnoremap <C-Q>rc :<C-u>Unite rails/controller<CR>
 nnoremap <C-Q>rv :<C-u>Unite rails/view<CR>
-nnoremap <C-Q>rd :<C-u>Unite rails/db<CR>
+nnoremap <C-Q>rd :<C-u>Unite rails/db -input=seeds/\ <CR>
+nnoremap <C-Q>ri :<C-u>Unite rails/db -input=migrate/\ <CR>
 
 " C-] to unite tag jump
 augroup vimrc-tagjump-unite
@@ -659,7 +660,7 @@ augroup END
 " }}}
 
 " Title string {{{
-let &titlestring='%m%F%( %a%) %{g:todo_current_doing}'
+let &titlestring='%m%F%( %a%) TODO: %{g:todo_current_doing}'
 "}}}
 
 " IM hack(disable im if normal mode) {{{
