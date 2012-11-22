@@ -348,6 +348,8 @@ nnoremap <CR> :call append(line('.'),'')<CR>
 nnoremap <silent>,n :tabnew<CR>
 nnoremap <silent>,h :tabprevious<CR>
 nnoremap <silent>,l :tabnext<CR>
+nnoremap <silent>,H :tabmove -1<CR>
+nnoremap <silent>,L :tabmove +1<CR>
 
 inoremap <C-E> <End>
 inoremap <C-A> <Home>
