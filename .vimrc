@@ -86,6 +86,7 @@ call unite#filters#sorter_default#use(['sorter_smart'])
 " }}}
 " unite-file_mru {{{
 let g:unite_source_file_mru_limit=1000
+call unite#custom_source('file_mru', 'ignore_pattern', '\.rsync_cache')
 " }}}
 "}}}
 NeoBundle 'tsukkee/unite-tag' "{{{
@@ -138,7 +139,8 @@ nnoremap <C-Q>r <ESC>
 nnoremap <C-Q>rm :<C-u>Unite rails/model<CR>
 nnoremap <C-Q>rc :<C-u>Unite rails/controller<CR>
 nnoremap <C-Q>rv :<C-u>Unite rails/view<CR>
-nnoremap <C-Q>rd :<C-u>Unite rails/db<CR>
+nnoremap <C-Q>rd :<C-u>Unite rails/db -input=seeds/\ <CR>
+nnoremap <C-Q>ri :<C-u>Unite rails/db -input=migrate/\ <CR>
 
 " C-] to unite tag jump
 augroup vimrc-tagjump-unite
@@ -262,7 +264,7 @@ NeoBundle 'todesking/vim-easymotion' "{{{
 	nmap <C-K> <Leader><Leader>b
 	vmap <C-J> <Leader><Leader>w
 	vmap <C-K> <Leader><Leader>b
-	let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvwxyz'
+	let g:EasyMotion_keys = 'siogkmjferndlhyuxvtcbwa'
 "}}}
 NeoBundle 'kana/vim-textobj-user'
 
@@ -348,6 +350,8 @@ nnoremap <CR> :call append(line('.'),'')<CR>
 nnoremap <silent>,n :tabnew<CR>
 nnoremap <silent>,h :tabprevious<CR>
 nnoremap <silent>,l :tabnext<CR>
+nnoremap <silent>,H :tabmove -1<CR>
+nnoremap <silent>,L :tabmove +1<CR>
 
 inoremap <C-E> <End>
 inoremap <C-A> <Home>
@@ -660,7 +664,7 @@ augroup END
 " }}}
 
 " Title string {{{
-let &titlestring='%m%F%( %a%) %{g:todo_current_doing}'
+let &titlestring='%m%F%( %a%) TODO: %{g:todo_current_doing}'
 "}}}
 
 " IM hack(disable im if normal mode) {{{
@@ -943,16 +947,17 @@ function! s:update_todo_doing_status(todo)
 endfunction
 
 function! s:todo_current_doing(todo) abort
+	let current_doing = ''
 	if a:todo.root || s:get_mark(a:todo.line) == '>'
+		let current_doing = a:todo.root ? '' : substitute(s:todo_set_mark(a:todo.line, ''), '^\s\+', '', '')
 		for c in a:todo.children
-			let doing = s:todo_current_doing(c)
-			if doing != ''
-				return doing
+			let child_doing = s:todo_current_doing(c)
+			if child_doing != ''
+				let current_doing = current_doing . ' > ' . child_doing
 			endif
 		endfor
-		return a:todo.root ? '' : substitute(s:todo_set_mark(a:todo.line, ''), '^\s\+', '', '')
 	end
-	return ''
+	return substitute(current_doing, '^ > ', '', '')
 endfunction
 
 function! s:todo_reorder_buffer() abort
