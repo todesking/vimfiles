@@ -45,6 +45,8 @@ let s:foldcolumn_default=10
 
 set tags+=./tags,./../tags,./../../tags,./../../../tags,./../../../../tags
 
+set scrolloff=10
+
 " }}}
 
 " Visible spaces {{{
