@@ -137,6 +137,7 @@ nnoremap <C-Q>r <ESC>
 nnoremap <C-Q>rm :<C-u>Unite rails/model<CR>
 nnoremap <C-Q>rc :<C-u>Unite rails/controller<CR>
 nnoremap <C-Q>rv :<C-u>Unite rails/view<CR>
+nnoremap <C-Q>rf :<C-u>Unite rails/config<CR>
 nnoremap <C-Q>rd :<C-u>Unite rails/db -input=seeds/\ <CR>
 nnoremap <C-Q>ri :<C-u>Unite rails/db -input=migrate/\ <CR>
 
