@@ -45,7 +45,7 @@ let s:foldcolumn_default=10
 
 set tags+=./tags,./../tags,./../../tags,./../../../tags,./../../../../tags
 
-set scrolloff=10
+set scrolloff=0
 
 " }}}
 
@@ -664,7 +664,7 @@ augroup END
 " }}}
 
 " Title string {{{
-let &titlestring='%m%F%( %a%) TODO: %{g:todo_current_doing}'
+let &titlestring='%m%F%( %a%) [TODO] %{g:todo_current_doing}'
 "}}}
 
 " IM hack(disable im if normal mode) {{{
