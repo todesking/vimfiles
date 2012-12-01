@@ -139,6 +139,7 @@ nnoremap <C-Q>r <ESC>
 nnoremap <C-Q>rm :<C-u>Unite rails/model<CR>
 nnoremap <C-Q>rc :<C-u>Unite rails/controller<CR>
 nnoremap <C-Q>rv :<C-u>Unite rails/view<CR>
+nnoremap <C-Q>rf :<C-u>Unite rails/config<CR>
 nnoremap <C-Q>rd :<C-u>Unite rails/db -input=seeds/\ <CR>
 nnoremap <C-Q>ri :<C-u>Unite rails/db -input=migrate/\ <CR>
 
@@ -762,19 +763,19 @@ augroup END
 let g:todo_current_doing='(none)'
 
 function! s:todo_keymap()
-	nnoremap <Plug>(todo-mark-done)    :<C-U>call <SID>todo_done()<CR>
-	nnoremap <Plug>(todo-mark-discard) :<C-U>call <SID>todo_discard()<CR>
-	nnoremap <Plug>(todo-mark-clear)   :<C-U>call <SID>todo_clear_mark()<CR>
-	nnoremap <Plug>(todo-reorder)      :<C-U>call <SID>todo_reorder_buffer()<CR>
-	nnoremap <Plug>(todo-move-up)      :<C-U>call <SID>todo_move_up()<CR>
-	nnoremap <Plug>(todo-move-down)    :<C-U>call <SID>todo_move_down()<CR>
+	nnoremap <buffer> <Plug>(todo-mark-done)    :<C-U>call <SID>todo_done()<CR>
+	nnoremap <buffer> <Plug>(todo-mark-discard) :<C-U>call <SID>todo_discard()<CR>
+	nnoremap <buffer> <Plug>(todo-mark-clear)   :<C-U>call <SID>todo_clear_mark()<CR>
+	nnoremap <buffer> <Plug>(todo-reorder)      :<C-U>call <SID>todo_reorder_buffer()<CR>
+	nnoremap <buffer> <Plug>(todo-move-up)      :<C-U>call <SID>todo_move_up()<CR>
+	nnoremap <buffer> <Plug>(todo-move-down)    :<C-U>call <SID>todo_move_down()<CR>
 
-	nmap <leader>d       <Plug>(todo-mark-done)
-	nmap <leader>x       <Plug>(todo-mark-discard)
-	nmap <leader>r       <Plug>(todo-reorder)
-	nmap <leader><Space> <Plug>(todo-mark-clear)
-	nmap <leader>k       <Plug>(todo-move-up)
-	nmap <leader>j       <Plug>(todo-move-down)
+	nmap <buffer> <leader>d       <Plug>(todo-mark-done)
+	nmap <buffer> <leader>x       <Plug>(todo-mark-discard)
+	nmap <buffer> <leader>r       <Plug>(todo-reorder)
+	nmap <buffer> <leader><Space> <Plug>(todo-mark-clear)
+	nmap <buffer> <leader>k       <Plug>(todo-move-up)
+	nmap <buffer> <leader>j       <Plug>(todo-move-down)
 endfunction
 
 function! s:todo_move_mode()
