@@ -243,6 +243,7 @@ let g:neocomplcache_lock_iminsert = 1
 let g:neocomplcache_use_vimproc = 1
 let g:neocomplcache_enable_at_startup = 1
 " }}}
+NeoBundle 'Shougo/neocomplcache-rsense'
 
 NeoBundle 'closetag.vim' " {{{
    autocmd Filetype html,xml,xsl,eruby runtime plugin/closetag.vim
@@ -286,6 +287,7 @@ NeoBundle 'tpope/vim-rvm' "{{{
 "}}}
 NeoBundle 'todesking/vim-ruby', {'rev': 'my-custom'}
 NeoBundle 'tpope/vim-rails'
+NeoBundle 'rhysd/vim-textobj-ruby'
 
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'int3/vim-extradite'
@@ -362,11 +364,7 @@ cnoremap <C-E> <End>
 cnoremap <C-A> <Home>
 
 " not works well but I leave it
-nnoremap <silent>,bd :call <SID>delete_buffer_preserve_window()<CR>
-function! s:delete_buffer_preserve_window()
-	let nr=bufnr('%')
-	call feedkeys("\<C-^>:bdelete ".nr."\<CR>",'n')
-endfunction
+nnoremap <silent>,bd :<C-U>enew<CR>:bwipeout #<CR>
 
 inoremap <silent><C-L> <C-X><C-L>
 
