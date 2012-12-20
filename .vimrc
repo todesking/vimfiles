@@ -614,10 +614,10 @@ endfunction
 
 " Status line {{{
 function! Vimrc_current_project()
-	let path = expand('%')
-	if path =~ 'projects/[^/]\+/'
-		let project_tag = '['.substitute(path, '.*projects/\([^/]\+\)/.*', '\1', '').'] '
-		let project_path = substitute(path, '^.*projects/[^/]\+/', '', '')
+	let path = substitute(expand('%:p'), '^'.expand('~'), '~', '')
+	if path =~ '/projects/[^/]\+/'
+		let project_tag = '['.substitute(path, '.*/projects/\([^/]\+\)/.*', '\1', '').'] '
+		let project_path = substitute(path, '^.*/projects/[^/]\+/', '', '')
 		return project_tag . project_path
 	else
 		return path
