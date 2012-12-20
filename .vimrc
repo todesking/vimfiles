@@ -613,19 +613,20 @@ endfunction
 " }}}
 
 " Status line {{{
-function! Vimrc_statusline_current_file()
-	let cur = s:current_project_dir()
-	if !cur
-		return ''
+function! Vimrc_current_project()
+	let path = expand('%')
+	if path =~ 'projects/[^/]\+/'
+		let project_tag = '['.substitute(path, '.*projects/\([^/]\+\)/.*', '\1', '').'] '
+		let project_path = substitute(path, '^.*projects/[^/]\+/', '', '')
+		return project_tag . project_path
+	else
+		return path
 	endif
-	return 1
 endfunction
-
 let &statusline =
 			\  ''
 			\. '%<'
-			\. '%F'
-			\. ': %{Vimrc_statusline_current_file()}'
+			\. '%{Vimrc_current_project()} '
 			\. '%= '
 			\. '%m'
 			\. '%{&filetype}'
