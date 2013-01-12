@@ -289,14 +289,20 @@ NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
 " }}}
 NeoBundle 'taku-o/vim-zoom'
 
+" ruby {{{
 NeoBundle 'tpope/vim-rvm' "{{{
 "}}}
 NeoBundle 'todesking/vim-ruby', {'rev': 'my-custom'}
 NeoBundle 'tpope/vim-rails'
 NeoBundle 'rhysd/vim-textobj-ruby'
+" }}}
 
+NeoBundle 'motemen/hatena-vim'
+
+" Git {{{
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'int3/vim-extradite'
+" }}}
 
 NeoBundle 'todesking/vim-ref', {'rev': 'fix-refe'} "{{{
 	let g:ref_refe_cmd="~/local/bin/refe"
@@ -539,7 +545,7 @@ endfunction"}}}
 
 " Current project dir {{{
 function! s:current_project_dir()
-	let project_marker_dirs = ['lib', 'spec', 'bin', 'autoload', 'plugins']
+	let project_marker_dirs = ['lib', 'test', 'spec', 'bin', 'autoload', 'plugins']
 	let project_replace_pattern = '/\('.join(project_marker_dirs,'\|').'\)\(/.\{-}\)\?$'
 	let project_pattern = '.*'.project_replace_pattern
 	if exists('b:rails_root')
