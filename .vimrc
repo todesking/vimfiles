@@ -312,7 +312,7 @@ NeoBundle 'todesking/vim-ref', {'rev': 'fix-refe'} "{{{
 NeoBundle 'grep.vim' "{{{
 	let Grep_OpenQuickfixWindow = 0
 "}}}
-NeoBundle 'todesking/vim-ref-ri', {'rev': 'my-custom'} "{{{
+NeoBundle 'taka84u9/vim-ref-ri', {'rev': 'master'} "{{{
 	command! -nargs=1 Ri :Ref ri <args>
 "}}}
 
