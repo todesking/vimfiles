@@ -548,10 +548,13 @@ function! s:current_project_dir()
 	let project_marker_dirs = ['lib', 'test', 'spec', 'bin', 'autoload', 'plugins']
 	let project_replace_pattern = '/\('.join(project_marker_dirs,'\|').'\)\(/.\{-}\)\?$'
 	let project_pattern = '.*'.project_replace_pattern
+    let dir = expand('%:p:h')
 	if exists('b:rails_root')
 		return b:rails_root
-	elseif expand('%:p:h') =~ project_pattern && expand('%:p:h') !~ '/usr/.*'
-		return substitute(expand('%:p:h'), project_replace_pattern, '', '')
+	elseif dir =~ project_pattern && dir !~ '/usr/.*'
+		return substitute(dir, project_replace_pattern, '', '')
+    elseif dir =~ '/projects/'
+        return substitute(dir, '\v(.*\/projects\/[-_a-zA-Z0-9])\/.*', '\1', '')
 	else
 		return ''
 	endif
