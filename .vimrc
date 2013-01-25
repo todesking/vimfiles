@@ -397,6 +397,9 @@ inoremap <silent><C-L> <C-X><C-L>
 nnoremap j gj
 nnoremap k gk
 
+set visualbell
+set t_vb=
+
 function! s:register_jump_key(key)
 	exec 'nnoremap' '<silent>'.a:key
 				\ a:key.':call <SID>hello_again_hook(''CursorHold'')'
