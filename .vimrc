@@ -699,6 +699,18 @@ augroup END
 let &titlestring='%m%F%( %a%) [TODO] %{g:todo_current_doing}'
 "}}}
 
+" IM hack(disable im if normal mode) {{{
+function! s:disable_im_if_normal_mode()
+	if mode() == 'n'
+		call feedkeys('zz') " I don't know how it works but it works
+	endif
+endfunction
+augroup vimrc-disable-ime-in-normal-mode
+	autocmd!
+	autocmd FocusGained * call <SID>disable_im_if_normal_mode()
+augroup END
+" }}}
+
 " しばらく放置/よそから復帰したときのフック {{{
 function! s:hello_again_enter()
 	setlocal cursorline
