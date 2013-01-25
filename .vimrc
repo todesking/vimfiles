@@ -117,6 +117,11 @@ NeoBundle 'basyura/unite-rails'
 NeoBundle 'osyo-manga/unite-fold' " {{{
 	call unite#custom_filters('fold',['matcher_default', 'sorter_nothing', 'converter_default'])
 "}}}
+NeoBundle 'ujihisa/unite-colorscheme' " {{{
+command! Colors Unite colorscheme -auto-preview
+nnoremap <C-Q>c :<C-u>Colors<CR>
+" }}}
+NeoBundle 'ujihisa/unite-font'
 
 " Keymap {{{
 " in-unite {{{
@@ -288,6 +293,15 @@ NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
 	endif
 " }}}
 NeoBundle 'taku-o/vim-zoom'
+
+" Colors {{{
+NeoBundle 'altercation/vim-colors-solarized'
+NeoBundle 'pyte'
+NeoBundle 'newspaper.vim'
+NeoBundle 'Zenburn'
+NeoBundle 'ciaranm/inkpot'
+" }}}
+
 
 " ruby {{{
 NeoBundle 'tpope/vim-rvm' "{{{
