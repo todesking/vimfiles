@@ -597,6 +597,23 @@ function! Vimrc_complete_current_project_files(ArgLead, CmdLine, CursorPos)
 endfunction
 " }}}
 
+" Ce command(e based on Currend dir) {{{
+command! -complete=customlist,Vimrc_complete_current_dir -nargs=1 Ce :exec ':e '.expand('%:p:h').'/'."<args>"
+function! Vimrc_complete_current_dir(ArgLead, CmdLine, CursorPos)
+	let prefix = expand('%:p:h') . '/'
+	let candidates = glob(prefix.a:ArgLead.'*', 1, 1)
+	let result = []
+	for c in candidates
+		if isdirectory(c)
+			call add(result, substitute(c, prefix, '', '').'/')
+		else
+			call add(result, substitute(c, prefix, '', ''))
+		endif
+	endfor
+	return result
+endfunction
+" }}}
+
 " Rename file {{{
 " http://vim-users.jp/2009/05/hack17/
 command! -nargs=1 -complete=file Rename f <args>|call delete(expand('#'))|w
