@@ -402,8 +402,9 @@ set t_vb=
 
 function! s:register_jump_key(key)
 	exec 'nnoremap' '<silent>'.a:key
-				\ a:key.':call <SID>hello_again_hook(''CursorHold'')'
-				\   .'<CR>:call <SID>open_current_fold()<CR>'
+				\ a:key.':call <SID>hello_again_hook(''CursorHold'')<CR>'
+				\   .':call <SID>open_current_fold()<CR>'
+				\   .':normal! zz<CR>'
 endfunction
 
 function! s:open_current_fold()
