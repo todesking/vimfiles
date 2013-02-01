@@ -671,8 +671,8 @@ let &statusline =
 			\  ''
 			\. '%<'
 			\. '%{Vimrc_current_project()} '
-			\. '%= '
 			\. '%m'
+			\. '%= '
 			\. '%{&filetype}'
 			\. '%{",".(&fenc!=""?&fenc:&enc).",".&ff.","}'
 			\. '[%{GetB()}]'
@@ -714,7 +714,7 @@ augroup END
 " }}}
 
 " Title string {{{
-let &titlestring='%m%F%( %a%) [TODO] %{g:todo_current_doing}'
+let &titlestring='[TODO] %{g:todo_current_doing}'
 "}}}
 
 " IM hack(disable im if normal mode) {{{
