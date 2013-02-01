@@ -563,7 +563,7 @@ endfunction"}}}
 
 " Current project dir {{{
 function! s:current_project_dir()
-	let project_marker_dirs = ['lib', 'test', 'spec', 'bin', 'autoload', 'plugins']
+	let project_marker_dirs = ['lib', 'ext', 'test', 'spec', 'bin', 'autoload', 'plugins']
 	let project_replace_pattern = '/\('.join(project_marker_dirs,'\|').'\)\(/.\{-}\)\?$'
 	let project_pattern = '.*'.project_replace_pattern
     let dir = expand('%:p:h')
