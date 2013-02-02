@@ -184,6 +184,17 @@ function! s:unite_source.gather_candidates(args, context)
 endfunction
 call unite#define_source(s:unite_source)
 " }}}
+" unite-massive-candidates {{{
+let s:unite_source = {'name': 'massive-candidates'}
+function! s:unite_source.gather_candidates(args, context)
+  return map(repeat(['a', 'b', 'c'], 10000), '{
+        \ "word": v:val,
+        \ "source": "massive-candidates",
+        \ "kind": "word",
+        \ }')
+endfunction
+call unite#define_source(s:unite_source)
+" }}}
 " }}}
 
 " Sorter {{{
