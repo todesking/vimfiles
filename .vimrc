@@ -213,6 +213,9 @@ function! s:sorter_smart.filter(candidates, context)
 	if len(a:context.input) == 0
 		return a:candidates
 	endif
+	if len(a:candidates) > 100
+		return a:candidates
+	endif
 	let keywords = split(a:context.input, '\s\+')
 	if a:context.source.name == 'file_mru'
 		return a:candidates
