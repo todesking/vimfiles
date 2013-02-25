@@ -210,16 +210,15 @@ let s:sorter_smart = {
 "   file > directory : user.rb > user/active_user.rb
 "   alphabetical     : a_user.rb > b_user.rb
 function! s:sorter_smart.filter(candidates, context)
-	if len(a:context.input) == 0
+	let do_nothing = 0
+				\ || len(a:context.input) == 0
+				\ || len(a:candidates) > 100
+				\ || a:context.source.name == 'file_mru'
+	if do_nothing
 		return a:candidates
 	endif
-	if len(a:candidates) > 100
-		return a:candidates
-	endif
+
 	let keywords = split(a:context.input, '\s\+')
-	if a:context.source.name == 'file_mru'
-		return a:candidates
-	end
 	for candidate in a:candidates
 		let candidate.filter__sort_val =
 					\ s:sorter_smart_sort_val(candidate.word, keywords)
