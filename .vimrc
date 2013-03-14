@@ -329,6 +329,7 @@ NeoBundle 'motemen/hatena-vim'
 " Git {{{
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'int3/vim-extradite'
+NeoBundle 'Kocha/vim-unite-tig'
 " }}}
 
 NeoBundle 'todesking/vim-ref', {'rev': 'fix-refe'} "{{{
