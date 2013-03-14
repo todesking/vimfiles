@@ -339,6 +339,10 @@ NeoBundle 'todesking/vim-ref', {'rev': 'fix-refe'} "{{{
 NeoBundle 'grep.vim' "{{{
 	let Grep_OpenQuickfixWindow = 0
 "}}}
+NeoBundle 'mileszs/ack.vim' "{{{
+let g:ackprg = 'ag --nogroup --nocolor --column'
+let g:ack_qhandler = ""
+"}}}
 NeoBundle 'taka84u9/vim-ref-ri', {'rev': 'master'} "{{{
 	command! -nargs=1 Ri :Ref ri <args>
 "}}}
