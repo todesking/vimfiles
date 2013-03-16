@@ -43,7 +43,7 @@ set directory=$HOME/.vim/swp
 set foldtext=My_foldtext()
 let s:foldcolumn_default=10
 
-set tags+=./tags,./../tags,./../../tags,./../../../tags,./../../../../tags
+set tags+=./tags,./../tags,./../../tags,./../../../tags,./../../../../tags,./../../../../../tags,./../../../../../../tags
 
 set scrolloff=0
 
@@ -319,7 +319,7 @@ NeoBundle 'ciaranm/inkpot'
 " ruby {{{
 NeoBundle 'tpope/vim-rvm' "{{{
 "}}}
-NeoBundle 'todesking/vim-ruby', {'rev': 'my-custom'}
+NeoBundle 'vim-ruby/vim-ruby'
 NeoBundle 'tpope/vim-rails'
 NeoBundle 'rhysd/vim-textobj-ruby'
 " }}}
@@ -332,7 +332,7 @@ NeoBundle 'int3/vim-extradite'
 NeoBundle 'Kocha/vim-unite-tig'
 " }}}
 
-NeoBundle 'todesking/vim-ref', {'rev': 'fix-refe'} "{{{
+NeoBundle 'thinca/vim-ref' "{{{
 	let g:ref_refe_cmd="~/local/bin/refe"
 	command! -nargs=1 Man :Ref man <args>
 	command! -nargs=1 Refe :Ref refe <args>
