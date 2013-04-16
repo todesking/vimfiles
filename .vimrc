@@ -382,7 +382,6 @@ augroup vimrc-filetype-ruby
 	autocmd!
 	autocmd FileType ruby inoremap <buffer> <c-]> end<ESC>
 	autocmd FileType ruby set foldmethod=manual
-	autocmd FileType ruby setlocal iskeyword=a-z,A-Z,?,!,@-@,_
 augroup END
 
 " To avoid ultra-heavy movement when Ruby insert mode {{{
