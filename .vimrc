@@ -336,6 +336,10 @@ NeoBundle 'thinca/vim-ref' "{{{
 	let g:ref_refe_cmd="~/local/bin/refe"
 	command! -nargs=1 Man :Ref man <args>
 	command! -nargs=1 Refe :Ref refe <args>
+	augroup vimrc-filetype-ref
+		autocmd!
+		autocmd FileType ref setlocal bufhidden=hide
+	augroup END
 "}}}
 NeoBundle 'grep.vim' "{{{
 	let Grep_OpenQuickfixWindow = 0
