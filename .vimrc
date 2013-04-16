@@ -116,6 +116,19 @@ NeoBundle 'sgur/unite-qf'
 NeoBundle 'basyura/unite-rails'
 NeoBundle 'osyo-manga/unite-fold' " {{{
 	call unite#custom_filters('fold',['matcher_default', 'sorter_nothing', 'converter_default'])
+	function! g:vimrc_unite_fold_foldtext(bufnr, val)
+		if has_key(a:val, 'word')
+			return a:val.word
+		else
+			let marker_label = matchstr(a:val.line, "\"\\s*\\zs.*\\ze".split(&foldmarker, ",")[0])
+			if !empty(marker_label)
+				return marker_label
+			else
+				return matchstr(a:val.line, "^\\zs.*\\ze\\s*\"\\s*.*".split(&foldmarker, ",")[0])
+			endif
+		end
+	endfunction
+	let g:Unite_fold_foldtext=function('g:vimrc_unite_fold_foldtext')
 "}}}
 NeoBundle 'ujihisa/unite-colorscheme' " {{{
 command! Colors Unite colorscheme -auto-preview
