@@ -351,6 +351,13 @@ NeoBundle 'roalddevries/yaml.vim' "{{{
 	augroup END
 "}}}
 
+" vimscript {{{
+augroup vimrc-vimscript
+	autocmd!
+	autocmd FileType vim set textwidth=0
+augroup END
+" }}}
+
 NeoBundle 'motemen/hatena-vim'
 
 " Git {{{
