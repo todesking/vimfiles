@@ -338,6 +338,19 @@ NeoBundle 'tpope/vim-rails'
 NeoBundle 'rhysd/vim-textobj-ruby'
 " }}}
 
+NeoBundle 'roalddevries/yaml.vim' "{{{
+	function! Vimrc_autocmd_yaml_vim()
+		if &foldmethod != 'syntax'
+			runtime yaml.vim
+			set foldmethod=syntax
+		endif
+	endfunction
+	augroup vimrc-yaml-vim
+		autocmd!
+		autocmd FileType yaml nmap <buffer><leader>f :<C-U>call Vimrc_autocmd_yaml_vim()<CR>
+	augroup END
+"}}}
+
 NeoBundle 'motemen/hatena-vim'
 
 " Git {{{
