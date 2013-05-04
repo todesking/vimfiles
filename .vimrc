@@ -72,7 +72,7 @@ if has("syntax")
 endif
 " }}}
 
-" plugins {{{
+" plugins/filetypes {{{
 NeoBundle 'Shougo/vimproc'
 
 " Unite {{{
@@ -110,10 +110,31 @@ call unite#define_filter(s:converter_tag)
 unlet s:converter_tag
 
 call unite#custom_filters('tag',['matcher_default', 'sorter_default', 'converter_tag'])
+
+nnoremap <C-Q>t :<C-u>Unite tag<CR>
+" C-] to unite tag jump
+augroup vimrc-tagjump-unite
+	autocmd!
+	autocmd BufEnter *
+				\   if empty(&buftype)
+				\|      nnoremap <buffer> <C-]> m':<C-u>UniteWithCursorWord -immediately outline tag<CR>
+				\|  endif
+augroup END
 "}}}
 NeoBundle 'Shougo/unite-outline'
-NeoBundle 'sgur/unite-qf'
-NeoBundle 'basyura/unite-rails'
+NeoBundle 'sgur/unite-qf' "{{{
+nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview<CR>
+"}}}
+NeoBundle 'basyura/unite-rails' "{{{
+  nnoremap <C-Q>r <ESC>
+  nnoremap <C-Q>rm :<C-u>Unite rails/model<CR>
+  nnoremap <C-Q>rc :<C-u>Unite rails/controller<CR>
+  nnoremap <C-Q>rv :<C-u>Unite rails/view<CR>
+  nnoremap <C-Q>rf :<C-u>Unite rails/config<CR>
+  nnoremap <C-Q>rd :<C-u>Unite rails/db -input=seeds/\ <CR>
+  nnoremap <C-Q>ri :<C-u>Unite rails/db -input=migrate/\ <CR>
+  nnoremap <C-Q>rl :<C-u>Unite rails/lib<CR>
+"}}}
 NeoBundle 'osyo-manga/unite-fold' " {{{
 	call unite#custom_filters('fold',['matcher_default', 'sorter_nothing', 'converter_default'])
 	function! g:vimrc_unite_fold_foldtext(bufnr, val)
@@ -129,6 +150,8 @@ NeoBundle 'osyo-manga/unite-fold' " {{{
 		end
 	endfunction
 	let g:Unite_fold_foldtext=function('g:vimrc_unite_fold_foldtext')
+
+	nnoremap <C-Q>d :<C-u>Unite fold<CR>
 "}}}
 NeoBundle 'ujihisa/unite-colorscheme' " {{{
 command! Colors Unite colorscheme -auto-preview
@@ -151,28 +174,7 @@ nnoremap <C-Q>  <ESC>
 nnoremap <C-Q>u :UniteResume<CR>
 nnoremap <C-Q>o m':<C-u>Unite outline<CR>
 nnoremap <C-Q>p :<C-u>exec 'Unite file_rec:'.<SID>current_project_dir()<CR>
-nnoremap <C-Q>t :<C-u>Unite tag<CR>
-nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview<CR>
-nnoremap <C-Q>d :<C-u>Unite fold<CR>
 nnoremap <C-Q>l :<C-u>Unite line<CR>
-
-" unite-rails
-nnoremap <C-Q>r <ESC>
-nnoremap <C-Q>rm :<C-u>Unite rails/model<CR>
-nnoremap <C-Q>rc :<C-u>Unite rails/controller<CR>
-nnoremap <C-Q>rv :<C-u>Unite rails/view<CR>
-nnoremap <C-Q>rf :<C-u>Unite rails/config<CR>
-nnoremap <C-Q>rd :<C-u>Unite rails/db -input=seeds/\ <CR>
-nnoremap <C-Q>ri :<C-u>Unite rails/db -input=migrate/\ <CR>
-
-" C-] to unite tag jump
-augroup vimrc-tagjump-unite
-	autocmd!
-	autocmd BufEnter *
-				\   if empty(&buftype)
-				\|      nnoremap <buffer> <C-]> m':<C-u>UniteWithCursorWord -immediately outline tag<CR>
-				\|  endif
-augroup END
 " }}}
 
 " Sources {{{
@@ -327,7 +329,6 @@ NeoBundle 'newspaper.vim'
 NeoBundle 'Zenburn'
 NeoBundle 'ciaranm/inkpot'
 " }}}
-
 
 " ruby {{{
 NeoBundle 'tpope/vim-rvm' "{{{
