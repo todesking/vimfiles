@@ -364,6 +364,7 @@ NeoBundle 'motemen/hatena-vim'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'int3/vim-extradite'
 NeoBundle 'Kocha/vim-unite-tig'
+NeoBundle 'airblade/vim-gitgutter'
 " }}}
 
 NeoBundle 'thinca/vim-ref' "{{{
