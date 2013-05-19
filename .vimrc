@@ -338,6 +338,13 @@ NeoBundle 'tpope/vim-rails'
 NeoBundle 'rhysd/vim-textobj-ruby'
 " }}}
 
+NeoBundle 'slim-template/vim-slim' "{{{
+	augroup vimrc-plugin-vim-slim
+		autocmd!
+		autocmd BufNewFile,BufRead *.slim set syntax=slim
+	augroup END
+"}}}
+
 NeoBundle 'roalddevries/yaml.vim' "{{{
 	function! Vimrc_autocmd_yaml_vim()
 		if &foldmethod != 'syntax'
