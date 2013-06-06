@@ -373,7 +373,9 @@ NeoBundle 'motemen/hatena-vim'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'int3/vim-extradite'
 NeoBundle 'Kocha/vim-unite-tig'
-NeoBundle 'airblade/vim-gitgutter'
+NeoBundle 'airblade/vim-gitgutter' " {{{
+  let g:gitgutter_eager = 0
+" }}}
 " }}}
 
 NeoBundle 'thinca/vim-ref' "{{{
