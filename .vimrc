@@ -311,6 +311,7 @@ NeoBundle 'kana/vim-textobj-user'
 
 NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
 	if has('gui')
+		autocmd! indent_guides BufEnter
 		augroup vimrc-indentguide
 			autocmd!
 			autocmd BufWinEnter,BufNew * highlight IndentGuidesOdd guifg=NONE guibg=NONE
