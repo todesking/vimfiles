@@ -353,7 +353,7 @@ NeoBundle 'slim-template/vim-slim' "{{{
 	augroup vimrc-plugin-vim-slim
 		autocmd!
 		autocmd BufNewFile,BufRead *.slim set filetype=slim
-		autocmd FileType slim set shiftwidth=2 expandtab
+		autocmd FileType slim setlocal shiftwidth=2 expandtab
 	augroup END
 "}}}
 
