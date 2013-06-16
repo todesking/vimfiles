@@ -72,7 +72,7 @@ if has("syntax")
 endif
 " }}}
 
-" plugins {{{
+" plugins/filetypes {{{
 NeoBundle 'Shougo/vimproc'
 
 " Unite {{{
@@ -90,7 +90,7 @@ call unite#filters#sorter_default#use(['sorter_smart'])
 " }}}
 " unite-file_mru {{{
 let g:unite_source_file_mru_limit=1000
-call unite#custom_source('file_mru', 'ignore_pattern', '\.rsync_cache')
+call unite#custom_source('file_mru', 'ignore_pattern', '\.rsync_cache\|svn-commit\.tmp\|svn-cherry-pick\/\(message\|target\)')
 " }}}
 "}}}
 NeoBundle 'tsukkee/unite-tag' "{{{
@@ -110,12 +110,48 @@ call unite#define_filter(s:converter_tag)
 unlet s:converter_tag
 
 call unite#custom_filters('tag',['matcher_default', 'sorter_default', 'converter_tag'])
+
+nnoremap <C-Q>t :<C-u>Unite tag<CR>
+" C-] to unite tag jump
+augroup vimrc-tagjump-unite
+	autocmd!
+	autocmd BufEnter *
+				\   if empty(&buftype)
+				\|      nnoremap <buffer> <C-]> m':<C-u>UniteWithCursorWord -immediately outline tag<CR>
+				\|  endif
+augroup END
 "}}}
 NeoBundle 'Shougo/unite-outline'
-NeoBundle 'sgur/unite-qf'
-NeoBundle 'basyura/unite-rails'
+NeoBundle 'sgur/unite-qf' "{{{
+nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview<CR>
+"}}}
+NeoBundle 'basyura/unite-rails' "{{{
+  nnoremap <C-Q>r <ESC>
+  nnoremap <C-Q>rm :<C-u>Unite rails/model<CR>
+  nnoremap <C-Q>rc :<C-u>Unite rails/controller<CR>
+  nnoremap <C-Q>rv :<C-u>Unite rails/view<CR>
+  nnoremap <C-Q>rf :<C-u>Unite rails/config<CR>
+  nnoremap <C-Q>rd :<C-u>Unite rails/db -input=seeds/\ <CR>
+  nnoremap <C-Q>ri :<C-u>Unite rails/db -input=migrate/\ <CR>
+  nnoremap <C-Q>rl :<C-u>Unite rails/lib<CR>
+"}}}
 NeoBundle 'osyo-manga/unite-fold' " {{{
 	call unite#custom_filters('fold',['matcher_default', 'sorter_nothing', 'converter_default'])
+	function! g:vimrc_unite_fold_foldtext(bufnr, val)
+		if has_key(a:val, 'word')
+			return a:val.word
+		else
+			let marker_label = matchstr(a:val.line, "\"\\s*\\zs.*\\ze".split(&foldmarker, ",")[0])
+			if !empty(marker_label)
+				return marker_label
+			else
+				return matchstr(a:val.line, "^\\zs.*\\ze\\s*\"\\s*.*".split(&foldmarker, ",")[0])
+			endif
+		end
+	endfunction
+	let g:Unite_fold_foldtext=function('g:vimrc_unite_fold_foldtext')
+
+	nnoremap <C-Q>d :<C-u>Unite fold<CR>
 "}}}
 NeoBundle 'ujihisa/unite-colorscheme' " {{{
 command! Colors Unite colorscheme -auto-preview
@@ -138,28 +174,7 @@ nnoremap <C-Q>  <ESC>
 nnoremap <C-Q>u :UniteResume<CR>
 nnoremap <C-Q>o m':<C-u>Unite outline<CR>
 nnoremap <C-Q>p :<C-u>exec 'Unite file_rec:'.<SID>current_project_dir()<CR>
-nnoremap <C-Q>t :<C-u>Unite tag<CR>
-nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview<CR>
-nnoremap <C-Q>d :<C-u>Unite fold<CR>
 nnoremap <C-Q>l :<C-u>Unite line<CR>
-
-" unite-rails
-nnoremap <C-Q>r <ESC>
-nnoremap <C-Q>rm :<C-u>Unite rails/model<CR>
-nnoremap <C-Q>rc :<C-u>Unite rails/controller<CR>
-nnoremap <C-Q>rv :<C-u>Unite rails/view<CR>
-nnoremap <C-Q>rf :<C-u>Unite rails/config<CR>
-nnoremap <C-Q>rd :<C-u>Unite rails/db -input=seeds/\ <CR>
-nnoremap <C-Q>ri :<C-u>Unite rails/db -input=migrate/\ <CR>
-
-" C-] to unite tag jump
-augroup vimrc-tagjump-unite
-	autocmd!
-	autocmd BufEnter *
-				\   if empty(&buftype)
-				\|      nnoremap <buffer> <C-]> m':<C-u>UniteWithCursorWord -immediately outline tag<CR>
-				\|  endif
-augroup END
 " }}}
 
 " Sources {{{
@@ -306,6 +321,7 @@ endfunction
 
 NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
 	if has('gui')
+		autocmd! indent_guides BufEnter
 		augroup vimrc-indentguide
 			autocmd!
 			autocmd BufWinEnter,BufNew * highlight IndentGuidesOdd guifg=NONE guibg=NONE
@@ -325,7 +341,6 @@ NeoBundle 'Zenburn'
 NeoBundle 'ciaranm/inkpot'
 " }}}
 
-
 " ruby {{{
 NeoBundle 'tpope/vim-rvm' "{{{
 "}}}
@@ -334,18 +349,53 @@ NeoBundle 'tpope/vim-rails'
 NeoBundle 'rhysd/vim-textobj-ruby'
 " }}}
 
+NeoBundle 'slim-template/vim-slim' "{{{
+	augroup vimrc-plugin-vim-slim
+		autocmd!
+		autocmd BufNewFile,BufRead *.slim set filetype=slim
+		autocmd FileType slim set shiftwidth=2 expandtab
+	augroup END
+"}}}
+
+NeoBundle 'roalddevries/yaml.vim' "{{{
+	function! Vimrc_autocmd_yaml_vim()
+		if &foldmethod != 'syntax'
+			runtime yaml.vim
+			set foldmethod=syntax
+		endif
+	endfunction
+	augroup vimrc-yaml-vim
+		autocmd!
+		autocmd FileType yaml nmap <buffer><leader>f :<C-U>call Vimrc_autocmd_yaml_vim()<CR>
+	augroup END
+"}}}
+
+" vimscript {{{
+augroup vimrc-vimscript
+	autocmd!
+	autocmd FileType vim set textwidth=0
+augroup END
+" }}}
+
 NeoBundle 'motemen/hatena-vim'
 
 " Git {{{
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'int3/vim-extradite'
 NeoBundle 'Kocha/vim-unite-tig'
+NeoBundle 'airblade/vim-gitgutter' " {{{
+  let g:gitgutter_eager = 0
+" }}}
 " }}}
 
 NeoBundle 'thinca/vim-ref' "{{{
 	let g:ref_refe_cmd="~/local/bin/refe"
 	command! -nargs=1 Man :Ref man <args>
 	command! -nargs=1 Refe :Ref refe <args>
+	augroup vimrc-filetype-ref
+		autocmd!
+		autocmd FileType ref setlocal bufhidden=hide
+	augroup END
 "}}}
 NeoBundle 'grep.vim' "{{{
 	let Grep_OpenQuickfixWindow = 0
@@ -375,7 +425,6 @@ augroup vimrc-filetype-ruby
 	autocmd!
 	autocmd FileType ruby inoremap <buffer> <c-]> end<ESC>
 	autocmd FileType ruby set foldmethod=manual
-	autocmd FileType ruby setlocal iskeyword=a-z,A-Z,?,!,@-@,_
 augroup END
 
 " To avoid ultra-heavy movement when Ruby insert mode {{{
@@ -591,7 +640,7 @@ endfunction"}}}
 
 " Current project dir {{{
 function! s:current_project_dir()
-	let project_marker_dirs = ['lib', 'ext', 'test', 'spec', 'bin', 'autoload', 'plugins']
+	let project_marker_dirs = ['lib', 'ext', 'test', 'spec', 'bin', 'autoload', 'plugins', 'plugin']
 	let project_replace_pattern = '/\('.join(project_marker_dirs,'\|').'\)\(/.\{-}\)\?$'
 	let project_pattern = '.*'.project_replace_pattern
     let dir = expand('%:p:h')
