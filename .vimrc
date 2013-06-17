@@ -379,7 +379,9 @@ NeoBundle 'Kocha/vim-unite-tig'
 NeoBundle 'gregsexton/gitv' " {{{
 " }}}
 NeoBundle 'airblade/vim-gitgutter' " {{{
-  let g:gitgutter_eager = 0
+	let g:gitgutter_eager = 0
+	nnoremap <leader>g :<C-U>GitGutterAll<CR>
+
 " }}}
 " }}}
 
