@@ -307,7 +307,17 @@ NeoBundle 'todesking/vim-easymotion' "{{{
 	vmap <C-K> <Leader><Leader>b
 	let g:EasyMotion_keys = 'siogkmjferndlhyuxvtcbwa'
 "}}}
-NeoBundle 'kana/vim-textobj-user'
+NeoBundle 'kana/vim-textobj-user' " {{{
+	call textobj#user#plugin('lastmofified', {
+	\   'lastmodified': {
+	\     'select-a': 'al',
+	\     '*select-a-function*': 'g:Vimrc_select_a_last_modified',
+	\   },
+	\ })
+" }}}
+function! g:Vimrc_select_a_last_modified() abort
+	return ['v', getpos("'["), getpos("']")]
+endfunction
 
 NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
 	if has('gui')
@@ -345,7 +355,7 @@ NeoBundle 'slim-template/vim-slim' "{{{
 	augroup vimrc-plugin-vim-slim
 		autocmd!
 		autocmd BufNewFile,BufRead *.slim set filetype=slim
-		autocmd FileType slim set shiftwidth=2 expandtab
+		autocmd FileType slim setlocal shiftwidth=2 expandtab
 	augroup END
 "}}}
 
