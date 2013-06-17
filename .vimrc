@@ -359,6 +359,7 @@ NeoBundle 'roalddevries/yaml.vim' "{{{
 	augroup vimrc-yaml-vim
 		autocmd!
 		autocmd FileType yaml nmap <buffer><leader>f :<C-U>call Vimrc_autocmd_yaml_vim()<CR>
+		autocmd FileType yaml setlocal shiftwidth=2 expandtab
 	augroup END
 "}}}
 
