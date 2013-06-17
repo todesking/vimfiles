@@ -448,6 +448,10 @@ augroup END
 " }}}
 
 " General keymap {{{
+nnoremap ,cn :<C-U>cnext<CR>
+nnoremap ,cp :<C-U>cprevious<CR>
+nnoremap ,cc :<C-U>cc<CR>
+
 nnoremap <CR> :call append(line('.'),'')<CR>
 
 nnoremap <silent>,n :tabnew<CR>
