@@ -323,6 +323,8 @@ NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
 " }}}
 NeoBundle 'taku-o/vim-zoom'
 
+NeoBundle 'mattn/habatobi-vim'
+
 " Colors {{{
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'pyte'
