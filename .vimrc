@@ -706,6 +706,7 @@ endfunction
 " Rename file {{{
 " http://vim-users.jp/2009/05/hack17/
 command! -nargs=1 -complete=file Rename f <args>|call delete(expand('#'))|w
+command! -complete=customlist,Vimrc_complete_current_project_files -nargs=1 PRename exec "f ".s:current_project_dir()."/<args>"|call delete(expand('#'))|w
 " }}}
 
 " Helptags {{{
