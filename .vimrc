@@ -390,7 +390,22 @@ NeoBundle 'gregsexton/gitv' " {{{
 " }}}
 NeoBundle 'airblade/vim-gitgutter' " {{{
 	let g:gitgutter_eager = 0
-	nnoremap <leader>g :<C-U>GitGutterAll<CR>
+	nnoremap <leader>g :<C-U>call <SID>vimrc_gitgutter_refresh()<CR>
+	let g:vimrc_gitgutter_version = 0
+	function! s:vimrc_gitgutter_refresh()
+		let g:vimrc_gitgutter_version += 1
+		call s:vimrc_gitgutter_bufenter()
+	endfunction
+	function! s:vimrc_gitgutter_bufenter()
+		if !exists('b:vimrc_gitgutter_version') || b:vimrc_gitgutter_version != g:vimrc_gitgutter_version
+			GitGutter
+			let b:vimrc_gitgutter_version = g:vimrc_gitgutter_version
+		endif
+	endfunction
+	augroup vimrc-gitgutter
+		autocmd!
+		autocmd BufEnter * call s:vimrc_gitgutter_bufenter()
+	augroup END
 
 " }}}
 " }}}
