@@ -358,7 +358,6 @@ NeoBundle 'slim-template/vim-slim' "{{{
 		autocmd FileType slim setlocal shiftwidth=2 expandtab
 	augroup END
 "}}}
-
 NeoBundle 'roalddevries/yaml.vim' "{{{
 	function! Vimrc_autocmd_yaml_vim()
 		if &foldmethod != 'syntax'
@@ -372,6 +371,7 @@ NeoBundle 'roalddevries/yaml.vim' "{{{
 		autocmd FileType yaml setlocal shiftwidth=2 expandtab
 	augroup END
 "}}}
+NeoBundle 'evanmiller/nginx-vim-syntax'
 
 " vimscript {{{
 augroup vimrc-vimscript
