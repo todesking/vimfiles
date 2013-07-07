@@ -373,6 +373,12 @@ NeoBundle 'roalddevries/yaml.vim' "{{{
 	augroup END
 "}}}
 
+" Haskell {{{
+NeoBundle 'dag/vim2hs' "{{{
+"}}}
+NeoBundle 'ujihisa/ref-hoogle'
+"}}}
+
 " vimscript {{{
 augroup vimrc-vimscript
 	autocmd!
