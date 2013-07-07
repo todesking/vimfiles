@@ -358,7 +358,6 @@ NeoBundle 'slim-template/vim-slim' "{{{
 		autocmd FileType slim setlocal shiftwidth=2 expandtab
 	augroup END
 "}}}
-
 NeoBundle 'roalddevries/yaml.vim' "{{{
 	function! Vimrc_autocmd_yaml_vim()
 		if &foldmethod != 'syntax'
@@ -372,6 +371,7 @@ NeoBundle 'roalddevries/yaml.vim' "{{{
 		autocmd FileType yaml setlocal shiftwidth=2 expandtab
 	augroup END
 "}}}
+NeoBundle 'evanmiller/nginx-vim-syntax'
 
 " Haskell {{{
 NeoBundle 'dag/vim2hs' "{{{
@@ -396,7 +396,22 @@ NeoBundle 'gregsexton/gitv' " {{{
 " }}}
 NeoBundle 'airblade/vim-gitgutter' " {{{
 	let g:gitgutter_eager = 0
-	nnoremap <leader>g :<C-U>GitGutterAll<CR>
+	nnoremap <leader>g :<C-U>call <SID>vimrc_gitgutter_refresh()<CR>
+	let g:vimrc_gitgutter_version = 0
+	function! s:vimrc_gitgutter_refresh()
+		let g:vimrc_gitgutter_version += 1
+		call s:vimrc_gitgutter_bufenter()
+	endfunction
+	function! s:vimrc_gitgutter_bufenter()
+		if !exists('b:vimrc_gitgutter_version') || b:vimrc_gitgutter_version != g:vimrc_gitgutter_version
+			GitGutter
+			let b:vimrc_gitgutter_version = g:vimrc_gitgutter_version
+		endif
+	endfunction
+	augroup vimrc-gitgutter
+		autocmd!
+		autocmd BufEnter * call s:vimrc_gitgutter_bufenter()
+	augroup END
 
 " }}}
 " }}}
@@ -712,6 +727,7 @@ endfunction
 " Rename file {{{
 " http://vim-users.jp/2009/05/hack17/
 command! -nargs=1 -complete=file Rename f <args>|call delete(expand('#'))|w
+command! -complete=customlist,Vimrc_complete_current_project_files -nargs=1 PRename exec "f ".s:current_project_dir()."/<args>"|call delete(expand('#'))|w
 " }}}
 
 " Helptags {{{
