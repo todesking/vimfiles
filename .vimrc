@@ -664,6 +664,10 @@ endfunction"}}}
 " }}}
 " }}}
 
+" LCdCurrent {{{
+command! LCdCurrent lcd %:p:h
+" }}}
+
 " Current project dir {{{
 function! s:current_project_dir()
 	let project_marker_dirs = ['lib', 'ext', 'test', 'spec', 'bin', 'autoload', 'plugins', 'plugin']
