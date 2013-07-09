@@ -955,11 +955,13 @@ function! s:todo_syntax()
 	highlight TodoDone guifg=darkgray
 	highlight TodoDisabled guifg=gray
 	highlight TodoNormal guifg=lightgreen
+	highlight TodoSeparator guifg=#777777
 	highlight link TodoDoing Todo
-	syntax match TodoDone  /^\s*\zs\* .*\ze/
-	syntax match TodoDoing /^\s*\zs> .*\ze/
-	syntax match TodoDisabled /^\s*\zsx .*\ze/
-	syntax match TodoNormal /^\(\s*. \)\@!\s*\zs.*\ze/
+	syntax match TodoSeparator /:/ contained
+	syntax match TodoDone  /^\s*\zs\* .*\ze/ contains=TodoSeparator
+	syntax match TodoDoing /^\s*\zs> .*\ze/ contains=TodoSeparator
+	syntax match TodoDisabled /^\s*\zsx .*\ze/ contains=TodoSeparator
+	syntax match TodoNormal /^\(\s*. \)\@!\s*\zs.*\ze/ contains=TodoSeparator
 endfunction
 
 function! s:todo_discard()
