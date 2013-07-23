@@ -90,6 +90,7 @@ call unite#filters#sorter_default#use(['sorter_smart'])
 " }}}
 " unite-file_mru {{{
 let g:unite_source_file_mru_limit=1000
+let g:unite_source_file_mru_time_format=""
 call unite#custom_source('file_mru', 'ignore_pattern', '\.rsync_cache\|svn-commit\.tmp\|svn-cherry-pick\/\(message\|target\)')
 " }}}
 "}}}
