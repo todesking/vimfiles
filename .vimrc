@@ -302,10 +302,42 @@ NeoBundle 'AndrewRadev/linediff.vim'
 NeoBundle 'tsaleh/vim-matchit'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'todesking/vim-easymotion' "{{{
-	nmap <C-J> <Leader><Leader>w
-	nmap <C-K> <Leader><Leader>b
-	vmap <C-J> <Leader><Leader>w
-	vmap <C-K> <Leader><Leader>b
+	function! Vimrc_current_time() abort
+		let time = map(split(reltimestr(reltime()), '\.'), 'str2nr(v:val)')
+		return (time[0] % 1000 * 1000) + (time[1] / 1000)
+	endfunction
+	function! Vimrc_easymotion_move(direction, visual) abort
+		if a:visual && visualmode() == 'V'
+			let modes = ['JK', 'WB']
+		else
+			let modes = ['WB']
+		endif
+		if !exists('b:vimrc_easymotion_move_mode')
+			let b:vimrc_easymotion_move_mode = modes[0]
+		endif
+		if exists('b:vimrc_easymotion_last_cancelled_pos') && exists('b:vimrc_easymotion_last_cancelled_time')
+			if getpos('.') == b:vimrc_easymotion_last_cancelled_pos &&
+						\ Vimrc_current_time() - b:vimrc_easymotion_last_cancelled_time < 1500
+				let b:vimrc_easymotion_move_mode = modes[(index(modes, b:vimrc_easymotion_move_mode) + 1) % len(modes)]
+			else
+				let b:vimrc_easymotion_move_mode = modes[0]
+			endif
+		else
+			let b:vimrc_easymotion_move_mode = modes[0]
+		endif
+		let prev_pos = getpos('.')
+		call function('EasyMotion#'.b:vimrc_easymotion_move_mode)(a:visual, a:direction)
+		let cur_pos = getpos('.')
+		let moved = prev_pos != cur_pos
+		if !moved
+			let b:vimrc_easymotion_last_cancelled_pos = cur_pos
+			let b:vimrc_easymotion_last_cancelled_time = Vimrc_current_time()
+		endif
+	endfunction
+	nmap <silent><C-J> :<C-U>call Vimrc_easymotion_move('0', 0)<CR>
+	nmap <silent><C-K> :<C-U>call Vimrc_easymotion_move('1', 0)<CR>
+	vmap <silent><C-J> :<C-U>call Vimrc_easymotion_move('0', 1)<CR>
+	vmap <silent><C-K> :<C-U>call Vimrc_easymotion_move('1', 1)<CR>
 	let g:EasyMotion_keys = 'siogkmjferndlhyuxvtcbwa'
 "}}}
 NeoBundle 'kana/vim-textobj-user' " {{{
