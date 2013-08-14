@@ -512,6 +512,10 @@ augroup END
 " }}}
 
 " General keymap {{{
+" :(
+cnoremap <C-U><C-P> up
+cnoremap u<C-P> up
+
 nnoremap ,cn :<C-U>cnext<CR>
 nnoremap ,cp :<C-U>cprevious<CR>
 nnoremap ,cc :<C-U>cc<CR>
