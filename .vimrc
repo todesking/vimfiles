@@ -18,6 +18,8 @@ set smartcase
 set wrapscan
 set incsearch
 
+set ambiwidth=single
+
 set number
 set showmatch
 set laststatus=2
@@ -365,6 +367,11 @@ NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
 	endif
 " }}}
 NeoBundle 'taku-o/vim-zoom'
+NeoBundle 'bling/vim-airline' "{{{
+	if has('gui_running')
+		let g:airline_powerline_fonts = 1
+	endif
+"}}}
 
 NeoBundle 'mattn/habatobi-vim'
 
