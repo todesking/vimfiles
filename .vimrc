@@ -61,16 +61,16 @@ set list
 set listchars=tab:»\ ,trail:_,extends:»,precedes:«,nbsp:%
 
 if has("syntax")
-    " PODバグ対策
-    syn sync fromstart
-    function! ActivateInvisibleIndicator()
-        syntax match InvisibleJISX0208Space "　" display containedin=ALL
-        highlight InvisibleJISX0208Space term=underline ctermbg=Blue guibg=darkgray gui=underline
-    endf
-    augroup invisible
-        autocmd! invisible
-        autocmd BufNew,BufRead * call ActivateInvisibleIndicator()
-    augroup END
+	" PODバグ対策
+	syn sync fromstart
+	function! ActivateInvisibleIndicator()
+		syntax match InvisibleJISX0208Space "　" display containedin=ALL
+		highlight InvisibleJISX0208Space term=underline ctermbg=Blue guibg=darkgray gui=underline
+	endf
+	augroup invisible
+		autocmd! invisible
+		autocmd BufNew,BufRead * call ActivateInvisibleIndicator()
+	augroup END
 endif
 " }}}
 
@@ -84,9 +84,9 @@ let g:unite_enable_start_insert = 1
 let g:unite_update_time = 100
 
 let g:unite_source_file_rec_ignore_pattern =
-      \'\%(^\|/\)\.$\|\~$\|\.\%(o\|exe\|dll\|bak\|sw[po]\|class\)$'.
-      \'\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'.
-	  \'\|\.\%(\gif\|jpg\|png\|swf\)$'
+		\'\%(^\|/\)\.$\|\~$\|\.\%(o\|exe\|dll\|bak\|sw[po]\|class\)$'.
+		\'\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'.
+		\'\|\.\%(\gif\|jpg\|png\|swf\)$'
 
 call unite#filters#sorter_default#use(['sorter_smart'])
 " }}}
@@ -129,14 +129,14 @@ NeoBundle 'sgur/unite-qf' "{{{
 nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview<CR>
 "}}}
 NeoBundle 'basyura/unite-rails' "{{{
-  nnoremap <C-Q>r <ESC>
-  nnoremap <C-Q>rm :<C-u>Unite rails/model<CR>
-  nnoremap <C-Q>rc :<C-u>Unite rails/controller<CR>
-  nnoremap <C-Q>rv :<C-u>Unite rails/view<CR>
-  nnoremap <C-Q>rf :<C-u>Unite rails/config<CR>
-  nnoremap <C-Q>rd :<C-u>Unite rails/db -input=seeds/\ <CR>
-  nnoremap <C-Q>ri :<C-u>Unite rails/db -input=migrate/\ <CR>
-  nnoremap <C-Q>rl :<C-u>Unite rails/lib<CR>
+	nnoremap <C-Q>r <ESC>
+	nnoremap <C-Q>rm :<C-u>Unite rails/model<CR>
+	nnoremap <C-Q>rc :<C-u>Unite rails/controller<CR>
+	nnoremap <C-Q>rv :<C-u>Unite rails/view<CR>
+	nnoremap <C-Q>rf :<C-u>Unite rails/config<CR>
+	nnoremap <C-Q>rd :<C-u>Unite rails/db -input=seeds/\ <CR>
+	nnoremap <C-Q>ri :<C-u>Unite rails/db -input=migrate/\ <CR>
+	nnoremap <C-Q>rl :<C-u>Unite rails/lib<CR>
 "}}}
 NeoBundle 'osyo-manga/unite-fold' " {{{
 	call unite#custom_filters('fold',['matcher_default', 'sorter_nothing', 'converter_default'])
@@ -185,31 +185,31 @@ nnoremap <C-Q>l :<C-u>Unite line<CR>
 " from: https://github.com/ujihisa/config/blob/master/_vimrc
 let s:unite_source = {'name': 'neco'}
 function! s:unite_source.gather_candidates(args, context)
-  let necos = [
-        \ "~(-'_'-) goes right",
-        \ "~(-'_'-) goes right and left",
-        \ "~(-'_'-) goes right quickly",
-        \ "~(-'_'-) skips right",
-        \ "~(-'_'-)  -8(*'_'*) go right and left",
-        \ "(=' .' ) ~w",
-        \ ]
-  return map(necos, '{
-        \ "word": v:val,
-        \ "source": "neco",
-        \ "kind": "command",
-        \ "action__command": "Neco " . v:key,
-        \ }')
+	let necos = [
+		\ "~(-'_'-) goes right",
+		\ "~(-'_'-) goes right and left",
+		\ "~(-'_'-) goes right quickly",
+		\ "~(-'_'-) skips right",
+		\ "~(-'_'-)  -8(*'_'*) go right and left",
+		\ "(=' .' ) ~w",
+		\ ]
+	return map(necos, '{
+		\ "word": v:val,
+		\ "source": "neco",
+		\ "kind": "command",
+		\ "action__command": "Neco " . v:key,
+		\ }')
 endfunction
 call unite#define_source(s:unite_source)
 " }}}
 " unite-massive-candidates {{{
 let s:unite_source = {'name': 'massive-candidates'}
 function! s:unite_source.gather_candidates(args, context)
-  return map(repeat(['a', 'b', 'c'], 10000), '{
-        \ "word": v:val,
-        \ "source": "massive-candidates",
-        \ "kind": "word",
-        \ }')
+	return map(repeat(['a', 'b', 'c'], 10000), '{
+		\ "word": v:val,
+		\ "source": "massive-candidates",
+		\ "kind": "word",
+		\ }')
 endfunction
 call unite#define_source(s:unite_source)
 " }}}
@@ -288,7 +288,7 @@ endif
 NeoBundle 'Shougo/neocomplcache-rsense'
 
 NeoBundle 'closetag.vim' " {{{
-   autocmd Filetype html,xml,xsl,eruby runtime plugin/closetag.vim
+	 autocmd Filetype html,xml,xsl,eruby runtime plugin/closetag.vim
 " }}}
 NeoBundle 'Align' " {{{
 let g:Align_xstrlen='strwidth'
@@ -487,7 +487,7 @@ endif
 
 " Ruby {{{
 if has("ruby")
-  silent! ruby nil
+	silent! ruby nil
 endif
 augroup vimrc-filetype-ruby
 	autocmd!
@@ -631,84 +631,84 @@ endfunction
 " https://github.com/LeafCage/foldCC/blob/master/plugin/foldCC.vim
 " folding look
 function! My_foldtext()
-  "表示するテキストの作成（折り畳みマーカーを除去）
-  let line = s:rm_CmtAndFmr(v:foldstart)
+	"表示するテキストの作成（折り畳みマーカーを除去）
+	let line = s:rm_CmtAndFmr(v:foldstart)
 
-  "切り詰めサイズをウィンドウに合わせる"{{{
-  let regardMultibyte =strlen(line) -strdisplaywidth(line)
+	"切り詰めサイズをウィンドウに合わせる"{{{
+	let regardMultibyte =strlen(line) -strdisplaywidth(line)
 
-  let line_width = winwidth(0) - &foldcolumn
-  if &number == 1 "行番号表示オンのとき
-      let line_width -= max([&numberwidth, len(line('$'))])
-  endif
+	let line_width = winwidth(0) - &foldcolumn
+	if &number == 1 "行番号表示オンのとき
+		let line_width -= max([&numberwidth, len(line('$'))])
+	endif
 
-  let footer_length=9
-  let alignment = line_width - footer_length - 4 + regardMultibyte
-    "15はprintf()で消費する分、4はfolddasesを使うための余白
-    "issue:regardMultibyteで足される分が多い （61桁をオーバーして切り詰められてる場合
-  "}}}alignment
+	let footer_length=9
+	let alignment = line_width - footer_length - 4 + regardMultibyte
+	"15はprintf()で消費する分、4はfolddasesを使うための余白
+	"issue:regardMultibyteで足される分が多い （61桁をオーバーして切り詰められてる場合
+	"}}}alignment
 
-  let foldlength=v:foldend-v:foldstart+1
-  let dots=repeat('.',float2nr(ceil(foldlength/10.0)))
+	let foldlength=v:foldend-v:foldstart+1
+	let dots=repeat('.',float2nr(ceil(foldlength/10.0)))
 
-  return printf('%-'.alignment.'.'.alignment.'s %3d ',line.' '.dots,foldlength)
-  return printf('%-'.alignment.'.'.alignment.'s   [%4d  Lv%-2d]%s',line.'...',foldlength,v:foldlevel,v:folddashes)
+	return printf('%-'.alignment.'.'.alignment.'s %3d ',line.' '.dots,foldlength)
+	return printf('%-'.alignment.'.'.alignment.'s   [%4d  Lv%-2d]%s',line.'...',foldlength,v:foldlevel,v:folddashes)
 endfunction
 function! s:fold_navi() "{{{
 if foldlevel('.')
-  let save_csr=winsaveview()
-  let parentList=[]
+	let save_csr=winsaveview()
+	let parentList=[]
 
-  "カーソル行が折り畳まれているとき"{{{
-  let whtrClosed = foldclosed('.')
-  if whtrClosed !=-1
-    call insert(parentList, s:surgery_line(whtrClosed) )
-    if foldlevel('.') == 1
-      call winrestview(save_csr)
-      return join(parentList,' > ')
-    endif
+	"カーソル行が折り畳まれているとき"{{{
+	let whtrClosed = foldclosed('.')
+	if whtrClosed !=-1
+	call insert(parentList, s:surgery_line(whtrClosed) )
+	if foldlevel('.') == 1
+		call winrestview(save_csr)
+		return join(parentList,' > ')
+	endif
 
-    normal! [z
-    if foldclosed('.') ==whtrClosed
-      call winrestview(save_csr)
-      return join(parentList,' > ')
-    endif
-  endif"}}}
+	normal! [z
+	if foldclosed('.') ==whtrClosed
+		call winrestview(save_csr)
+		return join(parentList,' > ')
+	endif
+	endif"}}}
 
-  "折畳を再帰的に戻れるとき"{{{
-  while 1
-    normal! [z
-    call insert(parentList, s:surgery_line('.') )
-    if foldlevel('.') == 1
-      break
-    endif
-  endwhile
-  call winrestview(save_csr)
-  return join(parentList,' > ')"}}}
+	"折畳を再帰的に戻れるとき"{{{
+	while 1
+	normal! [z
+	call insert(parentList, s:surgery_line('.') )
+	if foldlevel('.') == 1
+		break
+	endif
+	endwhile
+	call winrestview(save_csr)
+	return join(parentList,' > ')"}}}
 endif
 endfunction
 " }}}
 
 function! s:rm_CmtAndFmr(lnum)"{{{
-  let line = getline(a:lnum)
-  let comment = split(&commentstring, '%s')
-  let comment_end =''
-  if len(comment) == 0
-	  return line
-  endif
-  if len(comment) >1
-    let comment_end=comment[1]
-  endif
-  let foldmarkers = split(&foldmarker, ',')
+	let line = getline(a:lnum)
+	let comment = split(&commentstring, '%s')
+	let comment_end =''
+	if len(comment) == 0
+		return line
+	endif
+	if len(comment) >1
+	let comment_end=comment[1]
+	endif
+	let foldmarkers = split(&foldmarker, ',')
 
-  return substitute(line,'\V\%('.comment[0].'\)\?\s\*'.foldmarkers[0].'\%(\d\+\)\?\s\*\%('.comment_end.'\)\?', '','')
+	return substitute(line,'\V\%('.comment[0].'\)\?\s\*'.foldmarkers[0].'\%(\d\+\)\?\s\*\%('.comment_end.'\)\?', '','')
 endfunction"}}}
 
 function! s:surgery_line(lnum)"{{{
-  let line = substitute(s:rm_CmtAndFmr(a:lnum),'\V\^\s\*\|\s\*\$','','g')
-  let regardMultibyte = len(line) - strdisplaywidth(line)
-  let alignment = 60 + regardMultibyte
-  return line[:alignment]
+	let line = substitute(s:rm_CmtAndFmr(a:lnum),'\V\^\s\*\|\s\*\$','','g')
+	let regardMultibyte = len(line) - strdisplaywidth(line)
+	let alignment = 60 + regardMultibyte
+	return line[:alignment]
 endfunction"}}}
 
 " }}}
@@ -723,13 +723,13 @@ function! s:current_project_dir()
 	let project_marker_dirs = ['lib', 'ext', 'test', 'spec', 'bin', 'autoload', 'plugins', 'plugin']
 	let project_replace_pattern = '/\('.join(project_marker_dirs,'\|').'\)\(/.\{-}\)\?$'
 	let project_pattern = '.*'.project_replace_pattern
-    let dir = expand('%:p:h')
+	let dir = expand('%:p:h')
 	if exists('b:rails_root')
 		return b:rails_root
 	elseif dir =~ project_pattern && dir !~ '/usr/.*'
 		return substitute(dir, project_replace_pattern, '', '')
-    elseif dir =~ '/projects/'
-        return substitute(dir, '\v(.*\/projects\/[-_a-zA-Z0-9])\/.*', '\1', '')
+	elseif dir =~ '/projects/'
+		return substitute(dir, '\v(.*\/projects\/[-_a-zA-Z0-9])\/.*', '\1', '')
 	else
 		return ''
 	endif
@@ -798,20 +798,20 @@ command! SyntaxTrace echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") 
 " Vim のユーザ定義コマンドを自動的にシンタックスハイライトする {{{
 " http://emanon001.github.com/blog/2012/03/18/syntax-highlighting-of-user-defined-commands-in-vim/
 augroup syntax-highlight-extension
-  autocmd!
-  autocmd Syntax vim call s:set_syntax_of_user_defined_commands()
+	autocmd!
+	autocmd Syntax vim call s:set_syntax_of_user_defined_commands()
 augroup END
 
 function! s:set_syntax_of_user_defined_commands()
-  redir => _
-  silent! command
-  redir END
+	redir => _
+	silent! command
+	redir END
 
-  let command_names = map(split(_, '\n')[1:],
-        \                 'matchstr(v:val, ''^[!"b]*\s\+\zs\u\w*\ze'')')
-  if empty(command_names) | return | endif
+	let command_names = map(split(_, '\n')[1:],
+		\                 'matchstr(v:val, ''^[!"b]*\s\+\zs\u\w*\ze'')')
+	if empty(command_names) | return | endif
 
-  execute 'syntax keyword vimCommand contained' join(command_names)
+	execute 'syntax keyword vimCommand contained' join(command_names)
 endfunction
 " }}}
 
@@ -837,31 +837,31 @@ let &statusline =
 			\. '[%{GetB()}]'
 			\. '(%3l,%3c)'
 function! GetB()
-  let c = matchstr(getline('.'), '.', col('.') - 1)
-  let c = iconv(c, &enc, &fenc)
-  return String2Hex(c)
+	let c = matchstr(getline('.'), '.', col('.') - 1)
+	let c = iconv(c, &enc, &fenc)
+	return String2Hex(c)
 endfunction
 " :help eval-examples
 " The function Nr2Hex() returns the Hex string of a number.
 func! Nr2Hex(nr)
-  let n = a:nr
-  let r = ""
-  while n
-    let r = '0123456789ABCDEF'[n % 16] . r
-    let n = n / 16
-  endwhile
-  return r
+	let n = a:nr
+	let r = ""
+	while n
+	let r = '0123456789ABCDEF'[n % 16] . r
+	let n = n / 16
+	endwhile
+	return r
 endfunc
 " The function String2Hex() converts each character in a string to a two
 " character Hex string.
 func! String2Hex(str)
-  let out = ''
-  let ix = 0
-  while ix < strlen(a:str)
-    let out = out . Nr2Hex(char2nr(a:str[ix]))
-    let ix = ix + 1
-  endwhile
-  return out
+	let out = ''
+	let ix = 0
+	while ix < strlen(a:str)
+	let out = out . Nr2Hex(char2nr(a:str[ix]))
+	let ix = ix + 1
+	endwhile
+	return out
 endfunc
 
 "入力モード時、ステータスラインのカラーを変更
@@ -899,56 +899,56 @@ function! s:hello_again_leave()
 	setlocal nocursorline
 endfunction
 augroup vimrc-hello-again
-  autocmd!
-  autocmd CursorMoved * call s:hello_again_hook('CursorMoved')
-  autocmd CursorHold * call s:hello_again_hook('CursorHold')
-  autocmd WinEnter * call s:hello_again_hook('WinEnter')
-  autocmd WinLeave * call s:hello_again_hook('WinLeave')
-  autocmd FocusGained * call s:hello_again_hook('WinEnter')
-  autocmd FocusLost * call s:hello_again_hook('WinLeave')
+	autocmd!
+	autocmd CursorMoved * call s:hello_again_hook('CursorMoved')
+	autocmd CursorHold * call s:hello_again_hook('CursorHold')
+	autocmd WinEnter * call s:hello_again_hook('WinEnter')
+	autocmd WinLeave * call s:hello_again_hook('WinLeave')
+	autocmd FocusGained * call s:hello_again_hook('WinEnter')
+	autocmd FocusLost * call s:hello_again_hook('WinLeave')
 
-  let s:hello_again_state=0
-  let s:hello_again_last_fired_by_cursorhold = reltime()
-  function! s:hello_again_hook(event)
-    if a:event ==# 'CursorHold'
-      if str2float(reltimestr(reltime(s:hello_again_last_fired_by_cursorhold))) < 2.0
-		  return
-	  endif
-    endif
-    let s:hello_again_last_fired_by_cursorhold = reltime()
-    if a:event ==# 'WinEnter'
-      call <SID>hello_again_enter()
-      let s:hello_again_state = 2
-    elseif a:event ==# 'WinLeave'
-      call <SID>hello_again_leave()
-    elseif a:event ==# 'CursorMoved'
-      if s:hello_again_state
-        if 1 < s:hello_again_state
-          let s:hello_again_state = 1
-        else
-          call <SID>hello_again_leave()
-          let s:hello_again_state = 0
-        endif
-      endif
-    elseif a:event ==# 'CursorHold'
-      call <SID>hello_again_enter()
-      let s:hello_again_state = 1
-    endif
-  endfunction
+	let s:hello_again_state=0
+	let s:hello_again_last_fired_by_cursorhold = reltime()
+	function! s:hello_again_hook(event)
+	if a:event ==# 'CursorHold'
+		if str2float(reltimestr(reltime(s:hello_again_last_fired_by_cursorhold))) < 2.0
+			return
+		endif
+	endif
+	let s:hello_again_last_fired_by_cursorhold = reltime()
+	if a:event ==# 'WinEnter'
+		call <SID>hello_again_enter()
+		let s:hello_again_state = 2
+	elseif a:event ==# 'WinLeave'
+		call <SID>hello_again_leave()
+	elseif a:event ==# 'CursorMoved'
+		if s:hello_again_state
+		if 1 < s:hello_again_state
+			let s:hello_again_state = 1
+		else
+			call <SID>hello_again_leave()
+			let s:hello_again_state = 0
+		endif
+		endif
+	elseif a:event ==# 'CursorHold'
+		call <SID>hello_again_enter()
+		let s:hello_again_state = 1
+	endif
+	endfunction
 augroup END
 " }}}
 
 " 保存時にディレクトリ作成 {{{
 " http://vim-users.jp/2011/02/hack202/
 augroup vimrc-auto-mkdir  " {{{
-  autocmd!
-  autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
-  function! s:auto_mkdir(dir, force)  " {{{
-    if !isdirectory(a:dir) && (a:force ||
-    \    input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
-      call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
-    endif
-  endfunction  " }}}
+	autocmd!
+	autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
+	function! s:auto_mkdir(dir, force)  " {{{
+	if !isdirectory(a:dir) && (a:force ||
+	\    input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
+		call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
+	endif
+	endfunction  " }}}
 augroup END  " }}}
 " }}}
 
