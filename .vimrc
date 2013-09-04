@@ -371,8 +371,9 @@ NeoBundle 'taku-o/vim-zoom'
 
 NeoBundle 'itchyny/lightline.vim' "{{{
 	let g:lightline = {
+				\ 'colorscheme': 'default',
 				\ 'active': {
-				\   'left': [['project_name'], ['readonly', 'project_path', 'modified']],
+				\   'left': [['project_name'], ['git_branch'], ['readonly', 'project_path', 'modified']],
 				\ 'right': [['lineinfo'], ['fileformat', 'fileencoding', 'filetype'], ['charinfo'] ],
 				\ },
 				\ 'component': {
@@ -382,9 +383,19 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 				\   'project_path': '%{Vimrc_current_project_info()["path"]}',
 				\   'charinfo': '%{printf("%6s",GetB())}',
 				\ },
+				\ 'component_function': {
+				\   'git_branch': 'Vimrc_statusline_git_branch',
+				\ },
 				\ 'separator': { 'left': '', 'right': '' },
 				\ 'subseparator': { 'left': '', 'right': '' },
 				\ }
+	function! Vimrc_statusline_git_branch()
+		if exists("*fugitive#head")
+			let _ = fugitive#head()
+			return strlen(_) ? ''._ : ''
+		endif
+		return ''
+	endfunction
 "}}}
 
 NeoBundle 'mattn/habatobi-vim'
