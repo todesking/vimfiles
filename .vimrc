@@ -371,9 +371,9 @@ NeoBundle 'taku-o/vim-zoom'
 
 NeoBundle 'itchyny/lightline.vim' "{{{
 	let g:lightline = {
-				\ 'colorscheme': 'default',
+				\ 'colorscheme': 'solarized_dark',
 				\ 'active': {
-				\   'left': [['project_name'], ['git_branch'], ['readonly', 'project_path', 'modified']],
+				\   'left': [['project_name', 'git_branch'], ['readonly', 'project_path', 'modified']],
 				\ 'right': [['lineinfo'], ['fileformat', 'fileencoding', 'filetype'], ['charinfo'] ],
 				\ },
 				\ 'component': {
