@@ -368,10 +368,23 @@ NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
 	endif
 " }}}
 NeoBundle 'taku-o/vim-zoom'
-NeoBundle 'bling/vim-airline' "{{{
-	if has('gui_running')
-		let g:airline_powerline_fonts = 1
-	endif
+
+NeoBundle 'itchyny/lightline.vim' "{{{
+	let g:lightline = {
+				\ 'active': {
+				\   'left': [['project_name'], ['readonly', 'project_path', 'modified']],
+				\ 'right': [['lineinfo'], ['fileformat', 'fileencoding', 'filetype'], ['charinfo'] ],
+				\ },
+				\ 'component': {
+				\   'readonly': '%{&readonly?"":""}',
+				\   'modified': '%{&modified?"+":""}',
+				\   'project_name': '%{Vimrc_current_project_info()["name"]}',
+				\   'project_path': '%{Vimrc_current_project_info()["path"]}',
+				\   'charinfo': '%{printf("%6s",GetB())}',
+				\ },
+				\ 'separator': { 'left': '', 'right': '' },
+				\ 'subseparator': { 'left': '', 'right': '' },
+				\ }
 "}}}
 
 NeoBundle 'mattn/habatobi-vim'
@@ -817,14 +830,22 @@ endfunction
 " }}}
 
 " Status line {{{
-function! Vimrc_current_project()
+function! Vimrc_current_project_info()
 	let path = substitute(expand('%:p'), '^'.expand('~'), '~', '')
 	if path =~ '/projects/[^/]\+/'
-		let project_tag = '['.substitute(path, '.*/projects/\([^/]\+\)/.*', '\1', '').'] '
+		let project_name = substitute(path, '.*/projects/\([^/]\+\)/.*', '\1', '')
 		let project_path = substitute(path, '^.*/projects/[^/]\+/', '', '')
-		return project_tag . project_path
+		return {'name': project_name, 'path': project_path}
 	else
-		return path
+		return {'name': '', 'path': path}
+	endif
+endfunction
+function! Vimrc_current_project()
+	let project = Vimrc_current_project_info()
+	if project['name']
+		return '['.project['name'].'] '.project['path']
+	else
+		return project['path']
 	endif
 endfunction
 let &statusline =
