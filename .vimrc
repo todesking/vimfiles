@@ -400,6 +400,8 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 
 NeoBundle 'mattn/habatobi-vim'
 
+NeoBundle 'scrooloose/syntastic'
+
 " Colors {{{
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'pyte'
