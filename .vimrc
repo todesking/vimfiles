@@ -93,6 +93,7 @@ call unite#filters#sorter_default#use(['sorter_smart'])
 " unite-file_mru {{{
 let g:unite_source_file_mru_limit=1000
 let g:unite_source_file_mru_time_format=""
+let g:unite_source_mru_do_validate=0
 call unite#custom_source('file_mru', 'ignore_pattern', '\.rsync_cache\|svn-commit\.tmp\|svn-cherry-pick\/\(message\|target\)\|.svn')
 " }}}
 "}}}
@@ -373,7 +374,7 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 	let g:lightline = {
 				\ 'colorscheme': 'solarized_dark',
 				\ 'active': {
-				\   'left': [['project_name', 'git_branch'], ['readonly', 'project_path', 'modified']],
+				\   'left': [['project_name', 'git_branch'], ['readonly', 'project_path', 'modified'],['pomodoro_status']],
 				\ 'right': [['lineinfo'], ['fileformat', 'fileencoding', 'filetype'], ['charinfo'] ],
 				\ },
 				\ 'component': {
@@ -382,6 +383,7 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 				\   'project_name': '%{Vimrc_current_project_info()["name"]}',
 				\   'project_path': '%{Vimrc_current_project_info()["path"]}',
 				\   'charinfo': '%{printf("%6s",GetB())}',
+				\   'pomodoro_status': '%{PomodoroStatus()}',
 				\ },
 				\ 'component_function': {
 				\   'git_branch': 'Vimrc_statusline_git_branch',
@@ -399,6 +401,10 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 "}}}
 
 NeoBundle 'mattn/habatobi-vim'
+
+NeoBundle 'pydave/AsyncCommand'
+
+NeoBundle 'mnick/vim-pomodoro' " depends: AsyncCommand
 
 NeoBundle 'scrooloose/syntastic'
 
