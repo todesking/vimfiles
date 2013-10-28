@@ -383,14 +383,15 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 				\   'project_name': '%{Vimrc_current_project_info()["name"]}',
 				\   'project_path': '%{Vimrc_current_project_info()["path"]}',
 				\   'charinfo': '%{printf("%6s",GetB())}',
-				\   'pomodoro_status': '%{PomodoroStatus()}',
 				\ },
 				\ 'component_function': {
 				\   'git_branch': 'Vimrc_statusline_git_branch',
 				\ },
-				\ 'separator': { 'left': '', 'right': '' },
-				\ 'subseparator': { 'left': '', 'right': '' },
 				\ }
+	if has('gui')
+		let g:lightline['separator'] = { 'left': '', 'right': '' }
+		let g:lightline['subseparator'] = { 'left': '', 'right': '' }
+	endif
 	function! Vimrc_statusline_git_branch()
 		if exists("*fugitive#head")
 			let _ = fugitive#head()
@@ -402,9 +403,16 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 
 NeoBundle 'mattn/habatobi-vim'
 
-NeoBundle 'pydave/AsyncCommand'
+if has('clientserver')
+	NeoBundle 'pydave/AsyncCommand'
+endif
 
-NeoBundle 'mnick/vim-pomodoro' " depends: AsyncCommand
+if has('clientserver')
+	NeoBundle 'mnick/vim-pomodoro' " depends: AsyncCommand
+	let g:lightline['component']['pomodoro_status'] = '%{PomodoroStatus()}'
+else
+	let g:lightline['component']['pomodoro_status'] = ''
+endif
 
 NeoBundle 'scrooloose/syntastic'
 
