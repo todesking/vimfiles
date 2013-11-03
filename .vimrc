@@ -53,6 +53,7 @@ set notimeout
 set ttimeout
 set ttimeoutlen=100
 
+set helplang=en,ja
 " }}}
 
 " Visible spaces {{{
