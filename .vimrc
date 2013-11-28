@@ -304,6 +304,7 @@ let g:yankring_max_element_length = 0
 let g:yankring_max_history_element_length = 1000 * 10
 " }}}
 NeoBundle 'AndrewRadev/linediff.vim'
+NeoBundle 'osyo-manga/vim-over'
 NeoBundle 'tsaleh/vim-matchit'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'todesking/vim-easymotion' "{{{
