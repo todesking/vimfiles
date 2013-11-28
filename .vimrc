@@ -428,6 +428,7 @@ NeoBundle 'ciaranm/inkpot'
 " ruby {{{
 NeoBundle 'tpope/vim-rvm' "{{{
 "}}}
+NeoBundle 'tpope/vim-rbenv'
 NeoBundle 'vim-ruby/vim-ruby'
 NeoBundle 'tpope/vim-rails'
 NeoBundle 'rhysd/vim-textobj-ruby'
