@@ -275,6 +275,7 @@ unlet s:sorter_smart
 
 " }}}
 
+if(0)
 NeoBundle 'Shougo/neocomplcache' " {{{
 if !exists('g:neocomplcache_omni_patterns')
 	let g:neocomplcache_omni_patterns = {}
@@ -289,6 +290,12 @@ if has('gui_running')
 endif
 " }}}
 NeoBundle 'Shougo/neocomplcache-rsense'
+endif
+
+if(has('lua'))
+NeoBundle 'Shougo/neocomplete.vim' "{{{
+"}}}
+endif
 
 NeoBundle 'closetag.vim' " {{{
 	 autocmd Filetype html,xml,xsl,eruby runtime plugin/closetag.vim
