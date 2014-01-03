@@ -284,7 +284,7 @@ let g:neocomplcache_lock_buffer_name_pattern='\*unite\*'
 let g:neocomplcache_enable_prefetch = 1
 let g:neocomplcache_lock_iminsert = 1
 let g:neocomplcache_use_vimproc = 1
-if has('gui')
+if has('gui_running')
 	let g:neocomplcache_enable_at_startup = 1
 endif
 " }}}
@@ -359,7 +359,7 @@ function! g:Vimrc_select_a_last_modified() abort
 endfunction
 
 NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
-	if has('gui')
+	if has('gui_running')
 		autocmd! indent_guides BufEnter
 		augroup vimrc-indentguide
 			autocmd!
@@ -380,7 +380,7 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 				\ 'right': [['lineinfo'], ['fileformat', 'fileencoding', 'filetype'], ['charinfo'] ],
 				\ },
 				\ 'component': {
-				\   'readonly': '%{&readonly?"":""}',
+				\   'readonly': '%{&readonly?has("gui_running")?"":"ro":""}',
 				\   'modified': '%{&modified?"+":""}',
 				\   'project_name': '%{Vimrc_current_project_info()["name"]}',
 				\   'project_path': '%{Vimrc_current_project_info()["path"]}',
@@ -390,14 +390,14 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 				\   'git_branch': 'Vimrc_statusline_git_branch',
 				\ },
 				\ }
-	if has('gui')
+	if has('gui_running')
 		let g:lightline['separator'] = { 'left': '', 'right': '' }
 		let g:lightline['subseparator'] = { 'left': '', 'right': '' }
 	endif
 	function! Vimrc_statusline_git_branch()
 		if exists("*fugitive#head")
 			let _ = fugitive#head()
-			return strlen(_) ? _.'' : ''
+			return strlen(_) ? _.(has('gui_running')?'':'†') : ''
 		endif
 		return ''
 	endfunction
