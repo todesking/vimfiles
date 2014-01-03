@@ -433,6 +433,7 @@ NeoBundle 'pyte'
 NeoBundle 'newspaper.vim'
 NeoBundle 'Zenburn'
 NeoBundle 'ciaranm/inkpot'
+NeoBundle 'w0ng/vim-hybrid'
 " }}}
 
 " ruby {{{
