@@ -379,6 +379,7 @@ NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
 	endif
 " }}}
 NeoBundle 'taku-o/vim-zoom'
+NeoBundle 'tyru/capture.vim'
 
 NeoBundle 'itchyny/lightline.vim' "{{{
 	let g:lightline = {
