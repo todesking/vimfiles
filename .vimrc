@@ -775,18 +775,36 @@ command! LCdCurrent lcd %:p:h
 " Current project dir {{{
 function! s:current_project_dir()
 	let project_marker_dirs = ['lib', 'ext', 'test', 'spec', 'bin', 'autoload', 'plugins', 'plugin']
-	let project_replace_pattern = '/\('.join(project_marker_dirs,'\|').'\)\(/.\{-}\)\?$'
-	let project_pattern = '.*'.project_replace_pattern
+	let project_replace_pattern = '\(.*\)/\('.join(project_marker_dirs,'\|').'\)\(/.\{-}\)\?$'
 	let dir = expand('%:p:h')
 	if exists('b:rails_root')
 		return b:rails_root
-	elseif dir =~ project_pattern && dir !~ '/usr/.*'
-		return substitute(dir, project_replace_pattern, '', '')
+	endif
+	let git_project_dir = s:current_project_dir_by_git(dir)
+	if !empty(git_project_dir)
+		return git_project_dir
 	elseif dir =~ '/projects/'
 		return substitute(dir, '\v(.*\/projects\/[-_a-zA-Z0-9])\/.*', '\1', '')
-	else
-		return ''
+	elseif dir =~ project_replace_pattern && dir !~ '/usr/.*'
+		return substitute(dir, project_replace_pattern, '\1', '')
 	endif
+	return ''
+endfunction
+
+function! s:current_project_dir_by_git(dir)
+	let i = 0
+	let d = a:dir
+	while i < 10
+		if d == '/'
+			return ''
+		endif
+		if !empty(globpath(d, '/.git'))
+			return d
+		endif
+		let d = fnamemodify(d, ':h')
+		let i += 1
+	endwhile
+	return ''
 endfunction
 
 " e-in-current-project
@@ -871,14 +889,9 @@ endfunction
 
 " Status line {{{
 function! Vimrc_current_project_info()
-	let path = substitute(expand('%:p'), '^'.expand('~'), '~', '')
-	if path =~ '/projects/[^/]\+/'
-		let project_name = substitute(path, '.*/projects/\([^/]\+\)/.*', '\1', '')
-		let project_path = substitute(path, '^.*/projects/[^/]\+/', '', '')
-		return {'name': project_name, 'path': project_path}
-	else
-		return {'name': '', 'path': path}
-	endif
+	let path = s:current_project_dir()
+	let short_path = substitute(path, '^'.expand('~'), '~', '')
+	return {'name': fnamemodify(short_path, ':t'), 'path': substitute(expand('%:p'), '^'.path.'/', '', '')}
 endfunction
 function! Vimrc_current_project()
 	let project = Vimrc_current_project_info()
