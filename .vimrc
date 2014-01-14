@@ -180,6 +180,7 @@ nnoremap <C-Q>  <ESC>
 nnoremap <C-Q>u :UniteResume<CR>
 nnoremap <C-Q>o m':<C-u>Unite outline<CR>
 nnoremap <C-Q>p :<C-u>exec 'Unite file_rec:'.<SID>current_project_dir()<CR>
+nnoremap <C-Q>c :<C-u>exec 'Unite file_rec:'.expand('%:p:h').'/'<CR>
 nnoremap <C-Q>l :<C-u>Unite line<CR>
 nnoremap <C-Q>b :<C-u>Unite buffer<CR>
 " }}}
