@@ -530,6 +530,8 @@ NeoBundle 'taka84u9/vim-ref-ri', {'rev': 'master'} "{{{
 	command! -nargs=1 Ri :Ref ri <args>
 "}}}
 
+NeoBundle 'Shougo/vimfiler.vim'
+
 " RSense.vim {{{
 let g:rsenseHome = expand('~/local/rsense/')
 if exists('*RSenseInstalled') && RSenseInstalled()
