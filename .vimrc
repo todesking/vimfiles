@@ -96,8 +96,25 @@ call unite#filters#sorter_default#use(['sorter_smart'])
 let g:unite_source_file_mru_limit=1000
 let g:unite_source_file_mru_time_format=""
 let g:unite_source_mru_do_validate=0
-call unite#custom_source('file_mru', 'ignore_pattern', '\.rsync_cache\|svn-commit\.tmp\|svn-cherry-pick\/\(message\|target\)\|.svn')
 " }}}
+let s:summarize_path = {
+			\ 'name': 'converter_summarize_path',
+			\}
+let s:home_path = expand('~')
+function! s:summarize_path.filter(candidates, context)
+	let candidates = copy(a:candidates)
+	for cand in candidates
+		let path = cand.word
+		let path = substitute(path, '^'.s:home_path, '~', '')
+		let path = substitute(path, '\v\~\/projects\/([-a-zA-Z0-9_]+)\/', '[\1] ', '')
+		let cand.abbr = path
+	endfor
+	return candidates
+endfunction
+call unite#define_filter(s:summarize_path)
+unlet s:summarize_path
+call unite#custom#source('file_mru', 'ignore_pattern', '\.rsync_cache\|svn-commit\.tmp\|svn-cherry-pick\/\(message\|target\)\|.svn')
+call unite#custom#source('file_mru', 'filters', ['matcher_default', 'sorter_default', 'converter_summarize_path'])
 "}}}
 NeoBundle 'tsukkee/unite-tag' "{{{
 let s:converter_tag = {
