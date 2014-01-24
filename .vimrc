@@ -107,7 +107,9 @@ function! s:summarize_path.filter(candidates, context)
 		let path = cand.word
 		let path = substitute(path, '^'.s:home_path, '~', '')
 		let path = substitute(path, '\v\~\/projects\/([-a-zA-Z0-9_]+)\/', '[\1] ', '')
-		let cand.abbr = path
+		let path = substitute(path, '\v\~\/.rbenv\/versions\/([^/]+)\/', '[rbenv:\1] ', '')
+		let path = substitute(path, '\v[\/ ]lib\/ruby\/gems\/([^/]+)\/gems\/', ' [gems:\1] ', '')
+		let cand.word = path
 	endfor
 	return candidates
 endfunction
