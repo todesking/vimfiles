@@ -389,6 +389,8 @@ function! g:Vimrc_select_a_last_modified() abort
 	return ['v', getpos("'["), getpos("']")]
 endfunction
 
+NeoBundle 'a.vim'
+
 NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
 	if has('gui_running')
 		autocmd! indent_guides BufEnter
