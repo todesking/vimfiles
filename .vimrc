@@ -492,6 +492,7 @@ NeoBundle 'roalddevries/yaml.vim' "{{{
 	augroup END
 "}}}
 NeoBundle 'evanmiller/nginx-vim-syntax'
+NeoBundle 'wavded/vim-stylus'
 
 " Haskell {{{
 NeoBundle 'dag/vim2hs' "{{{
