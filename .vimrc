@@ -155,6 +155,7 @@ nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview<CR>
 "}}}
 NeoBundle 'basyura/unite-rails' "{{{
 	nnoremap <C-Q>r <ESC>
+	nnoremap <C-Q>ra :<C-u>Unite rails/asset<CR>
 	nnoremap <C-Q>rm :<C-u>Unite rails/model<CR>
 	nnoremap <C-Q>rc :<C-u>Unite rails/controller<CR>
 	nnoremap <C-Q>rv :<C-u>Unite rails/view<CR>
