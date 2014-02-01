@@ -122,7 +122,7 @@ call unite#custom#source('file_mru', 'filters', ['matcher_default', 'sorter_defa
 call unite#custom#source('file_rec', 'filters', ['matcher_default', 'sorter_default', 'converter_summarize_path'])
 "}}}
 NeoBundle 'tsukkee/unite-tag' "{{{
-let g:unite_source_tag_max_name_length = 35
+let g:unite_source_tag_max_name_length = 50
 let g:unite_source_tag_max_fname_length = 80
 let s:converter_tag = {
 			\ 'name': 'converter_tag',
