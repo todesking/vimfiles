@@ -413,8 +413,12 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 	let g:lightline = {
 				\ 'colorscheme': 'solarized_dark',
 				\ 'active': {
-				\   'left': [['project_name', 'git_branch'], ['readonly', 'project_path', 'modified'],['pomodoro_status']],
-				\ 'right': [['lineinfo'], ['fileformat', 'fileencoding', 'filetype'], ['charinfo'] ],
+				\   'left': [['project_name', 'git_branch'], ['path_component']],
+				\   'right': [['lineinfo'], ['fileformat', 'fileencoding', 'filetype'], ['charinfo'] ],
+				\ },
+				\ 'inactive': {
+				\   'left': [['project_name', 'git_branch'], ['path_component']],
+				\   'right': [['lineinfo'], ['fileformat', 'fileencoding', 'filetype'], ['charinfo'] ],
 				\ },
 				\ 'component': {
 				\   'readonly': '%{&readonly?has("gui_running")?"":"ro":""}',
@@ -427,6 +431,10 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 				\   'git_branch': 'Vimrc_statusline_git_branch',
 				\ },
 				\ }
+	let g:lightline['component']['path_component'] =
+				\ g:lightline['component']['project_path'].
+				\ g:lightline['component']['readonly'].
+				\ g:lightline['component']['modified']
 	if has('gui_running')
 		let g:lightline['separator'] = { 'left': '', 'right': '' }
 		let g:lightline['subseparator'] = { 'left': '', 'right': '' }
