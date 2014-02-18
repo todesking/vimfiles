@@ -165,6 +165,7 @@ NeoBundle 'basyura/unite-rails' "{{{
 	nnoremap <C-Q>rd :<C-u>Unite rails/db -input=seeds/\ <CR>
 	nnoremap <C-Q>ri :<C-u>Unite rails/db -input=migrate/\ <CR>
 	nnoremap <C-Q>rl :<C-u>Unite rails/lib<CR>
+	nnoremap <C-Q>rh :<C-u>Unite rails/helper<CR>
 "}}}
 NeoBundle 'osyo-manga/unite-fold' " {{{
 	call unite#custom_filters('fold',['matcher_default', 'sorter_nothing', 'converter_default'])
