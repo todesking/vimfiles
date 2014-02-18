@@ -55,6 +55,8 @@ set ttimeout
 set ttimeoutlen=100
 
 set helplang=en,ja
+
+let $PATH=substitute("~/bin:~/local/bin:~/.rbenv/bin:", "\\~", $HOME, "g").$PATH
 " }}}
 
 " Visible spaces {{{
