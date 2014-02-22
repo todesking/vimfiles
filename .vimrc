@@ -886,6 +886,10 @@ function! Vimrc_complete_current_dir(ArgLead, CmdLine, CursorPos)
 endfunction
 " }}}
 
+" P! {{{
+command! -bang -nargs=+ P :exec ':! cd '.s:current_project_dir().' && '.<q-args>
+" }}}
+
 " Rename file {{{
 " http://vim-users.jp/2009/05/hack17/
 command! -nargs=1 -complete=file Rename f <args>|call delete(expand('#'))|w
