@@ -107,13 +107,16 @@ function! s:summarize_path.filter(candidates, context)
 	let candidates = copy(a:candidates)
 	for cand in candidates
 		let path = cand.word
-		let path = substitute(path, '^'.s:home_path, '~', '')
+		let path = substitute(path, s:home_path, '~', '')
 		let path = substitute(path, '\v\~\/projects\/([-a-zA-Z0-9_]+)\/', '[\1] ', '')
 		let path = substitute(path, '\v\~\/.rbenv\/versions\/([^/]+)\/', '[rbenv:\1] ', '')
 		let path = substitute(path, '\v[\/ ]lib\/ruby\/gems\/([^/]+)\/gems\/([^/]+)\/', '[gem:\2] ', '')
 		let path = substitute(path, '\v\~\/\.vim\/bundle\/([^/]+)\/', '[.vim/\1] ', '')
 		let path = substitute(path, '\v\~\/\.vim\/', '[.vim] ', '')
 		let cand.word = path
+		if !empty(cand.word)
+			let cand.abbr = path
+		endif
 	endfor
 	return candidates
 endfunction
@@ -122,6 +125,7 @@ unlet s:summarize_path
 call unite#custom#source('file_mru', 'ignore_pattern', '\.rsync_cache\|svn-commit\.tmp\|svn-cherry-pick\/\(message\|target\)\|.svn')
 call unite#custom#source('file_mru', 'filters', ['matcher_default', 'sorter_default', 'converter_summarize_path'])
 call unite#custom#source('file_rec', 'filters', ['matcher_default', 'sorter_default', 'converter_summarize_path'])
+call unite#custom#source('buffer', 'filters', ['matcher_default', 'sorter_default', 'converter_summarize_path'])
 "}}}
 NeoBundle 'tsukkee/unite-tag' "{{{
 let g:unite_source_tag_max_name_length = 50
@@ -202,7 +206,7 @@ augroup unite-keybind
 augroup END
 " }}}
 
-nnoremap <silent><C-S> :Unite file_mru<CR>
+nnoremap <silent><C-S> :Unite buffer file_mru<CR>
 
 nnoremap <C-Q>  <ESC>
 
