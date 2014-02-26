@@ -192,6 +192,7 @@ command! Colors Unite colorscheme -auto-preview
 nnoremap <C-Q>c :<C-u>Colors<CR>
 " }}}
 NeoBundle 'ujihisa/unite-font'
+NeoBundle 'Shougo/neomru.vim'
 
 " Keymap {{{
 " in-unite {{{
