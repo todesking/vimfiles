@@ -206,7 +206,7 @@ augroup unite-keybind
 augroup END
 " }}}
 
-nnoremap <silent><C-S> :Unite buffer file_mru<CR>
+nnoremap <silent><C-S> :Unite file_mru<CR>
 
 nnoremap <C-Q>  <ESC>
 
