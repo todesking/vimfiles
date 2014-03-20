@@ -458,6 +458,7 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 "}}}
 
 NeoBundle 'mattn/habatobi-vim'
+NeoBundle 'thinca/vim-threes'
 
 if has('clientserver')
 	NeoBundle 'pydave/AsyncCommand'
