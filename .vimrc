@@ -287,6 +287,7 @@ function! s:sorter_smart_sort_val(text, keywords)
 	for kw in a:keywords
 		let sort_val .= printf('%05d', 100 - s:matches(a:text, kw)).'_'
 		let sort_val .= printf('%05d', stridx(a:text, kw)).'_'
+		let sort_val .= printf('%05d', len(text_without_keywords)).'_'
 		let text_without_keywords =
 					\ substitute(text_without_keywords, kw, '', 'g')
 	endfor
