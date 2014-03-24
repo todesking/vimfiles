@@ -600,6 +600,12 @@ endif
 
 " }}}
 
+augroup vimrc-ftdetect
+	autocmd!
+	autocmd BufRead *.scala set filetype=scala
+	autocmd BufRead *.md    set filetype=markdown
+augroup END
+
 " Ruby {{{
 if has("ruby")
 	silent! ruby nil
