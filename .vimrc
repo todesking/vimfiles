@@ -122,9 +122,18 @@ function! s:summarize_path.filter(candidates, context)
 endfunction
 call unite#define_filter(s:summarize_path)
 unlet s:summarize_path
-call unite#custom#source('file_mru', 'ignore_pattern', '\.rsync_cache\|svn-commit\.tmp\|svn-cherry-pick\/\(message\|target\)\|.svn')
-call unite#custom#source('file_mru', 'filters', ['matcher_default', 'sorter_default', 'converter_summarize_path'])
-call unite#custom#source('file_rec', 'filters', ['matcher_default', 'sorter_default', 'converter_summarize_path'])
+
+let s:filter = {
+			\ 'name': 'converter_remove_trash_files',
+			\}
+function s:filter.filter(candidates, context)
+	return filter(a:candidates, 'v:val.word !~ ''\.cache$\|/resolution-cache/\|\.DS_Store\|\.jar$\|/target/''')
+endfunction
+call unite#define_filter(s:filter)
+unlet s:filter
+
+call unite#custom#source('file_mru', 'filters', ['converter_remove_trash_files', 'matcher_default', 'sorter_default', 'converter_summarize_path'])
+call unite#custom#source('file_rec', 'filters', ['converter_remove_trash_files', 'matcher_default', 'sorter_default', 'converter_summarize_path'])
 call unite#custom#source('buffer', 'filters', ['matcher_default', 'sorter_default', 'converter_summarize_path'])
 "}}}
 NeoBundle 'tsukkee/unite-tag' "{{{
