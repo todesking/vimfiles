@@ -492,6 +492,7 @@ NeoBundle 'rhysd/vim-textobj-ruby'
 " }}}
 
 NeoBundle 'derekwyatt/vim-scala'
+NeoBundle 'derekwyatt/vim-sbt'
 
 NeoBundle 'slim-template/vim-slim' "{{{
 	augroup vimrc-plugin-vim-slim
