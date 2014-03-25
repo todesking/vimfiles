@@ -603,6 +603,7 @@ endif
 augroup vimrc-ftdetect
 	autocmd!
 	autocmd BufRead *.scala set filetype=scala
+	autocmd BufRead *.sbt   set filetype=sbt
 	autocmd BufRead *.md    set filetype=markdown
 augroup END
 
