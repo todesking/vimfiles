@@ -500,8 +500,11 @@ NeoBundle 'tpope/vim-rails'
 NeoBundle 'rhysd/vim-textobj-ruby'
 " }}}
 
+" Scala {{{
 NeoBundle 'derekwyatt/vim-scala'
 NeoBundle 'derekwyatt/vim-sbt'
+NeoBundle 'gre/play2vim'
+" }}}
 
 NeoBundle 'slim-template/vim-slim' "{{{
 	augroup vimrc-plugin-vim-slim
