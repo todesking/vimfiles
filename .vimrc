@@ -643,6 +643,10 @@ augroup END
 
 " }}}
 
+" GitLab {{{
+command! GitLabOpenCommit :execute 'Git lab open-commit '.expand('%:p').' '.line('.')
+" }}}
+
 " General keymap {{{
 " :(
 cnoremap <C-U><C-P> up
