@@ -103,16 +103,20 @@ let s:summarize_path = {
 			\ 'name': 'converter_summarize_path',
 			\}
 let s:home_path = expand('~')
+function! Vimrc_summarize_path(path)
+	let path = simplify(a:path)
+	let path = substitute(path, s:home_path, '~', '')
+	let path = substitute(path, '\v\~\/projects\/([-a-zA-Z0-9_]+)\/', '[\1] ', '')
+	let path = substitute(path, '\v\~\/.rbenv\/versions\/([^/]+)\/', '[rbenv:\1] ', '')
+	let path = substitute(path, '\v[\/ ]lib\/ruby\/gems\/([^/]+)\/gems\/([^/]+)\/', '[gem:\2] ', '')
+	let path = substitute(path, '\v\~\/\.vim\/bundle\/([^/]+)\/', '[.vim/\1] ', '')
+	let path = substitute(path, '\v\~\/\.vim\/', '[.vim] ', '')
+	return path
+endfunction
 function! s:summarize_path.filter(candidates, context)
 	let candidates = copy(a:candidates)
 	for cand in candidates
-		let path = cand.word
-		let path = substitute(path, s:home_path, '~', '')
-		let path = substitute(path, '\v\~\/projects\/([-a-zA-Z0-9_]+)\/', '[\1] ', '')
-		let path = substitute(path, '\v\~\/.rbenv\/versions\/([^/]+)\/', '[rbenv:\1] ', '')
-		let path = substitute(path, '\v[\/ ]lib\/ruby\/gems\/([^/]+)\/gems\/([^/]+)\/', '[gem:\2] ', '')
-		let path = substitute(path, '\v\~\/\.vim\/bundle\/([^/]+)\/', '[.vim/\1] ', '')
-		let path = substitute(path, '\v\~\/\.vim\/', '[.vim] ', '')
+		let path = Vimrc_summarize_path(cand.word)
 		let cand.word = path
 		if !empty(cand.word)
 			let cand.abbr = path
@@ -179,15 +183,16 @@ call unite#custom#source('buffer', 'filters', ['matcher_default', 'sorter_defaul
 "}}}
 NeoBundle 'tsukkee/unite-tag' "{{{
 let g:unite_source_tag_max_name_length = 50
-let g:unite_source_tag_max_fname_length = 80
+let g:unite_source_tag_max_fname_length = 999
 let s:converter_tag = {
 			\ 'name': 'converter_tag',
-			\ 'description': 'strip location info for tag',
 			\ }
 function s:converter_tag.filter(candidates,context)
 	let candidates = copy(a:candidates)
 	for cand in candidates
 		let cand.abbr = substitute(cand.abbr, ' pat:.*', '', '')
+		let path = substitute(Vimrc_summarize_path(cand.action__path), '^\[[^\]]\+\] ', '', '')
+		let cand.abbr = substitute(cand.abbr, ' @.*', '@'.path, '')
 	endfor
 	return candidates
 endfunction
