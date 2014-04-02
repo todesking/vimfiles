@@ -163,6 +163,7 @@ function! Vimrc_unite_syntax()
 	highlight link unite__word_tag Identifier
 	syntax region UniteUnimportant keepend excludenl matchgroup=UniteUnimportantMarker start=/!!!{/ end=/}!!!/ concealends containedin=uniteSource__FileMru,uniteSource__FileRec
 	highlight link UniteUnimportant Comment
+	setlocal concealcursor+=i
 endfunction
 
 augroup vimrc-untie-syntax
