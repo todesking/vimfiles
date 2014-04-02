@@ -493,7 +493,9 @@ else
 	let g:lightline['component']['pomodoro_status'] = ''
 endif
 
-NeoBundle 'scrooloose/syntastic'
+NeoBundle 'scrooloose/syntastic' " {{{
+	let g:syntastic_scala_checkers=['fsc']
+" }}}
 
 " Colors {{{
 NeoBundle 'altercation/vim-colors-solarized'
