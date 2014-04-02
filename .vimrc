@@ -123,6 +123,47 @@ endfunction
 call unite#define_filter(s:summarize_path)
 unlet s:summarize_path
 
+let s:filter={'name': 'converter_hide_unimportant_path'}
+function! s:filter.filter(candidates, context)
+	let header_pat = '^\[[^\]]\+\] '
+	let prev = []
+	for cand in a:candidates
+		let path = cand.abbr
+		if empty(path) | let path = cand.word | endif
+
+		let header = matchstr(path, header_pat)
+		if header == -1 | let header = '' | endif
+		if !empty(header) | let path = substitute(path, header_pat, '', '') | endif
+		let components = [header] + split(path, '/', 1)
+		let i = 0
+		let l = min([len(components), len(prev)])
+		while i < l
+			if components[i] != prev[i] | break | endif
+			let i = i + 1
+		endwhile
+
+		if i > 1
+			let cand.abbr = '!!!{'.components[0].join(components[1: i-1], '/').'/}!!!'.join(components[i :], '/')
+		elseif i == 1
+			let cand.abbr = '!!!{'.components[0].'}!!!'.join(components[i :], '/')
+		endif
+		let prev = components
+	endfor
+	return a:candidates
+endfunction
+call unite#define_filter(s:filter)
+unlet s:filter
+
+function! Vimrc_unite_syntax()
+	syn region UniteUnimportant keepend excludenl matchgroup=UniteUnimportantMarker start=/!!!{/ end=/}!!!/ concealends containedin=uniteSource__FileMru,uniteSource__FileRec
+	hi UniteUnimportant guifg=#888888
+endfunction
+
+augroup vimrc-untie-syntax
+	autocmd!
+	autocmd FileType unite :call Vimrc_unite_syntax()
+augroup END
+
 let s:filter = {
 			\ 'name': 'converter_remove_trash_files',
 			\}
@@ -132,9 +173,9 @@ endfunction
 call unite#define_filter(s:filter)
 unlet s:filter
 
-call unite#custom#source('file_mru', 'filters', ['converter_remove_trash_files', 'matcher_default', 'sorter_default', 'converter_summarize_path'])
-call unite#custom#source('file_rec', 'filters', ['converter_remove_trash_files', 'matcher_default', 'sorter_default', 'converter_summarize_path'])
-call unite#custom#source('buffer', 'filters', ['matcher_default', 'sorter_default', 'converter_summarize_path'])
+call unite#custom#source('file_mru', 'filters', ['converter_remove_trash_files', 'matcher_default', 'sorter_default', 'converter_summarize_path', 'converter_hide_unimportant_path'])
+call unite#custom#source('file_rec', 'filters', ['converter_remove_trash_files', 'matcher_default', 'sorter_default', 'converter_summarize_path', 'converter_hide_unimportant_path'])
+call unite#custom#source('buffer', 'filters', ['matcher_default', 'sorter_default', 'converter_summarize_path', 'converter_hide_unimportant_path'])
 "}}}
 NeoBundle 'tsukkee/unite-tag' "{{{
 let g:unite_source_tag_max_name_length = 50
