@@ -428,6 +428,19 @@ NeoBundle 'taku-o/vim-zoom'
 NeoBundle 'tyru/capture.vim'
 
 NeoBundle 'itchyny/lightline.vim' "{{{
+	function! Vimrc_summarize_project_path(path)
+		let path = a:path
+		" JVM subproject
+		let path = substitute(path, '\v^(.+)\/(src\/%(%(main|test)\/%(java|scala))\/.+)', '[\1] \2', '')
+		" JVM package
+		let path = substitute(path,
+					\ '\v<(src\/%(main|test)\/%(java|scala))\/(.+)/([^/]+)\.%(java|scala)',
+					\ '\=submatch(1)."/".substitute(submatch(2),"/",".","g").".".submatch(3)', '')
+		" JVM src dir
+		let path = substitute(path, '\v<src\/(%(main|test)\/%(java|scala))\/(.+)', '\2(\1)', '')
+
+		return path
+	endfunction
 	let g:lightline = {
 				\ 'colorscheme': 'solarized_dark',
 				\ 'active': {
@@ -442,7 +455,7 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 				\   'readonly': '%{&readonly?has("gui_running")?"":"ro":""}',
 				\   'modified': '%{&modified?"+":""}',
 				\   'project_name': '%{Vimrc_current_project_info()["name"]}',
-				\   'project_path': '%{Vimrc_current_project_info()["path"]}',
+				\   'project_path': '%{Vimrc_summarize_project_path(Vimrc_current_project_info()["path"])}',
 				\   'charinfo': '%{printf("%6s",GetB())}',
 				\ },
 				\ 'component_function': {
