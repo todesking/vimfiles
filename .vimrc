@@ -159,8 +159,10 @@ call unite#define_filter(s:filter)
 unlet s:filter
 
 function! Vimrc_unite_syntax()
-	syn region UniteUnimportant keepend excludenl matchgroup=UniteUnimportantMarker start=/!!!{/ end=/}!!!/ concealends containedin=uniteSource__FileMru,uniteSource__FileRec
-	hi UniteUnimportant guifg=#888888
+	syntax match unite__word_tag /\[[^]]\+\]/ contained containedin=uniteSource__FileMru,uniteSource__FileRec
+	highlight unite__word_tag guifg=#00aa00
+	syntax region UniteUnimportant keepend excludenl matchgroup=UniteUnimportantMarker start=/!!!{/ end=/}!!!/ concealends containedin=uniteSource__FileMru,uniteSource__FileRec
+	highlight UniteUnimportant guifg=#888888
 endfunction
 
 augroup vimrc-untie-syntax
