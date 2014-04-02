@@ -519,6 +519,10 @@ NeoBundle 'rhysd/vim-textobj-ruby'
 NeoBundle 'derekwyatt/vim-scala'
 NeoBundle 'derekwyatt/vim-sbt'
 NeoBundle 'gre/play2vim'
+
+augroup vimrc-ft-scala
+	autocmd filetype scala setlocal shiftwidth=2 expandtab
+augroup END
 " }}}
 
 NeoBundle 'slim-template/vim-slim' "{{{
