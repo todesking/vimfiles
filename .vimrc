@@ -160,9 +160,9 @@ unlet s:filter
 
 function! Vimrc_unite_syntax()
 	syntax match unite__word_tag /\[[^]]\+\]/ contained containedin=uniteSource__FileMru,uniteSource__FileRec
-	highlight unite__word_tag guifg=#00aa00
+	highlight link unite__word_tag Identifier
 	syntax region UniteUnimportant keepend excludenl matchgroup=UniteUnimportantMarker start=/!!!{/ end=/}!!!/ concealends containedin=uniteSource__FileMru,uniteSource__FileRec
-	highlight UniteUnimportant guifg=#888888
+	highlight link UniteUnimportant Comment
 endfunction
 
 augroup vimrc-untie-syntax
