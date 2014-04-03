@@ -161,7 +161,7 @@ unlet s:filter
 function! Vimrc_unite_syntax()
 	syntax match unite__word_tag /\[[^]]\+\]/ contained containedin=uniteSource__FileMru,uniteSource__FileRec
 	highlight link unite__word_tag Identifier
-	syntax region UniteUnimportant keepend excludenl matchgroup=UniteUnimportantMarker start=/!!!{/ end=/}!!!/ concealends containedin=uniteSource__FileMru,uniteSource__FileRec
+	syntax region UniteUnimportant keepend excludenl matchgroup=UniteUnimportantMarker start=/!!!{/ end=/}!!!/ concealends containedin=uniteSource__FileMru,uniteSource__FileRec,uniteSource__Buffer
 	highlight link UniteUnimportant Comment
 	setlocal concealcursor+=i
 endfunction
