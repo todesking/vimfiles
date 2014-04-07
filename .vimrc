@@ -829,7 +829,8 @@ endfunction
 " folding look
 function! My_foldtext()
 	"表示するテキストの作成（折り畳みマーカーを除去）
-	let line = s:rm_CmtAndFmr(v:foldstart)
+	let line = s:remove_comment_and_fold_marker(v:foldstart)
+	let line = substitute(line, "\t", repeat(' ', &tabstop), 'g')
 
 	"切り詰めサイズをウィンドウに合わせる"{{{
 	let regardMultibyte =strlen(line) -strdisplaywidth(line)
@@ -886,7 +887,7 @@ endif
 endfunction
 " }}}
 
-function! s:rm_CmtAndFmr(lnum)"{{{
+function! s:remove_comment_and_fold_marker(lnum)"{{{
 	let line = getline(a:lnum)
 	let comment = split(&commentstring, '%s')
 	let comment_end =''
@@ -902,7 +903,7 @@ function! s:rm_CmtAndFmr(lnum)"{{{
 endfunction"}}}
 
 function! s:surgery_line(lnum)"{{{
-	let line = substitute(s:rm_CmtAndFmr(a:lnum),'\V\^\s\*\|\s\*\$','','g')
+	let line = substitute(s:remove_comment_and_fold_marker(a:lnum),'\V\^\s\*\|\s\*\$','','g')
 	let regardMultibyte = len(line) - strdisplaywidth(line)
 	let alignment = 60 + regardMultibyte
 	return line[:alignment]
