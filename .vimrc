@@ -1190,6 +1190,7 @@ endfunction
 augroup vimrc-todo
 	autocmd BufNewFile,BufRead TODO set filetype=todo
 	autocmd FileType TODO call s:todo_syntax()
+	autocmd FileType TODO call s:todo_folding()
 	autocmd FileType TODO call s:todo_keymap()
 augroup END
 
@@ -1232,6 +1233,24 @@ function! s:todo_syntax()
 	syntax match TodoDoing /^\s*\zs> .*\ze/ contains=TodoSeparator
 	syntax match TodoDisabled /^\s*\zsx .*\ze/ contains=TodoSeparator
 	syntax match TodoNormal /^\(\s*. \)\@!\s*\zs.*\ze/ contains=TodoSeparator
+endfunction
+
+function! Vimrc_todo_foldexpr(lnum)
+	let indent_level = indent(a:lnum) / &shiftwidth
+	if getline(a:lnum) =~ '^\s*|'
+		if line('$') >= a:lnum + 1 && getline(a:lnum + 1) =~ '^\s*|'
+			return (indent_level + 1)
+		else
+			return '<'.(indent_level + 1)
+		endif
+	else
+		return '>'.(indent_level + 1)
+	endif
+endfunction
+
+function! s:todo_folding()
+	setlocal foldmethod=expr
+	setlocal foldexpr=Vimrc_todo_foldexpr(v:lnum)
 endfunction
 
 function! s:todo_discard()
@@ -1450,6 +1469,7 @@ endfunction
 
 let g:todo_debug = []
 
+" for debugging
 function! s:print_todo_structure(todo, indent_level)
 	echo repeat(' ', a:indent_level * 2) . matchstr(a:todo.line, '\v^\s*\zs.*\ze$')
 	for c in a:todo.children
