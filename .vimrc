@@ -1418,6 +1418,9 @@ endfunction
 function! s:todo_emit(todo) abort
 	if !a:todo.root
 		call append(line('$') - 1, a:todo.line)
+		for detail in a:todo.detail
+			call append(line('$') - 1, repeat("\t", a:todo.level).'| '.detail)
+		endfor
 	endif
 	for c in a:todo.children
 		call s:todo_emit(c)
@@ -1460,6 +1463,7 @@ function! s:create_todo_structure_from_current_buffer() abort
 	let stack[-1].root = 1
 	let lnum = 1
 	let prev_indent_level = -1
+	let prev_todo = {}
 
 	while lnum <= line('$')
 		let line = getline(lnum)
@@ -1469,8 +1473,16 @@ function! s:create_todo_structure_from_current_buffer() abort
 			continue
 		endif
 
+		if line =~ '^\s*|' && !empty(prev_todo)
+			call add(prev_todo.detail, substitute(line, '^\s*|\s*', '', ''))
+			let lnum += 1
+			continue
+		endif
+
 		let cur = s:new_todo_structure(lnum, line)
+		let prev_todo = cur
 		let indent_level = indent(lnum) / &shiftwidth
+		let cur.level = indent_level
 		if prev_indent_level == indent_level
 			let s=remove(stack, -1)
 			call add(stack[-1].children, cur)
@@ -1493,6 +1505,6 @@ function! s:create_todo_structure_from_current_buffer() abort
 endfunction
 
 function! s:new_todo_structure(lnum, line) abort
-	return {'lnum': a:lnum, 'root': 0, 'line': a:line, 'children': []}
+	return {'lnum': a:lnum, 'root': 0, 'level': 0, 'line': a:line, 'children': [], 'detail': []}
 endfunction
 "}}}
