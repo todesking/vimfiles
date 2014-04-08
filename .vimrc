@@ -596,6 +596,7 @@ NeoBundle 'roalddevries/yaml.vim' "{{{
 "}}}
 NeoBundle 'evanmiller/nginx-vim-syntax'
 NeoBundle 'wavded/vim-stylus'
+NeoBundle 'plasticboy/vim-markdown'
 
 " Haskell {{{
 NeoBundle 'dag/vim2hs' "{{{
