@@ -679,6 +679,10 @@ augroup vimrc-ftdetect
 	autocmd BufRead *.md    set filetype=markdown
 augroup END
 
+" Profile {{{
+command! -nargs=1 ProfileStart profile start <args> | profile file * | profile func *
+" }}}
+
 " Ruby {{{
 if has("ruby")
 	silent! ruby nil
