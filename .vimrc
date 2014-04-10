@@ -86,6 +86,7 @@ NeoBundle 'Shougo/unite.vim' "{{{
 " Settings {{{
 let g:unite_enable_start_insert = 1
 let g:unite_update_time = 100
+let g:unite_cursor_line_highlight='CursorLine'
 
 let g:unite_source_file_rec_ignore_pattern =
 		\'\%(^\|/\)\.$\|\~$\|\.\%(o\|exe\|dll\|bak\|sw[po]\|class\)$'.
