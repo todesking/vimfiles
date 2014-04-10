@@ -556,6 +556,7 @@ NeoBundle 'gre/play2vim'
 
 augroup vimrc-ft-scala
 	autocmd filetype scala setlocal shiftwidth=2 expandtab
+	autocmd filetype scala setlocal foldmethod=syntax
 augroup END
 " }}}
 
