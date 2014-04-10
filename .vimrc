@@ -188,23 +188,7 @@ call unite#custom#source('buffer', 'filters', ['matcher_default', 'sorter_defaul
 NeoBundle 'tsukkee/unite-tag' "{{{
 let g:unite_source_tag_max_name_length = 50
 let g:unite_source_tag_max_fname_length = 999
-let s:converter_tag = {
-			\ 'name': 'converter_tag',
-			\ }
-function s:converter_tag.filter(candidates,context)
-	let candidates = copy(a:candidates)
-	for cand in candidates
-		let cand.abbr = substitute(cand.abbr, ' pat:.*', '', '')
-		let path = substitute(Vimrc_summarize_path(cand.action__path), '^\[[^\]]\+\] ', '', '')
-		let cand.abbr = substitute(cand.abbr, ' @.*', '@'.path, '')
-	endfor
-	return candidates
-endfunction
-
-call unite#define_filter(s:converter_tag)
-unlet s:converter_tag
-
-call unite#custom_filters('tag',['matcher_default', 'sorter_default', 'converter_tag'])
+let g:unite_source_tag_strict_truncate_string = 1
 
 nnoremap <C-Q>t :<C-u>Unite tag<CR>
 " C-] to unite tag jump
