@@ -1221,7 +1221,7 @@ function! s:todo_syntax()
 	highlight TodoSeparator guifg=#777777
 	highlight link TodoDoing Todo
 	highlight link TodoDetail Comment
-	syntax match TodoSeparator /:/ contained
+	syntax match TodoSeparator /: / contained
 	syntax match TodoDone  /^\s*\zs\* .*\ze/ contains=TodoSeparator
 	syntax match TodoDoing /^\s*\zs> .*\ze/ contains=TodoSeparator
 	syntax match TodoDisabled /^\s*\zsx .*\ze/ contains=TodoSeparator
