@@ -662,7 +662,7 @@ augroup vimrc-ftdetect
 	autocmd!
 	autocmd BufRead *.scala set filetype=scala
 	autocmd BufRead *.sbt   set filetype=sbt
-	autocmd BufRead *.md    set filetype=markdown
+	autocmd BufRead *.md    set filetype=mkd
 augroup END
 
 " Profile {{{
