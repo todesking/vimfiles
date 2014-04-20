@@ -1178,6 +1178,78 @@ function! s:vimrc_sid()
 endfunction
 " }}}
 
+" Function tools {{{
+let Functions = {}
+function! Functions.get(name)
+	let s = ''
+	redir => s
+	silent execute '99verbose silent function '.a:name
+	redir END
+	let raw_lines = split(s, '\n')
+	let defined_at = matchstr(raw_lines[1], '^\s\+Last set from \zs.*$')
+	echo defined_at
+	if !empty(defined_at)
+		let body = raw_lines[2:-2]
+	else
+		let body = raw_lines[1:-2]
+	endif
+	return {
+	\   'name': name,
+	\   'lines': map(body, 'v:val[3:-1]'),
+	\   'defined_at': defined_at,
+	\ }
+endfunction
+
+function! Functions.define(name, args, body)
+	if type(a:body) == type([])
+		let body = join(a:body, "\n")
+	else
+		let body = a:body
+	endif
+
+	execute 'function! '.a:name.'('.join(a:args, ',').")\n".body."\nendfunction"
+endfunction
+" }}}
+
+" clientserver {{{
+" original: runtime/plugin/rrhelper.vim
+function! SetupRemoteReplies()
+  let cnt = 0
+  let max = argc()
+
+  let id = expand("<client>")
+  if id == 0
+    return
+  endif
+  while cnt < max
+    " Handle same file from more clients and file being more than once
+    " on the command line by encoding this stuff in the group name
+    let uniqueGroup = "RemoteReply_".id."_".cnt
+
+    " Path separators are always forward slashes for the autocommand pattern.
+    " Escape special characters with a backslash.
+    let f = substitute(argv(cnt), '\\', '/', "g")
+    if exists('*fnameescape')
+      let f = fnameescape(f)
+    else
+      let f = escape(f, " \t\n*?[{`$\\%#'\"|!<")
+    endif
+    execute "augroup ".uniqueGroup
+    execute "autocmd ".uniqueGroup." BufUnload ". f ."  call DoRemoteReply('".id."', '".cnt."', '".uniqueGroup."', '". f ."')"
+    execute "autocmd ".uniqueGroup." QuitPre ". f ."  call DoRemoteReply('".id."', '".cnt."', '".uniqueGroup."', '". f ."')"
+    let cnt = cnt + 1
+  endwhile
+  augroup END
+endfunc
+
+function! DoRemoteReply(id, cnt, group, file)
+  call server2client(a:id, a:cnt)
+  execute 'autocmd! '.a:group.' BufUnload '.a:file
+  execute 'autocmd! '.a:group.' QuitPre '.a:file
+  execute 'augroup! '.a:group
+endfunc
+" }}}
+
 " todo.vim {{{
 augroup vimrc-todo
 	autocmd BufNewFile,BufRead TODO set filetype=todo
