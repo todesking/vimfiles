@@ -112,7 +112,9 @@ function! Vimrc_summarize_path(path)
 	let path = substitute(path, '\v\~\/\.vim\/bundle\/([^/]+)\/', '[.vim/\1] ', '')
 	if path !~ '^\['
 		let info = Vimrc_file_info(a:path)
-		let path = '['.info['name'].'] '.info['file_path']
+		if !empty(info.name)
+			let path = '['.info['name'].'] '.info['file_path']
+		endif
 	endif
 	return path
 endfunction
@@ -917,9 +919,9 @@ function! s:current_project_dir()
 endfunction
 
 function! s:project_root(file_path) abort
-	let project_marker_dirs = ['lib', 'ext', 'test', 'spec', 'bin', 'autoload', 'plugins', 'plugin']
+	let project_marker_dirs = ['lib', 'ext', 'test', 'spec', 'bin', 'autoload', 'plugins', 'plugin', 'src']
 	let project_replace_pattern = '\(.*\)/\('.join(project_marker_dirs,'\|').'\)\(/.\{-}\)\?$'
-	let dir = fnamemodify(expand('%'), ':p:h')
+	let dir = fnamemodify(a:file_path, ':p:h')
 	if exists('b:rails_root')
 		return b:rails_root
 	endif
@@ -935,7 +937,7 @@ function! s:project_root(file_path) abort
 endfunction
 
 function! s:subproject_name(root, path) abort
-	let project_marker_dirs = ['lib', 'ext', 'test', 'spec', 'bin', 'autoload', 'plugins', 'plugin']
+	let project_marker_dirs = ['lib', 'ext', 'test', 'spec', 'bin', 'autoload', 'plugins', 'plugin', 'src']
 	let name = matchstr(fnamemodify(a:path, ':p'), '^'.a:root.'/\zs[^/]\+\ze/.*')
 	if name != -1 && !empty(name)
 		for suffix in project_marker_dirs
