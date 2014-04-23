@@ -455,7 +455,7 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 				\   'readonly': '%{&readonly?has("gui_running")?"":"ro":""}',
 				\   'modified': '%{&modified?"+":""}',
 				\   'project_name': '%{Vimrc_current_project_info()["name"]}',
-				\   'project_path': '%{Vimrc_summarize_project_path(Vimrc_current_project_info()["path"])}',
+				\   'project_path': '%{Vimrc_summarize_project_path(Vimrc_file_info(expand(''%''))["file_path"])}',
 				\   'charinfo': '%{printf("%6s",GetB())}',
 				\ },
 				\ 'component_function': {
@@ -874,11 +874,50 @@ endfunction"}}}
 command! LCdCurrent lcd %:p:h
 " }}}
 
+function! Vimrc_file_info(file_path)
+	let info = Vimrc_project_info(a:file_path)
+	let info.file_path = substitute(fnamemodify(a:file_path, ':p'), '^'.info.path.'/', '', '')
+	return info
+endfunction
+
 " Current project dir {{{
+" file_path:h => project_info
+let s:project_cache = {}
+function! Vimrc_project_info(file_path)
+	let dir = fnamemodify(a:file_path, ':p:h')
+	if has_key(s:project_cache, dir)
+		return s:project_cache[dir]
+	endif
+	let project_root = s:project_root(a:file_path)
+	let sub_project_name = s:subproject_name(project_root, a:file_path)
+	let main_project_name = fnamemodify(project_root, ':t')
+	let name = main_project_name
+	let path = project_root
+	if !empty(sub_project_name)
+		let name .= '/'.sub_project_name
+		let path .= '/'.sub_project_name
+	endif
+	return {
+	\  'name': name,
+	\  'main_name': main_project_name,
+	\  'sub_name': sub_project_name,
+	\  'path': path,
+	\  'main_path': project_root,
+	\  'sub_path': project_root,
+	\}
+endfunction
+
+function! Vimrc_current_project_info()
+	return Vimrc_project_info(expand('%:p'))
+endfunction
 function! s:current_project_dir()
+	return Vimrc_project_info(expand('%')).path
+endfunction
+
+function! s:project_root(file_path) abort
 	let project_marker_dirs = ['lib', 'ext', 'test', 'spec', 'bin', 'autoload', 'plugins', 'plugin']
 	let project_replace_pattern = '\(.*\)/\('.join(project_marker_dirs,'\|').'\)\(/.\{-}\)\?$'
-	let dir = expand('%:p:h')
+	let dir = fnamemodify(expand('%'), ':p:h')
 	if exists('b:rails_root')
 		return b:rails_root
 	endif
@@ -889,6 +928,19 @@ function! s:current_project_dir()
 		return substitute(dir, '\v(.*\/projects\/[-_a-zA-Z0-9])\/.*', '\1', '')
 	elseif dir =~ project_replace_pattern && dir !~ '/usr/.*'
 		return substitute(dir, project_replace_pattern, '\1', '')
+	endif
+	return ''
+endfunction
+
+function! s:subproject_name(root, path) abort
+	let project_marker_dirs = ['lib', 'ext', 'test', 'spec', 'bin', 'autoload', 'plugins', 'plugin']
+	let name = matchstr(fnamemodify(a:path, ':p'), '^'.a:root.'/\zs[^/]\+\ze/.*')
+	if name != -1 && !empty(name)
+		for suffix in project_marker_dirs
+			if getftype(a:root.'/'.name.'/'.suffix) == 'dir'
+				return name
+			endif
+		endfor
 	endif
 	return ''
 endfunction
@@ -994,11 +1046,6 @@ endfunction
 " }}}
 
 " Status line {{{
-function! Vimrc_current_project_info()
-	let path = s:current_project_dir()
-	let short_path = substitute(path, '^'.expand('~'), '~', '')
-	return {'name': fnamemodify(short_path, ':t'), 'path': substitute(expand('%:p'), '^'.path.'/', '', '')}
-endfunction
 function! Vimrc_current_project()
 	let project = Vimrc_current_project_info()
 	if project['name']
