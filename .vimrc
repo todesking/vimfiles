@@ -949,7 +949,7 @@ endfunction
 function! s:subproject_name(root, path) abort
 	let project_marker_dirs = ['lib', 'ext', 'test', 'spec', 'bin', 'autoload', 'plugins', 'plugin', 'src']
 	let name = matchstr(fnamemodify(a:path, ':p'), '^'.a:root.'/\zs[^/]\+\ze/.*')
-	if name != -1 && !empty(name)
+	if name != -1 && !empty(name) && index(project_marker_dirs, name) == -1
 		for suffix in project_marker_dirs
 			if getftype(a:root.'/'.name.'/'.suffix) == 'dir'
 				return name
