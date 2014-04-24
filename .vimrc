@@ -203,6 +203,16 @@ augroup vimrc-tagjump-unite
 				\|      nnoremap <buffer> <C-]> m':<C-u>UniteWithCursorWord -immediately outline tag<CR>
 				\|  endif
 augroup END
+let s:c = {'name': 'converter_tag'}
+function! s:c.filter(candidates, context) abort
+	for c in a:candidates
+		let c.abbr = printf('%-25s @%-100s', c.action__tagname, Vimrc_summarize_path(c.action__path))
+	endfor
+	return a:candidates
+endfunction
+call unite#define_filter(s:c)
+unlet s:c
+call unite#custom_filters('tag',['matcher_default', 'sorter_smart', 'converter_tag'])
 "}}}
 NeoBundle 'Shougo/unite-outline'
 NeoBundle 'sgur/unite-qf' "{{{
