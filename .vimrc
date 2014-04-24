@@ -206,7 +206,9 @@ augroup END
 let s:c = {'name': 'converter_tag'}
 function! s:c.filter(candidates, context) abort
 	for c in a:candidates
-		let c.abbr = printf('%-25s @%-100s', c.action__tagname, Vimrc_summarize_path(c.action__path))
+		let spath = Vimrc_summarize_path(c.action__path)
+		let c.abbr = printf('%-25s @%-100s', c.action__tagname, spath)
+		let c.word = c.action__tagname . ' ' . spath
 	endfor
 	return a:candidates
 endfunction
