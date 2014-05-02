@@ -460,7 +460,7 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 	let g:lightline = {
 				\ 'colorscheme': 'solarized_dark',
 				\ 'active': {
-				\   'left': [['project_name', 'git_branch'], ['path_component']],
+				\   'left': [['project_component'], ['path_component']],
 				\   'right': [['lineinfo'], ['fileformat', 'fileencoding', 'filetype'], ['charinfo'] ],
 				\ },
 				\ 'inactive': {
@@ -482,6 +482,9 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 				\ g:lightline['component']['project_path'].
 				\ g:lightline['component']['readonly'].
 				\ g:lightline['component']['modified']
+	let g:lightline['component']['project_component'] =
+				\ g:lightline['component']['project_name'].
+				\ '%{Vimrc_statusline_git_branch()}'
 	if has('gui_running')
 		let g:lightline['separator'] = { 'left': '', 'right': '' }
 		let g:lightline['subseparator'] = { 'left': '', 'right': '' }
@@ -489,9 +492,10 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 	function! Vimrc_statusline_git_branch()
 		if exists("*fugitive#head")
 			let _ = fugitive#head()
-			return strlen(_) ? _.(has('gui_running')?'':'†') : ''
+			return strlen(_) ? (has('gui_running')?'':'†')._ : ''
+		else
+			return ''
 		endif
-		return ''
 	endfunction
 "}}}
 
