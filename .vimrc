@@ -412,6 +412,8 @@ NeoBundle 'tpope/vim-surround'
 NeoBundle 'Lokaltog/vim-easymotion' "{{{
 	nmap <silent><C-J> <Plug>(easymotion-w)
 	nmap <silent><C-K> <Plug>(easymotion-b)
+	vmap <silent><C-J> <Plug>(easymotion-w)
+	vmap <silent><C-K> <Plug>(easymotion-b)
 	let g:EasyMotion_keys = 'siogkmjferndlhyuxvtcbwa'
 "}}}
 NeoBundle 'kana/vim-textobj-user' " {{{
