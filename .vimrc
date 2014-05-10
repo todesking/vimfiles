@@ -1,4 +1,5 @@
 " vim:foldmethod=marker
+let $RUBY_DLL=$HOME.'/.rbenv/versions/2.1.1/lib/libruby.dylib'
 
 " NeoBundle {{{
 set nocompatible               " be iMproved
@@ -904,8 +905,22 @@ endfunction
 " file_path:h => project_info
 let s:project_cache = {}
 function! Vimrc_project_info(file_path)
+	if a:file_path == ''
+		return {
+		\  'name': '',
+		\  'main_name': '',
+		\  'sub_name': '',
+		\  'path': '',
+		\  'main_path': '',
+		\  'sub_path': '',
+		\}
+	endif
+	if has_key(s:project_cache, a:file_path)
+		return s:project_cache[a:file_path]
+	endif
 	let dir = fnamemodify(a:file_path, ':p:h')
 	if has_key(s:project_cache, dir)
+		let s:project_cache[a:file_path] = s:project_cache[dir]
 		return s:project_cache[dir]
 	endif
 	let project_root = s:project_root(a:file_path)
@@ -917,7 +932,7 @@ function! Vimrc_project_info(file_path)
 		let name .= '/'.sub_project_name
 		let path .= '/'.sub_project_name
 	endif
-	return {
+	let info = {
 	\  'name': name,
 	\  'main_name': main_project_name,
 	\  'sub_name': sub_project_name,
@@ -925,6 +940,9 @@ function! Vimrc_project_info(file_path)
 	\  'main_path': project_root,
 	\  'sub_path': project_root,
 	\}
+	let s:project_cache[dir] = info
+	let s:project_cache[a:file_path] = info
+	return info
 endfunction
 
 function! Vimrc_current_project_info()
