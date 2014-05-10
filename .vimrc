@@ -491,9 +491,15 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 		let g:lightline['subseparator'] = { 'left': '', 'right': '' }
 	endif
 	function! Vimrc_statusline_git_branch()
+		if exists('b:vimrc_statusline_git_branch') && str2float(reltimestr(reltime(b:vimrc_statusline_git_branch_updated_at))) < 3.0
+			return b:vimrc_statusline_git_branch
+		endif
 		if exists("*fugitive#head")
 			let _ = fugitive#head()
-			return strlen(_) ? (has('gui_running')?'':'†')._ : ''
+			let s = strlen(_) ? (has('gui_running')?'':'†')._ : ''
+			let b:vimrc_statusline_git_branch = s
+			let b:vimrc_statusline_git_branch_updated_at = reltime()
+			return s
 		else
 			return ''
 		endif
