@@ -80,6 +80,10 @@ endif
 " }}}
 
 " plugins/filetypes {{{
+" matchparen {{{
+let g:matchparen_timeout = 10
+let g:matchparen_insert_timeout = 10
+" }}}
 NeoBundle 'Shougo/vimproc'
 
 " Unite {{{
@@ -1110,7 +1114,9 @@ let &statusline =
 			\. '(%3l,%3c)'
 function! GetB()
 	let c = matchstr(getline('.'), '.', col('.') - 1)
-	let c = iconv(c, &enc, &fenc)
+	if &enc != &fenc
+		let c = iconv(c, &enc, &fenc)
+	endif
 	return String2Hex(c)
 endfunction
 " :help eval-examples
