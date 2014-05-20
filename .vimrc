@@ -397,6 +397,7 @@ endif
 if(has('lua'))
 NeoBundle 'Shougo/neocomplete.vim' "{{{
 let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#force_overwrite_completefunc = 1
 "}}}
 endif
 
@@ -667,6 +668,16 @@ augroup vimrc-ftdetect
 	autocmd BufRead *.sbt   set filetype=sbt
 	autocmd BufRead *.md    set filetype=mkd
 augroup END
+
+augroup vimrc-full-screen-help " {{{
+	autocmd!
+	autocmd BufEnter * call Vimrc_full_screen_help()
+	function! Vimrc_full_screen_help()
+		if  &ft == 'help' && winnr() == 1 && winnr('$') == 2 && bufname(winbufnr(2)) == ''
+			execute "normal! \<C-W>o"
+		endif
+	endfunction
+augroup END " }}}
 
 " Profile {{{
 command! -nargs=1 ProfileStart profile start <args> | profile file * | profile func *
