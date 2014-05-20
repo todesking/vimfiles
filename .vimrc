@@ -394,6 +394,7 @@ endif
 
 if(has('lua'))
 NeoBundle 'Shougo/neocomplete.vim' "{{{
+let g:neocomplete#enable_at_startup = 1
 "}}}
 endif
 
@@ -961,7 +962,7 @@ function! Vimrc_current_project_info()
 	return Vimrc_project_info(expand('%:p'))
 endfunction
 function! s:current_project_dir()
-	return Vimrc_project_info(expand('%')).path
+	return Vimrc_project_info(expand('%')).main_path
 endfunction
 
 function! s:project_root(file_path) abort
