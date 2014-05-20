@@ -20,6 +20,8 @@ set smartcase
 set wrapscan
 set incsearch
 
+set noundofile
+
 set ambiwidth=single
 
 set number
