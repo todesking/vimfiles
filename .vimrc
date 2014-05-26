@@ -278,7 +278,8 @@ nnoremap <C-Q>  <ESC>
 
 nnoremap <C-Q>u :UniteResume<CR>
 nnoremap <C-Q>o m':<C-u>Unite outline<CR>
-nnoremap <C-Q>p :<C-u>exec 'Unite file_rec:'.<SID>current_project_dir()<CR>
+nnoremap <C-Q>P :<C-u>exec 'Unite file_rec:'.Vimrc_project_info(expand('%')).main_path<CR>
+nnoremap <C-Q>p :<C-u>exec 'Unite file_rec:'.Vimrc_project_info(expand('%')).sub_path<CR>
 nnoremap <C-Q>c :<C-u>exec 'Unite file_rec:'.expand('%:p:h').'/'<CR>
 nnoremap <C-Q>l :<C-u>Unite line<CR>
 nnoremap <C-Q>b :<C-u>Unite buffer<CR>
@@ -964,7 +965,7 @@ function! Vimrc_project_info(file_path)
 	\  'sub_name': sub_project_name,
 	\  'path': path,
 	\  'main_path': project_root,
-	\  'sub_path': project_root,
+	\  'sub_path': path,
 	\}
 	let s:project_cache[dir] = info
 	let s:project_cache[a:file_path] = info
