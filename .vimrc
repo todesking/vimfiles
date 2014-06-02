@@ -223,12 +223,15 @@ call unite#define_filter(s:c)
 unlet s:c
 call unite#custom_filters('tag',['matcher_default', 'sorter_smart', 'converter_tag'])
 "}}}
-NeoBundle 'Shougo/unite-outline'
+NeoBundle 'Shougo/unite-outline' "{{{
+let g:unite_source_outline_scala_show_all_declarations = 1
+"}}}
 NeoBundle 'sgur/unite-qf' "{{{
 nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview<CR>
 "}}}
 NeoBundle 'basyura/unite-rails' "{{{
 	nnoremap <C-Q>r <ESC>
+	nnoremap <C-Q>j  :<C-u>Unite jump<CR>
 	nnoremap <C-Q>ra :<C-u>Unite rails/asset<CR>
 	nnoremap <C-Q>rm :<C-u>Unite rails/model<CR>
 	nnoremap <C-Q>rc :<C-u>Unite rails/controller<CR>
@@ -399,6 +402,7 @@ if(has('lua'))
 NeoBundle 'Shougo/neocomplete.vim' "{{{
 let g:neocomplete#enable_at_startup = 1
 let g:neocomplete#force_overwrite_completefunc = 1
+let g:neocomplete#enable_smart_case = 1
 "}}}
 endif
 
@@ -558,10 +562,13 @@ NeoBundle 'todesking/ruby_hl_lvar.vim'
 NeoBundle 'derekwyatt/vim-scala'
 NeoBundle 'derekwyatt/vim-sbt'
 NeoBundle 'gre/play2vim'
+NeoBundle 'mdreves/vim-scaladoc'
 
 augroup vimrc-ft-scala
+	autocmd!
 	autocmd filetype scala setlocal shiftwidth=2 expandtab
 	autocmd filetype scala setlocal foldmethod=syntax
+	autocmd filetype scala nnoremap K :<C-U>call scaladoc#Search(expand("<cword>"))<CR>
 augroup END
 " }}}
 
