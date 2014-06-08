@@ -402,7 +402,9 @@ if(has('lua'))
 NeoBundle 'Shougo/neocomplete.vim' "{{{
 let g:neocomplete#enable_at_startup = 1
 let g:neocomplete#force_overwrite_completefunc = 1
+let g:neocomplete#enable_prefetch=1
 let g:neocomplete#enable_smart_case = 1
+let g:neocomplete#lock_iminsert = 1
 "}}}
 endif
 
@@ -594,7 +596,9 @@ NeoBundle 'roalddevries/yaml.vim' "{{{
 "}}}
 NeoBundle 'evanmiller/nginx-vim-syntax'
 NeoBundle 'wavded/vim-stylus'
-NeoBundle 'plasticboy/vim-markdown'
+NeoBundle 'plasticboy/vim-markdown' "{{{
+let g:markdown_fenced_languages = ['scala']
+"}}}
 
 " Haskell {{{
 NeoBundle 'dag/vim2hs' "{{{
@@ -726,6 +730,7 @@ augroup END
 
 " GitLab {{{
 command! GitLabOpenCommit :execute 'Git lab open-commit '.expand('%:p').' '.line('.')
+command! GitLabOpenFile :execute 'Git lab open-file '.expand('%:p').' '.line('.')
 " }}}
 
 " General keymap {{{
