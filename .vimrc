@@ -419,7 +419,7 @@ function! Vimrc_neocomplete_control()
 	if(neocomplete#is_enabled())
 		if(Vimrc_is_ime_enabled())
 			let b:vimrc_neocomplete_enabled = 1
-			NeoCompleteDisable
+			NeoCompleteLock
 		endif
 	else
 		if(get(b:, 'vimrc_neocomplete_enabled', 0) && !Vimrc_is_ime_enabled())
