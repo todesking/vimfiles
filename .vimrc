@@ -405,6 +405,29 @@ let g:neocomplete#force_overwrite_completefunc = 1
 let g:neocomplete#enable_prefetch=1
 let g:neocomplete#enable_smart_case = 1
 let g:neocomplete#lock_iminsert = 1
+augroup vimrc-neocomplete
+	autocmd!
+	autocmd CursorMovedI * call Vimrc_neocomplete_control()
+augroup END
+function! Vimrc_is_ime_enabled()
+	if(!executable('is_ascii_capable'))
+		return 0
+	endif
+	return str2nr(system("(is_ascii_capable && echo 0) || echo 1"))
+endfunction
+function! Vimrc_neocomplete_control()
+	if(neocomplete#is_enabled())
+		if(Vimrc_is_ime_enabled())
+			let b:vimrc_neocomplete_enabled = 1
+			NeoCompleteDisable
+		endif
+	else
+		if(get(b:, 'vimrc_neocomplete_enabled', 0) && !Vimrc_is_ime_enabled())
+			NeoCompleteEnable
+			let b:vimrc_neocomplete_enabled = 0
+		endif
+	endif
+endfunction
 "}}}
 endif
 
