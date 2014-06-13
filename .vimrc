@@ -695,6 +695,9 @@ if exists('*RSenseInstalled') && RSenseInstalled()
 endif
 "}}}
 
+NeoBundle 'Shougo/vimshell.vim' "{{{
+"}}}
+
 " }}}
 
 augroup vimrc-ftdetect
