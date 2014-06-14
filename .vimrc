@@ -143,18 +143,20 @@ NeoBundle 'todesking/YankRing.vim' " {{{
 let g:yankring_max_element_length = 0
 let g:yankring_max_history_element_length = 1000 * 10
 " }}}
-
 NeoBundle 'Align' " {{{
 	let g:Align_xstrlen='strwidth'
 	map (trashbox-leader-rwp) <Plug>RestoreWinPosn
 	map (trashbox-leader-swp) <Plug>SaveWinPosn
 	let g:loaded_AlignMapsPlugin = 1
 " }}}
-
 NeoBundle 'closetag.vim' " {{{
 	 autocmd Filetype html,xml,xsl,eruby runtime plugin/closetag.vim
 " }}}
-
+NeoBundle 'Shougo/neosnippet' " {{{
+	let g:neosnippet#disable_runtime_snippets = {
+	\ '_': 1,
+	\ }
+" }}}
 " }}}
 
 " Utilities {{{
