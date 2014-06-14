@@ -722,39 +722,6 @@ augroup END " }}}
 command! -nargs=1 ProfileStart profile start <args> | profile file * | profile func *
 " }}}
 
-" Ruby {{{
-if has("ruby")
-	silent! ruby nil
-endif
-augroup vimrc-filetype-ruby
-	autocmd!
-	autocmd FileType ruby inoremap <buffer> <c-]> end<ESC>
-	autocmd FileType ruby set foldmethod=manual
-augroup END
-
-" To avoid ultra-heavy movement when Ruby insert mode {{{
-
-" Don't screw up folds when inserting text that might affect them, until
-" leaving insert mode. Foldmethod is local to the window. Protect against
-" screwing up folding when switching between windows.
-autocmd InsertEnter * if !exists('w:last_fdm') | let w:last_fdm=&foldmethod | setlocal foldmethod=manual | endif
-autocmd InsertLeave,WinLeave * if exists('w:last_fdm') | let &l:foldmethod=w:last_fdm | unlet w:last_fdm | endif
-
-" }}}
-
-" }}}
-
-" Rails {{{
-augroup vimrc-filetype-erb
-	autocmd!
-	autocmd FileType eruby inoremap <buffer> {{ <%
-	autocmd FileType eruby inoremap <buffer> }} %>
-	autocmd FileType eruby inoremap <buffer> {{e <% end %><ESC>
-	autocmd FileType eruby inoremap <buffer> {b <br /><ESC>
-augroup END
-
-" }}}
-
 " GitLab {{{
 command! GitLabOpenCommit :execute 'Git lab open-commit '.expand('%:p').' '.line('.')
 command! GitLabOpenFile :execute 'Git lab open-file '.expand('%:p').' '.line('.')
@@ -830,7 +797,6 @@ try
 catch
 endtry
 nnoremap <silent> <leader>w :let &wrap=!&wrap<CR>:set wrap?<CR>
-nnoremap <leader>f :set foldmethod=syntax<CR>:set foldmethod=manual<CR>
 nnoremap <silent>_ :let &hlsearch=!&hlsearch<CR>:set hlsearch?<CR>
 
 autocmd FileType * setlocal formatoptions-=ro
