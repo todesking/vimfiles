@@ -51,6 +51,14 @@ endfunction " }}}
 call s:register_project_detection_method(s:dm)
 " }}}
 
+let s:empty_project_info = {
+\  'name': '',
+\  'main_name': '',
+\  'sub_name': '',
+\  'path': '',
+\  'main_path': '',
+\  'sub_path': '',
+\}
 function! CurrentProjectInfo(...) abort " {{{
 	if a:0 == 0
 		let file_path = expand('%')
@@ -59,24 +67,21 @@ function! CurrentProjectInfo(...) abort " {{{
 	else
 		throw "Illegal argument size(expected 0 to 1): ".a:0
 	endif
+
 	if file_path == ''
-		return {
-		\  'name': '',
-		\  'main_name': '',
-		\  'sub_name': '',
-		\  'path': '',
-		\  'main_path': '',
-		\  'sub_path': '',
-		\}
-	endif
+		return copy(s:empty_project_info)
+	else
+
 	if has_key(s:project_cache, file_path)
 		return s:project_cache[file_path]
 	endif
+
 	let dir = fnamemodify(file_path, ':p:h')
 	if has_key(s:project_cache, dir)
 		let s:project_cache[file_path] = s:project_cache[dir]
 		return s:project_cache[dir]
 	endif
+
 	let project_root = s:project_root_for(file_path)
 	let sub_project_name = s:subproject_name(project_root, file_path)
 	let main_project_name = fnamemodify(project_root, ':t')
@@ -102,7 +107,6 @@ endfunction " }}}
 function! s:project_root_for(file_path) abort abort " {{{
 	let dir = fnamemodify(a:file_path, ':p:h')
 
-	let root = ''
 	for method in s:project_detection_methods
 		if has_key(method, 'project_root_of')
 			let root = method.project_root_of(dir)
