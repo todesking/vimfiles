@@ -381,23 +381,6 @@ unlet s:sorter_smart
 
 " }}}
 
-if(0)
-NeoBundle 'Shougo/neocomplcache' " {{{
-if !exists('g:neocomplcache_omni_patterns')
-	let g:neocomplcache_omni_patterns = {}
-endif
-let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
-let g:neocomplcache_lock_buffer_name_pattern='\*unite\*'
-let g:neocomplcache_enable_prefetch = 1
-let g:neocomplcache_lock_iminsert = 1
-let g:neocomplcache_use_vimproc = 1
-if has('gui_running')
-	let g:neocomplcache_enable_at_startup = 1
-endif
-" }}}
-NeoBundle 'Shougo/neocomplcache-rsense'
-endif
-
 if(has('lua'))
 NeoBundle 'Shougo/neocomplete.vim' "{{{
 let g:neocomplete#enable_at_startup = 1
@@ -700,13 +683,6 @@ NeoBundle 'Shougo/vimshell.vim' "{{{
 
 " }}}
 
-augroup vimrc-ftdetect
-	autocmd!
-	autocmd BufRead *.scala set filetype=scala
-	autocmd BufRead *.sbt   set filetype=sbt
-	autocmd BufRead *.md    set filetype=mkd
-augroup END
-
 augroup vimrc-full-screen-help " {{{
 	autocmd!
 	autocmd BufEnter * call Vimrc_full_screen_help()
@@ -798,9 +774,9 @@ catch
 endtry
 nnoremap <silent> <leader>w :let &wrap=!&wrap<CR>:set wrap?<CR>
 nnoremap <silent>_ :let &hlsearch=!&hlsearch<CR>:set hlsearch?<CR>
+" }}}
 
 autocmd FileType * setlocal formatoptions-=ro
-" }}}
 
 " Folding {{{
 " Folding toggle {{{
@@ -1088,33 +1064,6 @@ function! s:helptags(pat)
 endfunction
 " }}}
 
-" Syntax trace {{{
-" from http://vim.wikia.com/wiki/Identify_the_syntax_highlighting_group_used_at_the_cursor
-command! SyntaxTrace echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
-\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
-\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"
-"}}}
-
-" Vim のユーザ定義コマンドを自動的にシンタックスハイライトする {{{
-" http://emanon001.github.com/blog/2012/03/18/syntax-highlighting-of-user-defined-commands-in-vim/
-augroup syntax-highlight-extension
-	autocmd!
-	autocmd Syntax vim call s:set_syntax_of_user_defined_commands()
-augroup END
-
-function! s:set_syntax_of_user_defined_commands()
-	redir => _
-	silent! command
-	redir END
-
-	let command_names = map(split(_, '\n')[1:],
-		\                 'matchstr(v:val, ''^[!"b]*\s\+\zs\u\w*\ze'')')
-	if empty(command_names) | return | endif
-
-	execute 'syntax keyword vimCommand contained' join(command_names)
-endfunction
-" }}}
-
 " Status line {{{
 function! Vimrc_current_project()
 	let project = Vimrc_current_project_info()
@@ -1238,62 +1187,12 @@ augroup vimrc-hello-again
 augroup END
 " }}}
 
-" 保存時にディレクトリ作成 {{{
-" http://vim-users.jp/2011/02/hack202/
-augroup vimrc-auto-mkdir  " {{{
-	autocmd!
-	autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
-	function! s:auto_mkdir(dir, force)  " {{{
-		if a:dir =~ '^scp://'
-			return
-		endif
-		if !isdirectory(a:dir) && (a:force ||
-		\    input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
-			call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
-		endif
-	endfunction  " }}}
-augroup END  " }}}
-" }}}
-
 " vimrc's SID {{{
 function! Vimrc_sid()
 	return s:vimrc_sid()
 endfunction
 function! s:vimrc_sid()
 	return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_vimrc_sid$')
-endfunction
-" }}}
-
-" Function tools {{{
-let Functions = {}
-function! Functions.get(name)
-	let s = ''
-	redir => s
-	silent execute '99verbose silent function '.a:name
-	redir END
-	let raw_lines = split(s, '\n')
-	let defined_at = matchstr(raw_lines[1], '^\s\+Last set from \zs.*$')
-	echo defined_at
-	if !empty(defined_at)
-		let body = raw_lines[2:-2]
-	else
-		let body = raw_lines[1:-2]
-	endif
-	return {
-	\   'name': name,
-	\   'lines': map(body, 'v:val[3:-1]'),
-	\   'defined_at': defined_at,
-	\ }
-endfunction
-
-function! Functions.define(name, args, body)
-	if type(a:body) == type([])
-		let body = join(a:body, "\n")
-	else
-		let body = a:body
-	endif
-
-	execute 'function! '.a:name.'('.join(a:args, ',').")\n".body."\nendfunction"
 endfunction
 " }}}
 
