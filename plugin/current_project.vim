@@ -1,5 +1,8 @@
 " file_path:h => project_info
 let s:project_cache = {}
+let s:project_marker_dirs = ['lib', 'ext', 'test', 'spec', 'bin', 'autoload', 'plugins', 'plugin', 'src']
+let s:project_replace_pattern = '\(.*\)/\('.join(project_marker_dirs,'\|').'\)\(/.\{-}\)\?$'
+
 function! CurrentProjectInfo(...) abort " {{{
 	if a:0 == 0
 		let file_path = expand('%')
@@ -49,28 +52,24 @@ function! CurrentProjectInfo(...) abort " {{{
 endfunction " }}}
 
 function! s:project_root(file_path) abort abort " {{{
-	let project_marker_dirs = ['lib', 'ext', 'test', 'spec', 'bin', 'autoload', 'plugins', 'plugin', 'src']
-	let project_replace_pattern = '\(.*\)/\('.join(project_marker_dirs,'\|').'\)\(/.\{-}\)\?$'
 	let dir = fnamemodify(a:file_path, ':p:h')
 	if exists('b:rails_root')
 		return b:rails_root
 	endif
-	let git_project_dir = s:current_project_dir_by_git(dir)
-	if !empty(git_project_dir)
-		return git_project_dir
-	elseif dir =~ '/projects/'
-		return substitute(dir, '\v(.*\/projects\/[-_a-zA-Z0-9])\/.*', '\1', '')
-	elseif dir =~ project_replace_pattern && dir !~ '/usr/.*'
-		return substitute(dir, project_replace_pattern, '\1', '')
-	endif
+
+	let project_dir = s:current_project_dir_by_git(dir)
+	if !empty(project_dir) | return project_dir | endif
+
+	let project_dir = s:current_project_dir_by_rule(dir)
+	if !empty(project_dir) | return project_dir | endif
+
 	return ''
 endfunction " }}}
 
 function! s:subproject_name(root, path) abort abort " {{{
-	let project_marker_dirs = ['lib', 'ext', 'test', 'spec', 'bin', 'autoload', 'plugins', 'plugin', 'src']
 	let name = matchstr(fnamemodify(a:path, ':p'), '^'.a:root.'/\zs[^/]\+\ze/.*')
-	if name != -1 && !empty(name) && index(project_marker_dirs, name) == -1
-		for suffix in project_marker_dirs
+	if name != -1 && !empty(name) && index(s:project_marker_dirs, name) == -1
+		for suffix in s:project_marker_dirs
 			if getftype(a:root.'/'.name.'/'.suffix) == 'dir'
 				return name
 			endif
@@ -95,3 +94,11 @@ function! s:current_project_dir_by_git(dir) abort " {{{
 	return ''
 endfunction " }}}
 
+function! s:current_project_dir_by_rule(dir) abort " {{{
+	let dir = a:dir
+	if dir =~ '/projects/'
+		return substitute(dir, '\v(.*\/projects\/[-_a-zA-Z0-9])\/.*', '\1', '')
+	elseif dir =~ s:project_replace_pattern && dir !~ '/usr/.*'
+		return substitute(dir, s:project_replace_pattern, '\1', '')
+	endif
+endfunction " }}}
