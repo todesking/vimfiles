@@ -82,11 +82,89 @@ endif
 " }}}
 
 " plugins/filetypes {{{
+
+NeoBundle 'Shougo/vimproc'
+if has('clientserver')
+	NeoBundle 'pydave/AsyncCommand'
+endif
+
+
+" Navigation/Highlight {{{
+
 " matchparen {{{
 let g:matchparen_timeout = 10
 let g:matchparen_insert_timeout = 10
 " }}}
-NeoBundle 'Shougo/vimproc'
+
+NeoBundle 'Lokaltog/vim-easymotion' "{{{
+	nmap <silent><C-J> <Plug>(easymotion-w)
+	nmap <silent><C-K> <Plug>(easymotion-b)
+	vmap <silent><C-J> <Plug>(easymotion-w)
+	vmap <silent><C-K> <Plug>(easymotion-b)
+	let g:EasyMotion_keys = 'siogkmjferndlhyuxvtcbwa'
+" }}}
+
+NeoBundle 'a.vim'
+
+NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
+	if has('gui_running')
+		autocmd! indent_guides BufEnter
+		augroup vimrc-indentguide
+			autocmd!
+			autocmd BufWinEnter,BufNew * highlight IndentGuidesOdd guifg=NONE guibg=NONE
+		augroup END
+		let g:indent_guides_enable_on_vim_startup=1
+		let g:indent_guides_start_level=1
+		let g:indent_guides_guide_size=1
+	endif
+" }}}
+" }}}
+
+" Textobj {{{
+
+NeoBundle 'tpope/vim-surround'
+
+NeoBundle 'kana/vim-textobj-user' " {{{
+	call textobj#user#plugin('lastmofified', {
+	\   'lastmodified': {
+	\     'select-a': 'al',
+	\     '*select-a-function*': 'g:Vimrc_select_a_last_modified',
+	\   },
+	\ })
+	function! g:Vimrc_select_a_last_modified() abort
+		return ['v', getpos("'["), getpos("']")]
+	endfunction
+" }}}
+
+" }}}
+
+" Edit support {{{
+NeoBundle 'todesking/YankRing.vim' " {{{
+let g:yankring_max_element_length = 0
+let g:yankring_max_history_element_length = 1000 * 10
+" }}}
+
+NeoBundle 'Align' " {{{
+	let g:Align_xstrlen='strwidth'
+	map (trashbox-leader-rwp) <Plug>RestoreWinPosn
+	map (trashbox-leader-swp) <Plug>SaveWinPosn
+	let g:loaded_AlignMapsPlugin = 1
+" }}}
+
+NeoBundle 'closetag.vim' " {{{
+	 autocmd Filetype html,xml,xsl,eruby runtime plugin/closetag.vim
+" }}}
+
+" }}}
+
+" Games {{{
+NeoBundle 'mattn/habatobi-vim'
+NeoBundle 'thinca/vim-threes'
+" }}}
+
+" Uncategorized {{{
+" }}}
+
 
 " Unite {{{
 NeoBundle 'Shougo/unite.vim' "{{{
@@ -414,56 +492,9 @@ endfunction
 "}}}
 endif
 
-NeoBundle 'closetag.vim' " {{{
-	 autocmd Filetype html,xml,xsl,eruby runtime plugin/closetag.vim
-" }}}
-NeoBundle 'Align' " {{{
-let g:Align_xstrlen='strwidth'
-map (trashbox-leader-rwp) <Plug>RestoreWinPosn
-map (trashbox-leader-swp) <Plug>SaveWinPosn
-let g:loaded_AlignMapsPlugin = 1
-" }}}
-NeoBundle 'todesking/YankRing.vim' " {{{
-let g:yankring_max_element_length = 0
-let g:yankring_max_history_element_length = 1000 * 10
-" }}}
 NeoBundle 'AndrewRadev/linediff.vim'
 NeoBundle 'osyo-manga/vim-over'
-" NeoBundle 'tsaleh/vim-matchit'
-NeoBundle 'tpope/vim-surround'
-NeoBundle 'Lokaltog/vim-easymotion' "{{{
-	nmap <silent><C-J> <Plug>(easymotion-w)
-	nmap <silent><C-K> <Plug>(easymotion-b)
-	vmap <silent><C-J> <Plug>(easymotion-w)
-	vmap <silent><C-K> <Plug>(easymotion-b)
-	let g:EasyMotion_keys = 'siogkmjferndlhyuxvtcbwa'
-"}}}
-NeoBundle 'kana/vim-textobj-user' " {{{
-	call textobj#user#plugin('lastmofified', {
-	\   'lastmodified': {
-	\     'select-a': 'al',
-	\     '*select-a-function*': 'g:Vimrc_select_a_last_modified',
-	\   },
-	\ })
-" }}}
-function! g:Vimrc_select_a_last_modified() abort
-	return ['v', getpos("'["), getpos("']")]
-endfunction
 
-NeoBundle 'a.vim'
-
-NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
-	if has('gui_running')
-		autocmd! indent_guides BufEnter
-		augroup vimrc-indentguide
-			autocmd!
-			autocmd BufWinEnter,BufNew * highlight IndentGuidesOdd guifg=NONE guibg=NONE
-		augroup END
-		let g:indent_guides_enable_on_vim_startup=1
-		let g:indent_guides_start_level=1
-		let g:indent_guides_guide_size=1
-	endif
-" }}}
 NeoBundle 'taku-o/vim-zoom'
 NeoBundle 'tyru/capture.vim'
 
@@ -529,12 +560,6 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 	endfunction
 "}}}
 
-NeoBundle 'mattn/habatobi-vim'
-NeoBundle 'thinca/vim-threes'
-
-if has('clientserver')
-	NeoBundle 'pydave/AsyncCommand'
-endif
 
 if has('clientserver')
 	NeoBundle 'mnick/vim-pomodoro' " depends: AsyncCommand
