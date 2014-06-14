@@ -903,10 +903,6 @@ endfunction"}}}
 " }}}
 " }}}
 
-" LCdCurrent {{{
-command! LCdCurrent lcd %:p:h
-" }}}
-
 function! Vimrc_file_info(file_path)
 	let info = Vimrc_project_info(a:file_path)
 	let info.file_path = substitute(fnamemodify(a:file_path, ':p'), '^'.info.path.'/', '', '')
