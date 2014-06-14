@@ -595,14 +595,11 @@ NeoBundle 'todesking/ruby_hl_lvar.vim'
 NeoBundle 'derekwyatt/vim-scala'
 NeoBundle 'derekwyatt/vim-sbt'
 NeoBundle 'gre/play2vim'
-NeoBundle 'mdreves/vim-scaladoc'
-
-augroup vimrc-ft-scala
-	autocmd!
-	autocmd filetype scala setlocal shiftwidth=2 expandtab
-	autocmd filetype scala setlocal foldmethod=syntax
-	autocmd filetype scala nnoremap K :<C-U>call scaladoc#Search(expand("<cword>"))<CR>
-augroup END
+NeoBundle 'mdreves/vim-scaladoc' " {{{
+	augroup vimrc-vim-scladoc
+		autocmd!
+		autocmd filetype scala nnoremap K :<C-U>call scaladoc#Search(expand("<cword>"))<CR>
+	augroup END
 " }}}
 
 NeoBundle 'slim-template/vim-slim' "{{{
