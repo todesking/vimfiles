@@ -365,8 +365,8 @@ nnoremap <C-Q>  <ESC>
 
 nnoremap <C-Q>u :UniteResume<CR>
 nnoremap <C-Q>o m':<C-u>Unite outline<CR>
-nnoremap <C-Q>P :<C-u>exec 'Unite file_rec:'.Vimrc_project_info(expand('%')).main_path<CR>
-nnoremap <C-Q>p :<C-u>exec 'Unite file_rec:'.Vimrc_project_info(expand('%')).sub_path<CR>
+nnoremap <C-Q>P :<C-u>exec 'Unite file_rec:'.CurrentProjectInfo(expand('%')).main_path<CR>
+nnoremap <C-Q>p :<C-u>exec 'Unite file_rec:'.CurrentProjectInfo(expand('%')).sub_path<CR>
 nnoremap <C-Q>c :<C-u>exec 'Unite file_rec:'.expand('%:p:h').'/'<CR>
 nnoremap <C-Q>l :<C-u>Unite line<CR>
 nnoremap <C-Q>b :<C-u>Unite buffer<CR>
@@ -904,7 +904,7 @@ endfunction"}}}
 " }}}
 
 function! Vimrc_file_info(file_path)
-	let info = Vimrc_project_info(a:file_path)
+	let info = CurrentProjectInfo(a:file_path)
 	let info.file_path = substitute(fnamemodify(a:file_path, ':p'), '^'.info.path.'/', '', '')
 	return info
 endfunction
@@ -912,7 +912,12 @@ endfunction
 " Ce command(e based on Currend dir) {{{
 command! -complete=customlist,Vimrc_complete_current_dir -nargs=1 Ce :exec ':e '.expand('%:p:h').'/'."<args>"
 function! Vimrc_complete_current_dir(ArgLead, CmdLine, CursorPos)
-	let prefix = expand('%:p:h') . '/'
+	return Vimrc_complete_dir(expand('%:p:h'), a:ArgLead, a:CmdLine, a:CursorPos)
+endfunction
+" }}}
+
+function! Vimrc_complete_dir(prefix, ArgLead, CmdLine, CursorPos) abort " {{{
+	let prefix = a:prefix . '/'
 	let candidates = glob(prefix.a:ArgLead.'*', 1, 1)
 	let result = []
 	for c in candidates
@@ -923,8 +928,24 @@ function! Vimrc_complete_current_dir(ArgLead, CmdLine, CursorPos)
 		endif
 	endfor
 	return result
-endfunction
-" }}}
+endfunction  " }}}
+
+" e-in-current-project
+command! -complete=customlist,Vimrc_complete_current_project_files -nargs=1 Pe :exec ':e '.<SID>current_project_dir().'/'."<args>"
+function! Vimrc_complete_current_project_files(ArgLead, CmdLine, CursorPos) abort " {{{
+	let prefix = CurrentProjectInfo(expand('%')).main_path
+	return Vimrc_complete_dir(prefix, a:ArgLead, a:CmdLine, a:CursorPos)
+endfunction " }}}
+
+" Compatibility {{{
+function! Vimrc_current_project_info() abort " {{{
+	return CurrentProjectInfo(expand('%:p'))
+endfunction " }}}
+
+function! s:current_project_dir() abort " {{{
+	return CurrentProjectInfo(expand('%')).main_path
+endfunction " }}}
+}}}
 
 " P! {{{
 command! -bang -nargs=+ P :exec ':! cd '.s:current_project_dir().' && '.<q-args>

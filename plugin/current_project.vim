@@ -1,6 +1,6 @@
 " file_path:h => project_info
 let s:project_cache = {}
-function! Vimrc_project_info(file_path) abort " {{{
+function! CurrentProjectInfo(file_path) abort " {{{
 	if a:file_path == ''
 		return {
 		\  'name': '',
@@ -39,13 +39,6 @@ function! Vimrc_project_info(file_path) abort " {{{
 	let s:project_cache[dir] = info
 	let s:project_cache[a:file_path] = info
 	return info
-endfunction " }}}
-
-function! Vimrc_current_project_info() abort " {{{
-	return Vimrc_project_info(expand('%:p'))
-endfunction " }}}
-function! s:current_project_dir() abort " {{{
-	return Vimrc_project_info(expand('%')).main_path
 endfunction " }}}
 
 function! s:project_root(file_path) abort abort " {{{
@@ -95,21 +88,3 @@ function! s:current_project_dir_by_git(dir) abort " {{{
 	return ''
 endfunction " }}}
 
-" e-in-current-project
-command! -complete=customlist,Vimrc_complete_current_project_files -nargs=1 Pe :exec ':e '.<SID>current_project_dir().'/'."<args>"
-function! Vimrc_complete_current_project_files(ArgLead, CmdLine, CursorPos) abort " {{{
-	let prefix = s:current_project_dir() . '/'
-	if prefix == '/'
-		return []
-	endif
-	let candidates = glob(prefix.a:ArgLead.'*', 1, 1)
-	let result = []
-	for c in candidates
-		if isdirectory(c)
-			call add(result, substitute(c, prefix, '', '').'/')
-		else
-			call add(result, substitute(c, prefix, '', ''))
-		endif
-	endfor
-	return result
-endfunction " }}}
