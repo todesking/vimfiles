@@ -156,6 +156,12 @@ NeoBundle 'Shougo/neosnippet' " {{{
 	let g:neosnippet#disable_runtime_snippets = {
 	\ '_': 1,
 	\ }
+	imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+	smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+	xmap <C-k>     <Plug>(neosnippet_expand_target)
+	if has('conceal')
+		set conceallevel=2 concealcursor=i
+	endif
 " }}}
 " }}}
 
