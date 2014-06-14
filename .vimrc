@@ -525,7 +525,7 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 				\ 'component': {
 				\   'readonly': '%{&readonly?has("gui_running")?"":"ro":""}',
 				\   'modified': '%{&modified?"+":""}',
-				\   'project_name': '%{Vimrc_current_project_info()["name"]}',
+				\   'project_name': '%{CurrentProjectInfo().name}',
 				\   'project_path': '%{Vimrc_summarize_project_path(Vimrc_file_info(expand(''%''))["file_path"])}',
 				\   'charinfo': '%{printf("%6s",GetB())}',
 				\ },
@@ -931,30 +931,20 @@ function! Vimrc_complete_dir(prefix, ArgLead, CmdLine, CursorPos) abort " {{{
 endfunction  " }}}
 
 " e-in-current-project
-command! -complete=customlist,Vimrc_complete_current_project_files -nargs=1 Pe :exec ':e '.<SID>current_project_dir().'/'."<args>"
+command! -complete=customlist,Vimrc_complete_current_project_files -nargs=1 Pe :exec ':e ' . CurrentProjectInfo().main_path . '/' . "<args>"
 function! Vimrc_complete_current_project_files(ArgLead, CmdLine, CursorPos) abort " {{{
 	let prefix = CurrentProjectInfo(expand('%')).main_path
 	return Vimrc_complete_dir(prefix, a:ArgLead, a:CmdLine, a:CursorPos)
 endfunction " }}}
 
-" Compatibility {{{
-function! Vimrc_current_project_info() abort " {{{
-	return CurrentProjectInfo(expand('%:p'))
-endfunction " }}}
-
-function! s:current_project_dir() abort " {{{
-	return CurrentProjectInfo(expand('%')).main_path
-endfunction " }}}
-}}}
-
 " P! {{{
-command! -bang -nargs=+ P :exec ':! cd '.s:current_project_dir().' && '.<q-args>
+command! -bang -nargs=+ P :exec ':! cd ' . CurrentProjectInfo().main_path . ' && ' . <q-args>
 " }}}
 
 " Rename file {{{
 " http://vim-users.jp/2009/05/hack17/
 command! -nargs=1 -complete=file Rename f <args>|call delete(expand('#'))|w
-command! -complete=customlist,Vimrc_complete_current_project_files -nargs=1 PRename exec "f ".s:current_project_dir()."/<args>"|call delete(expand('#'))|w
+command! -complete=customlist,Vimrc_complete_current_project_files -nargs=1 PRename exec "f " . CurrentProjectInfo().main_path . "/<args>"|call delete(expand('#'))|w
 command! -complete=customlist,Vimrc_complete_current_dir -nargs=1 CRename exec "f ".expand('%:p:h')."/<args>"|call delete(expand('#'))|w
 " }}}
 
@@ -969,7 +959,7 @@ endfunction
 
 " Status line {{{
 function! Vimrc_current_project()
-	let project = Vimrc_current_project_info()
+	let project = CurrentProjectInfo()
 	if project['name']
 		return '['.project['name'].'] '.project['path']
 	else

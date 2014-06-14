@@ -1,7 +1,14 @@
 " file_path:h => project_info
 let s:project_cache = {}
-function! CurrentProjectInfo(file_path) abort " {{{
-	if a:file_path == ''
+function! CurrentProjectInfo(...) abort " {{{
+	if a:0 == 0
+		let file_path = expand('%')
+	elseif a:0 == 1
+		let file_path = a:1
+	else
+		throw "Illegal argument size(expected 0 to 1): ".a:0
+	endif
+	if file_path == ''
 		return {
 		\  'name': '',
 		\  'main_name': '',
@@ -11,16 +18,16 @@ function! CurrentProjectInfo(file_path) abort " {{{
 		\  'sub_path': '',
 		\}
 	endif
-	if has_key(s:project_cache, a:file_path)
-		return s:project_cache[a:file_path]
+	if has_key(s:project_cache, file_path)
+		return s:project_cache[file_path]
 	endif
-	let dir = fnamemodify(a:file_path, ':p:h')
+	let dir = fnamemodify(file_path, ':p:h')
 	if has_key(s:project_cache, dir)
-		let s:project_cache[a:file_path] = s:project_cache[dir]
+		let s:project_cache[file_path] = s:project_cache[dir]
 		return s:project_cache[dir]
 	endif
-	let project_root = s:project_root(a:file_path)
-	let sub_project_name = s:subproject_name(project_root, a:file_path)
+	let project_root = s:project_root(file_path)
+	let sub_project_name = s:subproject_name(project_root, file_path)
 	let main_project_name = fnamemodify(project_root, ':t')
 	let name = main_project_name
 	let path = project_root
@@ -37,7 +44,7 @@ function! CurrentProjectInfo(file_path) abort " {{{
 	\  'sub_path': path,
 	\}
 	let s:project_cache[dir] = info
-	let s:project_cache[a:file_path] = info
+	let s:project_cache[file_path] = info
 	return info
 endfunction " }}}
 
