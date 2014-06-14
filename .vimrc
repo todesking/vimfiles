@@ -157,6 +157,13 @@ NeoBundle 'closetag.vim' " {{{
 
 " }}}
 
+" Utilities {{{
+NeoBundle 'AndrewRadev/linediff.vim'
+NeoBundle 'osyo-manga/vim-over'
+NeoBundle 'taku-o/vim-zoom'
+NeoBundle 'tyru/capture.vim'
+" }}}
+
 " Games {{{
 NeoBundle 'mattn/habatobi-vim'
 NeoBundle 'thinca/vim-threes'
@@ -164,7 +171,6 @@ NeoBundle 'thinca/vim-threes'
 
 " Uncategorized {{{
 " }}}
-
 
 " Unite {{{
 NeoBundle 'Shougo/unite.vim' "{{{
@@ -273,7 +279,7 @@ unlet s:filter
 call unite#custom#source('file_mru', 'filters', ['converter_remove_trash_files', 'matcher_default', 'sorter_default', 'converter_summarize_path', 'converter_hide_unimportant_path'])
 call unite#custom#source('file_rec', 'filters', ['converter_remove_trash_files', 'matcher_default', 'sorter_default', 'converter_summarize_path', 'converter_hide_unimportant_path'])
 call unite#custom#source('buffer', 'filters', ['matcher_default', 'sorter_default', 'converter_summarize_path', 'converter_hide_unimportant_path'])
-"}}}
+" }}}
 NeoBundle 'tsukkee/unite-tag' "{{{
 let g:unite_source_tag_max_name_length = 50
 let g:unite_source_tag_max_fname_length = 999
@@ -300,13 +306,13 @@ endfunction
 call unite#define_filter(s:c)
 unlet s:c
 call unite#custom_filters('tag',['matcher_default', 'sorter_smart', 'converter_tag'])
-"}}}
+" }}}
 NeoBundle 'Shougo/unite-outline' "{{{
 let g:unite_source_outline_scala_show_all_declarations = 1
-"}}}
+" }}}
 NeoBundle 'sgur/unite-qf' "{{{
 nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview<CR>
-"}}}
+" }}}
 NeoBundle 'basyura/unite-rails' "{{{
 	nnoremap <C-Q>r <ESC>
 	nnoremap <C-Q>j  :<C-u>Unite jump<CR>
@@ -319,7 +325,7 @@ NeoBundle 'basyura/unite-rails' "{{{
 	nnoremap <C-Q>ri :<C-u>Unite rails/db -input=migrate/\ <CR>
 	nnoremap <C-Q>rl :<C-u>Unite rails/lib<CR>
 	nnoremap <C-Q>rh :<C-u>Unite rails/helper<CR>
-"}}}
+" }}}
 NeoBundle 'osyo-manga/unite-fold' " {{{
 	call unite#custom_filters('fold',['matcher_default', 'sorter_nothing', 'converter_default'])
 	function! g:vimrc_unite_fold_foldtext(bufnr, val)
@@ -337,7 +343,7 @@ NeoBundle 'osyo-manga/unite-fold' " {{{
 	let g:Unite_fold_foldtext=function('g:vimrc_unite_fold_foldtext')
 
 	nnoremap <C-Q>d :<C-u>Unite fold<CR>
-"}}}
+" }}}
 NeoBundle 'ujihisa/unite-colorscheme' " {{{
 command! Colors Unite colorscheme -auto-preview
 nnoremap <C-Q>c :<C-u>Colors<CR>
@@ -489,14 +495,8 @@ function! Vimrc_neocomplete_control()
 		endif
 	endif
 endfunction
-"}}}
+" }}}
 endif
-
-NeoBundle 'AndrewRadev/linediff.vim'
-NeoBundle 'osyo-manga/vim-over'
-
-NeoBundle 'taku-o/vim-zoom'
-NeoBundle 'tyru/capture.vim'
 
 NeoBundle 'itchyny/lightline.vim' "{{{
 	function! Vimrc_summarize_project_path(path)
@@ -558,8 +558,7 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 			return ''
 		endif
 	endfunction
-"}}}
-
+" }}}
 
 if has('clientserver')
 	NeoBundle 'mnick/vim-pomodoro' " depends: AsyncCommand
@@ -581,34 +580,42 @@ NeoBundle 'ciaranm/inkpot'
 NeoBundle 'w0ng/vim-hybrid'
 " }}}
 
+" Filetypes {{{
+
 " ruby {{{
 NeoBundle 'tpope/vim-rvm' "{{{
-"}}}
+" }}}
 NeoBundle 'tpope/vim-rbenv'
 NeoBundle 'vim-ruby/vim-ruby'
 NeoBundle 'tpope/vim-rails'
 NeoBundle 'rhysd/vim-textobj-ruby'
 NeoBundle 'todesking/ruby_hl_lvar.vim'
+" RSense.vim {{{
+let g:rsenseHome = expand('~/local/rsense/')
+if exists('*RSenseInstalled') && RSenseInstalled()
+	let g:rsenseUseOmniFunc = 1
+endif
+" }}}
 " }}}
 
 " Scala {{{
 NeoBundle 'derekwyatt/vim-scala'
 NeoBundle 'derekwyatt/vim-sbt'
 NeoBundle 'gre/play2vim'
-NeoBundle 'mdreves/vim-scaladoc' " {{{
-	augroup vimrc-vim-scladoc
-		autocmd!
-		autocmd filetype scala nnoremap K :<C-U>call scaladoc#Search(expand("<cword>"))<CR>
-	augroup END
-" }}}
-
 NeoBundle 'slim-template/vim-slim' "{{{
 	augroup vimrc-plugin-vim-slim
 		autocmd!
 		autocmd BufNewFile,BufRead *.slim set filetype=slim
 		autocmd FileType slim setlocal shiftwidth=2 expandtab
 	augroup END
-"}}}
+" }}}
+NeoBundle 'mdreves/vim-scaladoc' " {{{
+	augroup vimrc-vim-scladoc
+		autocmd!
+		autocmd filetype scala nnoremap K :<C-U>call scaladoc#Search(expand("<cword>"))<CR>
+	augroup END
+" }}}
+" }}}
 NeoBundle 'roalddevries/yaml.vim' "{{{
 	function! Vimrc_autocmd_yaml_vim()
 		if &foldmethod != 'syntax'
@@ -621,34 +628,23 @@ NeoBundle 'roalddevries/yaml.vim' "{{{
 		autocmd FileType yaml nmap <buffer><leader>f :<C-U>call Vimrc_autocmd_yaml_vim()<CR>
 		autocmd FileType yaml setlocal shiftwidth=2 expandtab
 	augroup END
-"}}}
+" }}}
 NeoBundle 'evanmiller/nginx-vim-syntax'
 NeoBundle 'wavded/vim-stylus'
 NeoBundle 'plasticboy/vim-markdown' "{{{
-let g:markdown_fenced_languages = ['scala']
-"}}}
-
-" Haskell {{{
-NeoBundle 'dag/vim2hs' "{{{
-"}}}
-NeoBundle 'ujihisa/ref-hoogle'
-"}}}
-
-" vimscript {{{
-augroup vimrc-vimscript
-	autocmd!
-	autocmd FileType vim set textwidth=0
-augroup END
+	let g:markdown_fenced_languages = ['scala']
 " }}}
-
-NeoBundle 'motemen/hatena-vim'
+" Haskell {{{
+NeoBundle 'dag/vim2hs'
+NeoBundle 'ujihisa/ref-hoogle'
+" }}}
+" }}}
 
 " Git {{{
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'int3/vim-extradite'
 NeoBundle 'Kocha/vim-unite-tig'
-NeoBundle 'gregsexton/gitv' " {{{
-" }}}
+NeoBundle 'gregsexton/gitv'
 NeoBundle 'airblade/vim-gitgutter' " {{{
 	let g:gitgutter_eager = 0
 	nnoremap <leader>g :<C-U>call <SID>vimrc_gitgutter_refresh()<CR>
@@ -671,6 +667,7 @@ NeoBundle 'airblade/vim-gitgutter' " {{{
 " }}}
 " }}}
 
+" ref {{{
 NeoBundle 'thinca/vim-ref' "{{{
 	let g:ref_refe_cmd="~/local/bin/refe"
 	command! -nargs=1 Man :Ref man <args>
@@ -679,29 +676,25 @@ NeoBundle 'thinca/vim-ref' "{{{
 		autocmd!
 		autocmd FileType ref setlocal bufhidden=hide
 	augroup END
-"}}}
-NeoBundle 'grep.vim' "{{{
-	let Grep_OpenQuickfixWindow = 0
-"}}}
-NeoBundle 'mileszs/ack.vim' "{{{
-let g:ackprg = 'ag --nogroup --nocolor --column'
-let g:ack_qhandler = ""
-"}}}
+" }}}
 NeoBundle 'taka84u9/vim-ref-ri', {'rev': 'master'} "{{{
 	command! -nargs=1 Ri :Ref ri <args>
-"}}}
+" }}}
+" }}}
+
+NeoBundle 'grep.vim' "{{{
+	let Grep_OpenQuickfixWindow = 0
+" }}}
+
+NeoBundle 'mileszs/ack.vim' "{{{
+	let g:ackprg = 'ag --nogroup --nocolor --column'
+	let g:ack_qhandler = ""
+" }}}
 
 NeoBundle 'Shougo/vimfiler.vim'
 
-" RSense.vim {{{
-let g:rsenseHome = expand('~/local/rsense/')
-if exists('*RSenseInstalled') && RSenseInstalled()
-	let g:rsenseUseOmniFunc = 1
-endif
-"}}}
-
 NeoBundle 'Shougo/vimshell.vim' "{{{
-"}}}
+" }}}
 
 " }}}
 
@@ -1134,7 +1127,7 @@ augroup END
 
 " Title string {{{
 let &titlestring='[TODO] %{g:todo_current_doing}'
-"}}}
+" }}}
 
 " IM hack(disable im if normal mode) {{{
 function! s:disable_im_if_normal_mode()

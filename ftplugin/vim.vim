@@ -18,3 +18,4 @@ function! s:set_syntax_of_user_defined_commands()
 endfunction
 " }}}
 
+set textwidth=0
