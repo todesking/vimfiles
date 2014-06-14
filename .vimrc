@@ -744,7 +744,7 @@ set t_vb=
 
 function! s:register_jump_key(key)
 	exec 'nnoremap' '<silent>'.a:key
-				\ a:key.':call <SID>hello_again_hook(''CursorHold'')<CR>'
+				\ a:key
 				\   .':call <SID>open_current_fold()<CR>'
 				\   .':normal! zz<CR>'
 endfunction
@@ -1020,56 +1020,6 @@ endfunction
 augroup vimrc-disable-ime-in-normal-mode
 	autocmd!
 	autocmd FocusGained * call <SID>disable_im_if_normal_mode()
-augroup END
-" }}}
-
-" しばらく放置/よそから復帰したときのフック {{{
-function! s:hello_again_enter()
-	setlocal cursorline
-	" redraw
-	" let status_line_width=winwidth(0)
-	" echo printf('%'.status_line_width.'.'.status_line_width.'s',<SID>fold_navi())
-endfunction
-function! s:hello_again_leave()
-	setlocal nocursorline
-endfunction
-augroup vimrc-hello-again
-	autocmd!
-	autocmd CursorMoved * call s:hello_again_hook('CursorMoved')
-	autocmd CursorHold * call s:hello_again_hook('CursorHold')
-	autocmd WinEnter * call s:hello_again_hook('WinEnter')
-	autocmd WinLeave * call s:hello_again_hook('WinLeave')
-	autocmd FocusGained * call s:hello_again_hook('WinEnter')
-	autocmd FocusLost * call s:hello_again_hook('WinLeave')
-
-	let s:hello_again_state=0
-	let s:hello_again_last_fired_by_cursorhold = reltime()
-	function! s:hello_again_hook(event)
-	if a:event ==# 'CursorHold'
-		if str2float(reltimestr(reltime(s:hello_again_last_fired_by_cursorhold))) < 2.0
-			return
-		endif
-	endif
-	let s:hello_again_last_fired_by_cursorhold = reltime()
-	if a:event ==# 'WinEnter'
-		call <SID>hello_again_enter()
-		let s:hello_again_state = 2
-	elseif a:event ==# 'WinLeave'
-		call <SID>hello_again_leave()
-	elseif a:event ==# 'CursorMoved'
-		if s:hello_again_state
-		if 1 < s:hello_again_state
-			let s:hello_again_state = 1
-		else
-			call <SID>hello_again_leave()
-			let s:hello_again_state = 0
-		endif
-		endif
-	elseif a:event ==# 'CursorHold'
-		call <SID>hello_again_enter()
-		let s:hello_again_state = 1
-	endif
-	endfunction
 augroup END
 " }}}
 
