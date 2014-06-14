@@ -1,7 +1,7 @@
 " file_path:h => project_info
 let s:project_cache = {}
 let s:project_marker_dirs = ['lib', 'ext', 'test', 'spec', 'bin', 'autoload', 'plugins', 'plugin', 'src']
-let s:project_replace_pattern = '\(.*\)/\('.join(project_marker_dirs,'\|').'\)\(/.\{-}\)\?$'
+let s:project_replace_pattern = '\(.*\)/\('.join(s:project_marker_dirs,'\|').'\)\(/.\{-}\)\?$'
 
 function! CurrentProjectInfo(...) abort " {{{
 	if a:0 == 0
@@ -95,10 +95,9 @@ function! s:current_project_dir_by_git(dir) abort " {{{
 endfunction " }}}
 
 function! s:current_project_dir_by_rule(dir) abort " {{{
-	let dir = a:dir
-	if dir =~ '/projects/'
-		return substitute(dir, '\v(.*\/projects\/[-_a-zA-Z0-9])\/.*', '\1', '')
-	elseif dir =~ s:project_replace_pattern && dir !~ '/usr/.*'
-		return substitute(dir, s:project_replace_pattern, '\1', '')
+	if a:dir =~ '/projects/'
+		return substitute(a:dir, '\v(.*\/projects\/[-_a-zA-Z0-9])\/.*', '\1', '')
+	elseif a:dir =~ s:project_replace_pattern && a:dir !~ '/usr/.*'
+		return substitute(a:dir, s:project_replace_pattern, '\1', '')
 	endif
 endfunction " }}}
