@@ -162,6 +162,7 @@ NeoBundle 'Shougo/neosnippet' " {{{
 	if has('conceal')
 		set conceallevel=2 concealcursor=i
 	endif
+	let g:neosnippet#snippets_directory='~/.vim/snippets'
 " }}}
 " }}}
 
@@ -734,7 +735,6 @@ nnoremap <silent>,L :tabmove +1<CR>
 
 inoremap <C-E> <End>
 inoremap <C-A> <Home>
-inoremap <C-K> <C-O>D
 
 cnoremap <C-E> <End>
 cnoremap <C-A> <Home>

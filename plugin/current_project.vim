@@ -3,6 +3,54 @@ let s:project_cache = {}
 let s:project_marker_dirs = ['lib', 'ext', 'test', 'spec', 'bin', 'autoload', 'plugins', 'plugin', 'src']
 let s:project_replace_pattern = '\(.*\)/\('.join(s:project_marker_dirs,'\|').'\)\(/.\{-}\)\?$'
 
+let s:default_project_dir = expand('~/projects/')
+
+let s:project_root_filenames = ['.git', '.svn']
+
+let s:project_detection_methods = []
+
+function s:register_project_detection_method(definition) abort
+	call insert(s:project_detection_methods, a:definition)
+endfunction
+
+let s:dm = {'name': 'default'} " {{{
+function! s:dm.project_root_of(dir) abort " {{{
+	if s:starts_with(a:dir, s:default_project_dir)
+		return a:dir[len(s:default_project_dir):-1]
+	elseif a:dir =~ s:project_replace_pattern && a:dir !~ '/usr/.*'
+		return substitute(a:dir, s:project_replace_pattern, '\1', '')
+	endif
+endfunction " }}}
+call s:register_project_detection_method(s:dm)
+" }}}
+
+" Utility {{{
+function! s:starts_with(str, prefix) abort " {{{
+	return len(a:prefix) <= len(a:str) && a:prefix == a:str[0:len(a:prefix) - 1]
+endfunction " }}}
+" }}}
+
+let s:dm = {'name': 'project root filename'} " {{{
+function! s:dm.project_root_of(dir) abort " {{{
+	let i = 0
+	let d = a:dir
+	while i < 20
+		if d == '/'
+			return ''
+		endif
+		for f in s:project_root_filenames
+			if !empty(globpath(d, '/' . f))
+				return d
+			endif
+		endfor
+		let d = fnamemodify(d, ':h')
+		let i += 1
+	endwhile
+	return ''
+endfunction " }}}
+call s:register_project_detection_method(s:dm)
+" }}}
+
 function! CurrentProjectInfo(...) abort " {{{
 	if a:0 == 0
 		let file_path = expand('%')
@@ -29,7 +77,7 @@ function! CurrentProjectInfo(...) abort " {{{
 		let s:project_cache[file_path] = s:project_cache[dir]
 		return s:project_cache[dir]
 	endif
-	let project_root = s:project_root(file_path)
+	let project_root = s:project_root_for(file_path)
 	let sub_project_name = s:subproject_name(project_root, file_path)
 	let main_project_name = fnamemodify(project_root, ':t')
 	let name = main_project_name
@@ -51,18 +99,20 @@ function! CurrentProjectInfo(...) abort " {{{
 	return info
 endfunction " }}}
 
-function! s:project_root(file_path) abort abort " {{{
+function! s:project_root_for(file_path) abort abort " {{{
 	let dir = fnamemodify(a:file_path, ':p:h')
-	if exists('b:rails_root')
-		return b:rails_root
-	endif
 
-	let project_dir = s:current_project_dir_by_git(dir)
-	if !empty(project_dir) | return project_dir | endif
-
-	let project_dir = s:current_project_dir_by_rule(dir)
-	if !empty(project_dir) | return project_dir | endif
-
+	let root = ''
+	for method in s:project_detection_methods
+		if has_key(method, 'project_root_of')
+			let root = method.project_root_of(dir)
+		else
+			throw "Invalid method definition: " . get(method, 'name', '(unnamed)')
+		endif
+		if !empty(root)
+			return root
+		endif
+	endfor
 	return ''
 endfunction " }}}
 
@@ -78,26 +128,3 @@ function! s:subproject_name(root, path) abort abort " {{{
 	return ''
 endfunction " }}}
 
-function! s:current_project_dir_by_git(dir) abort " {{{
-	let i = 0
-	let d = a:dir
-	while i < 10
-		if d == '/'
-			return ''
-		endif
-		if !empty(globpath(d, '/.git'))
-			return d
-		endif
-		let d = fnamemodify(d, ':h')
-		let i += 1
-	endwhile
-	return ''
-endfunction " }}}
-
-function! s:current_project_dir_by_rule(dir) abort " {{{
-	if a:dir =~ '/projects/'
-		return substitute(a:dir, '\v(.*\/projects\/[-_a-zA-Z0-9])\/.*', '\1', '')
-	elseif a:dir =~ s:project_replace_pattern && a:dir !~ '/usr/.*'
-		return substitute(a:dir, s:project_replace_pattern, '\1', '')
-	endif
-endfunction " }}}
