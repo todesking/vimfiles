@@ -2,3 +2,18 @@ snippet    function
 options    head
 	function! ${1:name}() abort " {{{
 	endfunction " }}}
+
+snippet if
+options head
+	if ${1:cond}
+	endif
+
+snippet while
+options head
+	while ${1:cond}
+	endwhile
+
+snippet for
+options head
+	for ${1:cond}
+	endfor
