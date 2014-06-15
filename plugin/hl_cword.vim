@@ -32,9 +32,6 @@ endfunction
 
 function! s:hl_cword()
     let word = expand("<cword>")
-    if    word == ""
-    return
-    endif
     if get(b:, "highlight_cursor_word", "") ==# word
         return
     endif
