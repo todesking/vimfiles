@@ -50,6 +50,10 @@ function! SbtUpdateState() abort " {{{
 	return proc.last_compile_events
 endfunction " }}}
 
+function! SbtGetProc() abort " {{{
+	return s:getProc()
+endfunction " }}}
+
 function! s:getProc() abort " {{{
 	let info = CurrentProjectInfo()
 	return get(s:procs, info.path, {})
@@ -97,16 +101,21 @@ endfunction " }}}
 	function! s:CProc.update() dict abort " {{{
 		for l in self.proc.stdout.read_lines()
 			if self._state == 'idle'
-				if l ==# '^\v\[info\] Compiling '
+				if l =~# '^\v\[info\] Compiling '
 					let self._state = 'compile'
+				else
+					" ignore line
 				endif
 			elseif self._state == 'compile'
-				if l ==# '\v^\[(success|error)\] Total time\:.*completed.*'
-					let self.last_compile_events = self.s:build_compile_events(self._buf)
+				if l =~# '\v^\[(success|error)\] Total time\:.*completed.*'
+					let self.last_compile_events = s:build_compile_events(self._buf)
 					let self._buf = []
+					let self._state = 'idle'
 				else
 					call add(self._buf, l)
 				endif
+			else
+				throw "Invalid state: " . self._state
 			endif
 		endfor
 	endfunction " }}}
@@ -141,20 +150,4 @@ function! s:build_compile_events(lines) abort " {{{
 		call add(result, cur)
 	endif
 	return result
-endfunction " }}}
-
-function! Test() abort " {{{
-	return s:build_compile_result([
-	\ "3. Waiting for source changes... (press enter to interrupt)",
-	\ "[info] Compiling 4 Scala sources to /Users/ariyamizutani/projects/async_task_pipeline/target/scala-2.10/classes...",
-	\ "[warn] /Users/ariyamizutani/projects/async_task_pipeline/src-main-scala/impl.scala:127: postfix operator toString should be enabled",
-	\ "[warn] by making the implicit value scala.language.postfixOps visible.",
-	\ "[warn] This can be achieved by adding the import clause 'import scala.language.postfixOps'",
-	\ "[warn] or by setting the compiler option -language:postfixOps.",
-	\ "[warn] See the Scala docs for value scala.language.postfixOps for a discussion",
-	\ "[warn] why the feature should be explicitly enabled.",
-	\ "[warn]   threadPoolConfig toString",
-	\ "[warn]                    ^",
-	\ "[warn] one warning found",
-	\ ])
 endfunction " }}}
