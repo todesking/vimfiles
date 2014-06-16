@@ -5,6 +5,8 @@ if !exists('s:procs')
 	let s:procs = {}
 endif
 
+command! SbtStart call SbtStart()
+
 augroup qf_sbt
 	autocmd!
 	autocmd QuitPre * call SbtQuitAll()
@@ -119,6 +121,19 @@ endfunction " }}}
 			endif
 		endfor
 	endfunction " }}}
+	function! s:CProc.set_qf() dict abort " {{{
+		let qf_items = []
+		let typecodes = {'error': 'E', 'warn': 'W'}
+		for ev in self.last_compile_events
+			call add(qf_items, {
+			\ 'filename': ev.path,
+			\ 'lnum': ev.line,
+			\ 'text': join(ev.message, "\n"),
+			\ 'type': typecodes[ev.type],
+			\ })
+		endfor
+		call setqflist(qf_items)
+	endfunction " }}}
 " }}}
 
 function! s:is_valid(proc) abort " {{{
@@ -129,7 +144,7 @@ function! s:build_compile_events(lines) abort " {{{
 	let result = []
 	let cur = {}
 	for l in a:lines
-		if l =~ '\v (error|warning)s? found$'
+		if l =~# '\v (error|warning)s? found$' || l =~# '\v Compilation failed$'
 			continue
 		endif
 		let m = matchlist(l, '^\v\[(error|warn)\] (.*\.%(java|scala)):([0-9]+):(.*)')
@@ -138,7 +153,7 @@ function! s:build_compile_events(lines) abort " {{{
 			if !empty(cur)
 				call add(result, cur)
 			endif
-			let cur = {'path': m[2], 'line': str2nr(m[3]), 'message': [m[4]]}
+			let cur = {'type': m[1], 'path': m[2], 'line': str2nr(m[3]), 'message': [m[4]]}
 		elseif has_key(cur, 'path')
 			" error/warn message
 			call add(cur.message, substitute(l, '\v^\[(error|warn)\] ', '', 'g'))
