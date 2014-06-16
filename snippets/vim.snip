@@ -17,3 +17,10 @@ snippet for
 options head
 	for ${1:cond}
 	endfor
+
+snippet aug
+options head
+	augroup ${1:name}
+		autocmd!
+		${2:au}
+	augroup END
