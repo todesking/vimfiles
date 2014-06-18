@@ -168,6 +168,7 @@ NeoBundle 'AndrewRadev/linediff.vim'
 NeoBundle 'osyo-manga/vim-over'
 NeoBundle 'taku-o/vim-zoom'
 NeoBundle 'tyru/capture.vim'
+NeoBundle 'ciaranm/detectindent'
 " }}}
 
 " Games {{{
@@ -717,6 +718,8 @@ command! GitLabOpenFile :execute 'Git lab open-file '.expand('%:p').' '.line('.'
 " :(
 cnoremap <C-U><C-P> up
 cnoremap u<C-P> up
+
+nnoremap <silent>y= :<C-U>call setreg("*", getreg("0"))<CR>
 
 nnoremap ,cn :<C-U>cnext<CR>
 nnoremap ,cp :<C-U>cprevious<CR>
