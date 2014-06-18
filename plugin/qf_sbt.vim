@@ -19,7 +19,8 @@ function! SbtQuitAll() abort " {{{
 	endfor
 endfunction " }}}
 
-function! SbtStart() abort " {{{
+function! SbtStart(...) abort " {{{
+	let precommands = a:000
 	let info = CurrentProjectInfo()
 	let proc = s:getProc()
 	if s:is_valid(proc)
@@ -28,9 +29,26 @@ function! SbtStart() abort " {{{
 	endif
 
 	execute 'lcd ' . info.path
-	let proc = s:CProc.new(['sbt', '-J-Dsbt.log.format=false', '~compile'])
+	let proc = s:CProc.new(['sbt', '-J-Dsbt.log.format=false'] + precommands + ['~compile'])
 	let s:procs[info.path] = proc
 	lcd -
+endfunction " }}}
+
+function! SbtClean() abort " {{{
+	if s:is_valid(s:getProc())
+		call SbtStop()
+	endif
+	call SbtStart()
+endfunction " }}}
+
+function! SbtUpdateQf() abort " {{{
+	let proc = s:getProc()
+	if !s:is_valid(proc)
+		return
+	endif
+	call proc.update()
+	call proc.set_qf()
+	return proc._state
 endfunction " }}}
 
 function! SbtStop() abort " {{{
@@ -102,6 +120,9 @@ endfunction " }}}
 	endfunction " }}}
 	function! s:CProc.update() dict abort " {{{
 		for l in self.proc.stdout.read_lines()
+			if get(g:, 'sbt_qf_debug', 0)
+				echo l
+			endif
 			if self._state == 'idle'
 				if l =~# '^\v\[info\] Compiling '
 					let self._state = 'compile'
