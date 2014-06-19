@@ -1,6 +1,25 @@
 " vim:foldmethod=marker
 let $RUBY_DLL=$HOME.'/.rbenv/versions/2.1.1/lib/libruby.dylib'
 
+function! s:read_env(name, default) abort " {{{
+	if !executable('/usr/local/bin/bash')
+		return a:default
+	endif
+	let temp = tempname()
+	call system("/usr/local/bin/bash -i -c 'echo $" . a:name . " > " . temp . "'")
+	let value = substitute(system("cat " . temp), "\n$", '', 'g')
+	call delete(temp)
+	if empty(value)
+		return a:default
+	endif
+	return value
+endfunction " }}}
+
+if executable('/usr/local/bin/bash')
+	let $PATH = s:read_env('PATH', $PATH)
+	let $JAVA_HOME = s:read_env('JAVA_HOME', $JAVA_HOME)
+endif
+
 " NeoBundle {{{
 set nocompatible               " be iMproved
 filetype off                   " required!
