@@ -5,12 +5,22 @@ if !exists('s:procs')
 	let s:procs = {}
 endif
 
-command! SbtStart call SbtStart()
+command! SbtStart  call SbtStart()
+command! SbtStop   call SbtStop()
+command! SbtClean  call SbtClean()
+command! SbtUpdate call SbtUpdateQf()
+command! SbtRestart call SbtRestart()
 
 augroup qf_sbt
 	autocmd!
 	autocmd QuitPre * call SbtQuitAll()
 augroup END
+
+function! SbtRestart() abort " {{{
+	call SbtStop()
+	sleep 1000m
+	call SbtStart()
+endfunction " }}}
 
 function! SbtQuitAll() abort " {{{
 	for path in keys(s:procs)
@@ -38,7 +48,7 @@ function! SbtClean() abort " {{{
 	if s:is_valid(s:getProc())
 		call SbtStop()
 	endif
-	call SbtStart()
+	call SbtStart('clean')
 endfunction " }}}
 
 function! SbtUpdateQf() abort " {{{
@@ -111,7 +121,7 @@ endfunction " }}}
 		let self._state = 'idle'
 	endfunction " }}}
 	function! s:CProc.is_valid() dict abort " {{{
-		return self.proc.is_valid
+		return self.proc.checkpid()[0] == 'run'
 	endfunction " }}}
 	function! s:CProc.kill() dict abort " {{{
 		if self.is_valid()
@@ -124,13 +134,13 @@ endfunction " }}}
 				echo l
 			endif
 			if self._state == 'idle'
-				if l =~# '^\v\[info\] Compiling '
+				if l =~# '\v^\[info\] Compiling '
 					let self._state = 'compile'
 				else
 					" ignore line
 				endif
 			elseif self._state == 'compile'
-				if l =~# '\v^\[(success|error)\] Total time\:.*completed.*'
+				if l =~# '\v^\[(success|error)\] Total time\:.*completed.*' || l =~# '\v^\[error\] .* Compilation failed'
 					let self.last_compile_events = s:build_compile_events(self._buf)
 					let self._buf = []
 					let self._state = 'idle'
