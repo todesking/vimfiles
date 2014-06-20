@@ -54,10 +54,12 @@ endfunction " }}}
 function! SbtUpdateQf() abort " {{{
 	let proc = s:getProc()
 	if !s:is_valid(proc)
+		echo 'sbt not started'
 		return
 	endif
 	call proc.update()
 	call proc.set_qf()
+	echo 'State: ' . proc._state
 	return proc._state
 endfunction " }}}
 
