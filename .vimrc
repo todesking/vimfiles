@@ -1,23 +1,25 @@
 " vim:foldmethod=marker
 let $RUBY_DLL=$HOME.'/.rbenv/versions/2.1.1/lib/libruby.dylib'
 
-function! s:read_env(name, default) abort " {{{
-	if !executable('/usr/local/bin/bash')
-		return a:default
-	endif
+function! s:loadenv(shell_command_template, var_names) abort " {{{
 	let temp = tempname()
-	call system("/usr/local/bin/bash -i -c 'echo $" . a:name . " > " . temp . "'")
-	let value = substitute(system("cat " . temp), "\n$", '', 'g')
-	call delete(temp)
-	if empty(value)
-		return a:default
-	endif
-	return value
+	let commands = map(copy(a:var_names), '"echo $" . v:val . " > ' . temp . '_" .  v:val')
+	let command = substitute(a:shell_command_template, '__CMD__', "'" . join(commands, ';') . "'", '')
+	call system(command)
+	for name in a:var_names
+		let value = substitute(system("cat " . temp . '_' . name), "\n$", '', 'g')
+		if !empty(value)
+			execute 'let $' . name . ' = value'
+		endif
+		call system('rm ' . temp . '_' . name)
+	endfor
 endfunction " }}}
 
 if executable('/usr/local/bin/bash')
-	let $PATH = s:read_env('PATH', $PATH)
-	let $JAVA_HOME = s:read_env('JAVA_HOME', $JAVA_HOME)
+	call s:loadenv(
+	\ '/usr/local/bin/bash -i -c __CMD__',
+	\ ['PATH', 'JAVA_HOME']
+	\ )
 endif
 
 " NeoBundle {{{
