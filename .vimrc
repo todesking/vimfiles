@@ -1,27 +1,6 @@
 " vim:foldmethod=marker
 let $RUBY_DLL=$HOME.'/.rbenv/versions/2.1.1/lib/libruby.dylib'
 
-function! s:loadenv(shell_command_template, var_names) abort " {{{
-	let temp = tempname()
-	let commands = map(copy(a:var_names), '"echo $" . v:val . " > ' . temp . '_" .  v:val')
-	let command = substitute(a:shell_command_template, '__CMD__', "'" . join(commands, ';') . "'", '')
-	call system(command)
-	for name in a:var_names
-		let value = substitute(system("cat " . temp . '_' . name), "\n$", '', 'g')
-		if !empty(value)
-			execute 'let $' . name . ' = value'
-		endif
-		call system('rm ' . temp . '_' . name)
-	endfor
-endfunction " }}}
-
-if executable('/usr/local/bin/bash')
-	call s:loadenv(
-	\ '/usr/local/bin/bash -i -c __CMD__',
-	\ ['PATH', 'JAVA_HOME']
-	\ )
-endif
-
 " NeoBundle {{{
 set nocompatible               " be iMproved
 filetype off                   " required!
@@ -33,6 +12,13 @@ if has('vim_starting')
 endif
 let g:neobundle#types#git#default_protocol = 'git'
 " }}}
+
+if executable('/usr/local/bin/bash')
+	call loadenv#load(
+	\ '/usr/local/bin/bash -i -c __CMD__',
+	\ ['PATH', 'JAVA_HOME']
+	\ )
+endif
 
 " basic settings {{{
 filetype on
