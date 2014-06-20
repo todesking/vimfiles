@@ -14,6 +14,7 @@ function! s:todo_keymap()
 	nnoremap <buffer> <Plug>(todo-reorder)      :<C-U>call <SID>todo_reorder_buffer()<CR>
 	nnoremap <buffer> <Plug>(todo-move-up)      :<C-U>call <SID>todo_move_up()<CR>
 	nnoremap <buffer> <Plug>(todo-move-down)    :<C-U>call <SID>todo_move_down()<CR>
+	nnoremap <buffer> <Plug>(todo-move-top)    :<C-U>call <SID>todo_move_top()<CR>
 
 	nmap <buffer> <leader>d       <Plug>(todo-mark-done)
 	nmap <buffer> <leader>x       <Plug>(todo-mark-discard)
@@ -21,6 +22,7 @@ function! s:todo_keymap()
 	nmap <buffer> <leader><Space> <Plug>(todo-mark-clear)
 	nmap <buffer> <leader>k       <Plug>(todo-move-up)
 	nmap <buffer> <leader>j       <Plug>(todo-move-down)
+	nmap <buffer> <leader>t       <Plug>(todo-move-top)
 endfunction
 
 function! s:todo_move_mode()
@@ -142,6 +144,29 @@ function! s:todo_move_down() abort
 	let todo_orig = deepcopy(todo)
 	let lnum = line('.')
 	let lnum = s:todo_move(todo, lnum, 1)
+	if todo != todo_orig
+		call s:todo_redraw(todo)
+		call cursor(lnum, 0)
+	endif
+endfunction
+
+function! s:todo_move_top() abort
+	let todo = s:create_todo_structure_from_current_buffer()
+	let todo_orig = deepcopy(todo)
+	let lnum = line('.')
+	let parent = s:todo_parent_of(todo, lnum)
+	let children = []
+
+	for c in parent.children
+		if c.lnum == lnum
+			call insert(children, c)
+		else
+			call add(children, c)
+		endif
+	endfor
+	let parent.children = children
+	call s:todo_renumber(parent)
+
 	if todo != todo_orig
 		call s:todo_redraw(todo)
 		call cursor(lnum, 0)
