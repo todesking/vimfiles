@@ -1054,3 +1054,12 @@ function! s:vimrc_sid()
 endfunction
 " }}}
 
+" PTags {{{
+command! PTags call Vimrc_PTags()
+
+function! Vimrc_PTags() abort " {{{
+	let pinfo = CurrentProjectInfo()
+	execute '!cd ' . pinfo.path . ' && ctags -R .'
+endfunction " }}}
+
+" }}}
