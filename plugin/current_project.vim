@@ -9,6 +9,13 @@ let s:project_root_filenames = ['.git', '.svn']
 
 let s:project_detection_methods = []
 
+" Utility {{{
+function! s:starts_with(str, prefix) abort " {{{
+	return len(a:prefix) <= len(a:str) && a:prefix == a:str[0:len(a:prefix) - 1]
+endfunction " }}}
+" }}}
+
+" Detection method {{{
 function s:register_project_detection_method(definition) abort
 	call insert(s:project_detection_methods, a:definition)
 endfunction
@@ -22,12 +29,6 @@ function! s:dm.project_root_of(dir) abort " {{{
 	endif
 endfunction " }}}
 call s:register_project_detection_method(s:dm)
-" }}}
-
-" Utility {{{
-function! s:starts_with(str, prefix) abort " {{{
-	return len(a:prefix) <= len(a:str) && a:prefix == a:str[0:len(a:prefix) - 1]
-endfunction " }}}
 " }}}
 
 let s:dm = {'name': 'project root filename'} " {{{
@@ -50,6 +51,9 @@ function! s:dm.project_root_of(dir) abort " {{{
 endfunction " }}}
 call s:register_project_detection_method(s:dm)
 " }}}
+
+" }}}
+
 
 let s:empty_project_info = {
 \  'name': '',
