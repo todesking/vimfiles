@@ -21,10 +21,6 @@ if executable('/usr/local/bin/bash')
 	\ )
 endif
 " }}}
-NeoBundle 'todesking/current_project.vim'
-NeoBundle 'todesking/ttodo.vim' " {{{
-	let &titlestring='[TODO] %{g:todo_current_doing}'
-" }}}
 
 " basic settings {{{
 filetype on
@@ -96,11 +92,13 @@ endif
 
 " plugins/filetypes {{{
 
+" Library {{{
 NeoBundle 'Shougo/vimproc'
 if has('clientserver')
 	NeoBundle 'pydave/AsyncCommand'
 endif
-
+NeoBundle 'todesking/current_project.vim'
+" }}}
 
 " Navigation/Highlight {{{
 
@@ -211,6 +209,7 @@ let g:unite_source_file_mru_limit=1000
 let g:unite_source_file_mru_time_format=""
 let g:unite_source_mru_do_validate=0
 " }}}
+" summarize-path {{{
 let s:summarize_path = {
 			\ 'name': 'converter_summarize_path',
 			\}
@@ -242,7 +241,9 @@ function! s:summarize_path.filter(candidates, context)
 endfunction
 call unite#define_filter(s:summarize_path)
 unlet s:summarize_path
+" }}}
 
+" hide_unimportant_path {{{
 let s:filter={'name': 'converter_hide_unimportant_path'}
 function! s:filter.filter(candidates, context)
 	let header_pat = '^\[[^\]]\+\] '
@@ -273,7 +274,9 @@ function! s:filter.filter(candidates, context)
 endfunction
 call unite#define_filter(s:filter)
 unlet s:filter
+" }}}
 
+" Vimrc_unite_syntax {{{
 function! Vimrc_unite_syntax()
 	syntax match unite__word_tag /\[[^]]\+\]/ contained containedin=uniteSource__FileMru,uniteSource__FileRec
 	highlight link unite__word_tag Identifier
@@ -286,7 +289,9 @@ augroup vimrc-untie-syntax
 	autocmd!
 	autocmd FileType unite :call Vimrc_unite_syntax()
 augroup END
+" }}}
 
+" converter_remove_trash_files {{{
 let s:filter = {
 			\ 'name': 'converter_remove_trash_files',
 			\}
@@ -295,6 +300,7 @@ function s:filter.filter(candidates, context)
 endfunction
 call unite#define_filter(s:filter)
 unlet s:filter
+" }}}
 
 call unite#custom#source('file_mru', 'filters', ['converter_remove_trash_files', 'matcher_default', 'sorter_default', 'converter_summarize_path', 'converter_hide_unimportant_path'])
 call unite#custom#source('file_rec', 'filters', ['converter_remove_trash_files', 'matcher_default', 'sorter_default', 'converter_summarize_path', 'converter_hide_unimportant_path'])
@@ -714,6 +720,10 @@ NeoBundle 'mileszs/ack.vim' "{{{
 NeoBundle 'Shougo/vimfiler.vim'
 
 NeoBundle 'Shougo/vimshell.vim' "{{{
+" }}}
+
+NeoBundle 'todesking/ttodo.vim' " {{{
+	let &titlestring='[TODO] %{g:todo_current_doing}'
 " }}}
 
 " }}}
