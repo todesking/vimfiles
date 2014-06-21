@@ -1075,3 +1075,7 @@ function! Vimrc_PTags() abort " {{{
 endfunction " }}}
 
 " }}}
+
+" S(source %) {{{
+command! S call SourceThis()
+" }}}
