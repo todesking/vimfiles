@@ -22,6 +22,9 @@ if executable('/usr/local/bin/bash')
 endif
 " }}}
 NeoBundle 'todesking/current_project.vim'
+NeoBundle 'todesking/ttodo.vim' " {{{
+	let &titlestring='[TODO] %{g:todo_current_doing}'
+" }}}
 
 " basic settings {{{
 filetype on
@@ -1030,10 +1033,6 @@ autocmd!
 autocmd InsertEnter * highlight StatusLine guifg=#ccdc90 guibg=#2E4340
 autocmd InsertLeave * highlight StatusLine guifg=#2E4340 guibg=#ccdc90
 augroup END
-" }}}
-
-" Title string {{{
-let &titlestring='[TODO] %{g:todo_current_doing}'
 " }}}
 
 " IM hack(disable im if normal mode) {{{
