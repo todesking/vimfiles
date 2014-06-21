@@ -21,6 +21,7 @@ if executable('/usr/local/bin/bash')
 	\ )
 endif
 " }}}
+NeoBundle 'todesking/current_project.vim'
 
 " basic settings {{{
 filetype on
@@ -648,7 +649,7 @@ NeoBundle 'roalddevries/yaml.vim' "{{{
 NeoBundle 'evanmiller/nginx-vim-syntax'
 NeoBundle 'wavded/vim-stylus'
 NeoBundle 'plasticboy/vim-markdown' "{{{
-	let g:markdown_fenced_languages = ['scala']
+	let g:markdown_fenced_languages = ['scala', 'vim']
 " }}}
 " Haskell {{{
 NeoBundle 'dag/vim2hs'
