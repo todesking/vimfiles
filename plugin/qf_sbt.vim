@@ -59,8 +59,8 @@ function! SbtUpdateQf() abort " {{{
 	endif
 	call proc.update()
 	call proc.set_qf()
-	echo 'State: ' . proc._state
-	return proc._state
+	echo 'State: ' . proc.state
+	return proc.state
 endfunction " }}}
 
 function! SbtStop() abort " {{{
@@ -119,8 +119,8 @@ endfunction " }}}
 		let self.proc = vimproc#popen2(a:cmd)
 		let self.last_compile_events = []
 		let self._buf = []
-		let self._ongoing_events = []
-		let self._state = 'idle'
+		let self.state = 'startup' " startup -> compile -> idle -> compile
+		let self.last_compile_result = ''
 	endfunction " }}}
 	function! s:CProc.is_valid() dict abort " {{{
 		return self.proc.checkpid()[0] == 'run'
@@ -131,28 +131,39 @@ endfunction " }}}
 		endif
 	endfunction " }}}
 	function! s:CProc.update() dict abort " {{{
-		for l in self.proc.stdout.read_lines()
+		let lines = self.proc.stdout.read_lines()
+		for l in lines
 			if get(g:, 'sbt_qf_debug', 0)
 				echo l
 			endif
-			if self._state == 'idle'
+			if self.state == 'idle' || self.state == 'startup'
 				if l =~# '\v^\[info\] Compiling '
-					let self._state = 'compile'
+					let self.state = 'compile'
+				elseif l =~# '\v^\[success\] Total time\:.*completed.*'
+					let self.state = 'idle'
+					let self.last_compile_result = 'success'
+					let self.last_compile_events = []
 				else
 					" ignore line
 				endif
-			elseif self._state == 'compile'
+			elseif self.state == 'compile'
 				if l =~# '\v^\[(success|error)\] Total time\:.*completed.*' || l =~# '\v^\[error\] .* Compilation failed'
 					let self.last_compile_events = s:build_compile_events(self._buf)
 					let self._buf = []
-					let self._state = 'idle'
+					let self.state = 'idle'
+					if l =~ '\v^\[success\]'
+						let self.last_compile_result = 'success'
+					else
+						let self.last_compile_result = 'error'
+					endif
 				else
 					call add(self._buf, l)
 				endif
 			else
-				throw "Invalid state: " . self._state
+				throw "Invalid state: " . self.state
 			endif
 		endfor
+		return lines
 	endfunction " }}}
 	function! s:CProc.set_qf() dict abort " {{{
 		let qf_items = []
@@ -165,7 +176,9 @@ endfunction " }}}
 			\ 'type': typecodes[ev.type],
 			\ })
 		endfor
-		call setqflist(qf_items)
+		if getqflist() != qf_items
+			call setqflist(qf_items)
+		endif
 	endfunction " }}}
 " }}}
 
