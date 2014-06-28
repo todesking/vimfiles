@@ -1,3 +1,5 @@
+let b:did_ftplugin = 1
+
 " Vim のユーザ定義コマンドを自動的にシンタックスハイライトする {{{
 " http://emanon001.github.com/blog/2012/03/18/syntax-highlighting-of-user-defined-commands-in-vim/
 augroup syntax-highlight-extension
