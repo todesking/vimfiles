@@ -546,7 +546,7 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 				\ 'colorscheme': 'solarized_dark',
 				\ 'active': {
 				\   'left': [['project_component'], ['path_component']],
-				\   'right': [['lineinfo'], ['fileformat', 'fileencoding', 'filetype'], ['charinfo'] ],
+				\   'right': [['lineinfo'], ['fileformat', 'fileencoding', 'filetype'], ['build_status', 'charinfo'] ],
 				\ },
 				\ 'inactive': {
 				\   'left': [['project_name', 'git_branch'], ['path_component']],
@@ -561,6 +561,7 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 				\ },
 				\ 'component_function': {
 				\   'git_branch': 'Vimrc_statusline_git_branch',
+				\   'build_status': 'Vimrc_build_status',
 				\ },
 				\ }
 	let g:lightline['component']['path_component'] =
@@ -574,7 +575,7 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 		let g:lightline['separator'] = { 'left': '', 'right': '' }
 		let g:lightline['subseparator'] = { 'left': '', 'right': '' }
 	endif
-	function! Vimrc_statusline_git_branch()
+	function! Vimrc_statusline_git_branch() abort " {{{
 		if exists('b:vimrc_statusline_git_branch') && str2float(reltimestr(reltime(b:vimrc_statusline_git_branch_updated_at))) < 3.0
 			return b:vimrc_statusline_git_branch
 		endif
@@ -587,7 +588,56 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 		else
 			return ''
 		endif
-	endfunction
+	endfunction " }}}
+	let s:build_status_last_updated = reltime()
+	let s:build_status_last = ''
+	function! Vimrc_build_status() abort " {{{
+		if str2float(reltimestr(reltime(s:build_status_last_updated))) < 1.0
+			return s:build_status_last
+		endif
+		let proc = SbtGetProc()
+		if(empty(proc))
+			return ""
+		endif
+		let messages = proc.update()
+		let s = ""
+		let error_count = 0
+		let warn_count = 0
+		if proc.state == 'startup'
+			let s .= "..."
+		elseif proc.state == 'idle'
+			if proc.last_compile_result == 'success'
+				let s .= "[S]"
+			elseif proc.last_compile_result == 'error'
+				let s .= "[E]"
+			endif
+			for e in proc.last_compile_events
+				if e.type == 'error'
+					let error_count += 1
+				elseif e.type == 'warn'
+					let warn_count += 1
+				else
+					echoerr "WARN: Unknown compile event type: " . e.type
+				endif
+			endfor
+		elseif proc.state == 'compile'
+			let s .= "[.] "
+			if !empty(messages)
+				let m = matchlist(messages[-1], '\v^\[(error|warn|info|success)\] (.*)')
+				let s.= m[1][0] . ':' . m[2][0:20]
+			endif
+		endif
+		call proc.set_qf()
+		if error_count > 0
+			let s .= "E" . error_count
+		endif
+		if warn_count > 0
+			let s .= "W" . warn_count
+		endif
+		let s:build_status_last_updated = reltime()
+		let s:build_status_last = s
+		return s
+	endfunction " }}}
 " }}}
 
 if has('clientserver')
