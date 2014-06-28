@@ -589,11 +589,13 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 			return ''
 		endif
 	endfunction " }}}
-	let s:build_status_last_updated = reltime()
-	let s:build_status_last = ''
 	function! Vimrc_build_status() abort " {{{
-		if str2float(reltimestr(reltime(s:build_status_last_updated))) < 1.0
-			return s:build_status_last
+		if !exists('b:vimrc_build_status_last_updated')
+			let b:vimrc_build_status_last_updated = reltime()
+			let b:vimrc_build_status_last = ''
+		endif
+		if str2float(reltimestr(reltime(b:vimrc_build_status_last_updated))) < 1.0
+			return b:vimrc_build_status_last
 		endif
 		let proc = SbtGetProc()
 		if(empty(proc))
@@ -634,8 +636,8 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 		if warn_count > 0
 			let s .= "W" . warn_count
 		endif
-		let s:build_status_last_updated = reltime()
-		let s:build_status_last = s
+		let b:vimrc_build_status_last_updated = reltime()
+		let b:vimrc_build_status_last = s
 		return s
 	endfunction " }}}
 " }}}
