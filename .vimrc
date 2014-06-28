@@ -311,7 +311,7 @@ let g:unite_source_tag_max_name_length = 50
 let g:unite_source_tag_max_fname_length = 999
 let g:unite_source_tag_strict_truncate_string = 1
 
-nnoremap <C-Q>t :<C-u>Unite tag<CR>
+nnoremap <C-Q>t :<C-u>Unite tag -immediately<CR>
 " C-] to unite tag jump
 augroup vimrc-tagjump-unite
 	autocmd!
