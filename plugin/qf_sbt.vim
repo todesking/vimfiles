@@ -131,7 +131,7 @@ endfunction " }}}
 		endif
 	endfunction " }}}
 	function! s:CProc.update() dict abort " {{{
-		let lines = self.proc.stdout.read_lines()
+		let lines = self.proc.stdout.read_lines(-1, 20)
 		for l in lines
 			if get(g:, 'sbt_qf_debug', 0)
 				echo l
