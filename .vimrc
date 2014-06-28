@@ -746,7 +746,7 @@ command! GitLabOpenFile :execute 'Git lab open-file '.expand('%:p').' '.line('.'
 cnoremap <C-U><C-P> up
 cnoremap u<C-P> up
 
-nnoremap <silent>y= :<C-U>call setreg("*", getreg("0"))<CR>
+nnoremap <silent>y= :<C-U>call setreg("*", getreg("0"))<CR>:<C-U>echo "yanked to *: " . getreg("*")[0:30]<CR>
 
 nnoremap ,cn :<C-U>cnext<CR>
 nnoremap ,cp :<C-U>cprevious<CR>
