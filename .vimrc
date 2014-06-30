@@ -130,11 +130,6 @@ NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
 	endif
 " }}}
 
-NeoBundle "errormarker.vim" " {{{
-" }}}
-
-" }}}
-
 " Textobj {{{
 
 NeoBundle 'tpope/vim-surround'
