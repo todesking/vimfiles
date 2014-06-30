@@ -121,6 +121,7 @@ endfunction " }}}
 		let self._buf = []
 		let self.state = 'startup' " startup -> compile -> idle -> compile
 		let self.last_compile_result = ''
+		let self.last_build_number = 0
 	endfunction " }}}
 	function! s:CProc.is_valid() dict abort " {{{
 		return self.proc.checkpid()[0] == 'run'
@@ -140,6 +141,7 @@ endfunction " }}}
 				if l =~# '\v^\[info\] Compiling '
 					let self.state = 'compile'
 				elseif l =~# '\v^\[success\] Total time\:.*completed.*'
+					let self.last_build_number += 1
 					let self.state = 'idle'
 					let self.last_compile_result = 'success'
 					let self.last_compile_events = []
@@ -151,6 +153,7 @@ endfunction " }}}
 					let self.last_compile_events = s:build_compile_events(self._buf)
 					let self._buf = []
 					let self.state = 'idle'
+					let self.last_build_number += 1
 					if l =~ '\v^\[success\]'
 						let self.last_compile_result = 'success'
 					else
