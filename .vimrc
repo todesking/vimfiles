@@ -594,14 +594,16 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 			let b:vimrc_build_status_last_updated = reltime()
 			let b:vimrc_build_status_last = ''
 		endif
-		if str2float(reltimestr(reltime(b:vimrc_build_status_last_updated))) < 1.0
+		if str2float(reltimestr(reltime(b:vimrc_build_status_last_updated))) < 0.5
 			return b:vimrc_build_status_last
 		endif
 		let proc = SbtGetProc()
 		if(empty(proc))
 			return ""
 		endif
+		let build_number = proc.last_build_number
 		let messages = proc.update()
+		let build_completed = proc.last_build_number > build_number
 		let s = ""
 		let error_count = 0
 		let warn_count = 0
@@ -629,7 +631,10 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 				let s.= m[1][0] . ':' . m[2][0:20]
 			endif
 		endif
-		call proc.set_qf()
+		if build_completed
+			call proc.set_qf()
+			call Vimrc_sync_qf_to_syntastic()
+		endif
 		if error_count > 0
 			let s .= "E" . error_count
 		endif
@@ -1134,4 +1139,15 @@ endfunction " }}}
 
 " S(source %) {{{
 command! S call SourceThis()
+" }}}
+
+" qf to syntastic {{{
+function! Vimrc_sync_qf_to_syntastic() abort " {{{
+	let notifier = g:SyntasticNotifiers.Instance()
+    call notifier.reset(g:SyntasticLoclist.current())
+	call b:syntastic_loclist.destroy()
+
+	let b:syntastic_loclist = g:SyntasticLoclist.New(getqflist())
+	call notifier.refresh(b:syntastic_loclist)
+endfunction " }}}
 " }}}
