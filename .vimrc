@@ -216,10 +216,12 @@ let s:home_path = expand('~')
 function! Vimrc_summarize_path(path)
 	let path = simplify(a:path)
 	let path = substitute(path, s:home_path, '~', '')
-	let path = substitute(path, '\v\~\/.rbenv\/versions\/([^/]+)\/', '[rbenv:\1] ', '')
-	let path = substitute(path, '\v[\/ ]lib\/ruby\/gems\/([^/]+)\/gems\/([^/]+)\/', '[gem:\2] ', '')
-	let path = substitute(path, '\v\~\/\.vim\/bundle\/([^/]+)\/', '[.vim/\1] ', '')
-	if path !~ '^\['
+	if path =~ '\v\.rbenv|gems|\.vim'
+		let path = substitute(path, '\v\~\/.rbenv\/versions\/([^/]+)\/', '[rbenv:\1] ', '')
+		let path = substitute(path, '\v[\/ ]lib\/ruby\/gems\/([^/]+)\/gems\/([^/]+)\/', '[gem:\2] ', '')
+		let path = substitute(path, '\v\~\/\.vim\/bundle\/([^/]+)\/', '[.vim/\1] ', '')
+	endif
+	if path[0] != '['
 		let info = Vimrc_file_info(a:path)
 		if !empty(info.name)
 			let path = '['.info['name'].'] '.info['file_path']
