@@ -38,6 +38,7 @@ function! SbtStart(...) abort " {{{
 		return
 	endif
 
+	echo 'starting sbt...'
 	execute 'lcd ' . info.path
 	let proc = s:CProc.new(['sbt', '-J-Dsbt.log.format=false'] + precommands + ['~compile'])
 	let s:procs[info.path] = proc
@@ -66,10 +67,10 @@ endfunction " }}}
 function! SbtStop() abort " {{{
 	let proc = s:getProc()
 	if !s:is_valid(proc)
-		echo "sbt already stopped"
 		return
 	endif
 
+	echo 'stopping sbt...'
 	call proc.kill()
 endfunction " }}}
 
