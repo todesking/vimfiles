@@ -1,1 +1,1 @@
-autocmd BufNew,BufRead *.scala set filetype=scala
+autocmd BufNew,BufRead,BufNewFile *.scala setfiletype scala
