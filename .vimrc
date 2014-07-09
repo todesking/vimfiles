@@ -1161,3 +1161,15 @@ function! Vimrc_syntastic_notifier_try_refresh(notifier, loclist) " {{{
 	endtry
 endfunction " }}}
 " }}}
+
+" java class file {{{
+augroup class
+	autocmd!
+	autocmd BufReadPost,FileReadPost *.class %!jad -noctor -ff -i -p %
+	autocmd BufReadPost,FileReadPost *.class set readonly
+	autocmd BufReadPost,FileReadPost *.class set ft=java
+	autocmd BufReadPost,FileReadPost *.class normal gg=G
+	autocmd BufReadPost,FileReadPost *.class set nomodified
+augroup END
+" }}}
+
