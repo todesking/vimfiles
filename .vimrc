@@ -130,6 +130,8 @@ NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
 	endif
 " }}}
 
+" }}}
+
 " Textobj {{{
 
 NeoBundle 'tpope/vim-surround'
@@ -996,7 +998,7 @@ endfunction"}}}
 
 function! Vimrc_file_info(file_path)
 	let info = CurrentProjectInfo(a:file_path)
-	let info.file_path = substitute(fnamemodify(a:file_path, ':p'), '^'.info.path.'/', '', '')
+	let info.file_path = substitute(fnamemodify(a:file_path, ':p'), '^' . info.path . '/', '', '')
 	return info
 endfunction
 
