@@ -1024,9 +1024,9 @@ function! Vimrc_complete_dir(prefix, ArgLead, CmdLine, CursorPos) abort " {{{
 endfunction  " }}}
 
 " e-in-current-project
-command! -complete=customlist,Vimrc_complete_current_project_files -nargs=1 Pe :exec ':e ' . CurrentProjectInfo().main_path . '/' . "<args>"
+command! -complete=customlist,Vimrc_complete_current_project_files -nargs=1 Pe :exec ':e ' . CurrentProjectInfo().path . '/' . "<args>"
 function! Vimrc_complete_current_project_files(ArgLead, CmdLine, CursorPos) abort " {{{
-	let prefix = CurrentProjectInfo(expand('%')).main_path
+	let prefix = CurrentProjectInfo(expand('%')).path
 	return Vimrc_complete_dir(prefix, a:ArgLead, a:CmdLine, a:CursorPos)
 endfunction " }}}
 
