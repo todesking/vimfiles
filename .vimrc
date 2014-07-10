@@ -1165,11 +1165,25 @@ endfunction " }}}
 " java class file {{{
 augroup class
 	autocmd!
-	autocmd BufReadPost,FileReadPost *.class %!jad -noctor -ff -i -p %
-	autocmd BufReadPost,FileReadPost *.class set readonly
-	autocmd BufReadPost,FileReadPost *.class set ft=java
-	autocmd BufReadPost,FileReadPost *.class normal gg=G
-	autocmd BufReadPost,FileReadPost *.class set nomodified
+	autocmd BufReadPost,FileReadPost *.class call JadDecompile()
 augroup END
+
+function! JadDecompile() abort " {{{
+	let file = expand('%')
+	if file =~ '\v^[a-zA-Z0-9_]+\:'
+		let file = tempname() . '.class'
+		execute 'write ' . file
+	endif
+	execute '%!jad -noctor -ff -i -p ' . file
+	setlocal readonly
+	setlocal filetype=java
+	normal gg=G
+	setlocal nomodified
+endfunction " }}}
+
+" }}}
+
+" jar {{{
+autocmd BufReadCmd *.jar call zip#Browse(expand("<amatch>"))
 " }}}
 
