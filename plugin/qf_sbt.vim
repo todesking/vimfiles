@@ -120,6 +120,7 @@ endfunction " }}}
 		let self.proc = vimproc#popen2(a:cmd)
 		let self.last_compile_events = []
 		let self._buf = []
+		let self.log = []
 		let self.state = 'startup' " startup -> compile -> idle -> compile
 		let self.last_compile_result = ''
 		let self.last_build_number = 0
@@ -134,6 +135,11 @@ endfunction " }}}
 	endfunction " }}}
 	function! s:CProc.update() dict abort " {{{
 		let lines = self.proc.stdout.read_lines(-1, 20)
+		let self.log = self.log + lines
+		let max_log_size = 10
+		if len(self.log) > max_log_size
+			let self.log = self.log[(-max_log_size):-1]
+		endif
 		for l in lines
 			if get(g:, 'sbt_qf_debug', 0)
 				echo l
