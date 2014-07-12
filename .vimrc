@@ -590,6 +590,7 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 			return ''
 		endif
 	endfunction " }}}
+	let s:vimrc_build_status_version = 0
 	function! Vimrc_build_status() abort " {{{
 		if !exists('b:vimrc_build_status_last_updated')
 			let b:vimrc_build_status_last_updated = reltime()
@@ -604,12 +605,15 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 		endif
 		let build_number = proc.last_build_number
 		let messages = proc.update()
+		if !empty(messages)
+			let s:vimrc_build_status_version += 1
+		endif
 		let build_completed = proc.last_build_number > build_number
 		let s = ""
 		let error_count = 0
 		let warn_count = 0
 		if proc.state == 'startup'
-			let s .= "..."
+			let s .= repeat(".", s:vimrc_build_status_version % 4 + 1)
 		elseif proc.state == 'idle'
 			if proc.last_compile_result == 'success'
 				let s .= "[S]"
@@ -626,7 +630,7 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 				endif
 			endfor
 		elseif proc.state == 'compile'
-			let s .= "[.] "
+			let s .= "[" . repeat(".", s:vimrc_build_status_version % 4 + 1) . "] "
 			if !empty(messages)
 				let m = matchlist(messages[-1], '\v^\[(error|warn|info|success)\] (.*)')
 				let s.= m[1][0] . ':' . m[2][0:20]
