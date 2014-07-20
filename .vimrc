@@ -175,6 +175,7 @@ NeoBundle 'Shougo/neosnippet' " {{{
 	xmap <C-k>     <Plug>(neosnippet_expand_target)
 	let g:neosnippet#snippets_directory='~/.vim/snippets'
 " }}}
+NeoBundle "tpope/vim-repeat"
 " }}}
 
 " Utilities {{{
