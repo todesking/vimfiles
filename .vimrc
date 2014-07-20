@@ -161,6 +161,8 @@ NeoBundle 'Align' " {{{
 	map (trashbox-leader-swp) <Plug>SaveWinPosn
 	let g:loaded_AlignMapsPlugin = 1
 " }}}
+NeoBundle "godlygeek/tabular" " {{{
+" }}}
 NeoBundle 'closetag.vim' " {{{
 	 autocmd Filetype html,xml,xsl,eruby runtime plugin/closetag.vim
 " }}}
