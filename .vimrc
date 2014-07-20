@@ -191,9 +191,6 @@ NeoBundle 'mattn/habatobi-vim'
 NeoBundle 'thinca/vim-threes'
 " }}}
 
-" Uncategorized {{{
-" }}}
-
 " Unite {{{
 NeoBundle 'Shougo/unite.vim' "{{{
 " Settings {{{
@@ -1158,8 +1155,9 @@ function! Vimrc_sync_qf_to_syntastic() abort " {{{
     call notifier.reset(g:SyntasticLoclist.current())
 	call b:syntastic_loclist.destroy()
 
-	let b:syntastic_loclist = g:SyntasticLoclist.New(getqflist())
-	call Vimrc_syntastic_notifier_try_refresh(notifier, b:syntastic_loclist)
+	let loclist = g:SyntasticLoclist.New(getqflist())
+	call loclist.deploy()
+	call Vimrc_syntastic_notifier_try_refresh(notifier, loclist)
 endfunction " }}}
 function! Vimrc_syntastic_notifier_try_refresh(notifier, loclist) " {{{
 	try
