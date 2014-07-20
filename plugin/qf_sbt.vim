@@ -176,13 +176,14 @@ endfunction " }}}
 		return lines
 	endfunction " }}}
 	function! s:CProc.set_qf() dict abort " {{{
+		let message_width = 150
 		let qf_items = []
 		let typecodes = {'error': 'E', 'warn': 'W'}
 		for ev in self.last_compile_events
 			call add(qf_items, {
 			\ 'filename': ev.path,
 			\ 'lnum': ev.line,
-			\ 'text': join(ev.message, "\n"),
+			\ 'text': "\n" . join(map(ev.message, 'join(split(v:val, "\\v.{,' . message_width . '}\\zs"), "\n")'), "\n"),
 			\ 'type': typecodes[ev.type],
 			\ })
 		endfor
