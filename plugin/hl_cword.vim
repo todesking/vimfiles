@@ -46,6 +46,6 @@ function! s:hl_cword()
     endif
 
     let pattern = printf("\\<%s\\>", expand("<cword>"))
-    silent! let b:highlight_cursor_word_id = matchadd("CursorWord", pattern)
+    silent! let b:highlight_cursor_word_id = matchadd("CursorWord", pattern, 0)
     let b:highlight_cursor_word = word
 endfunction
