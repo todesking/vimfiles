@@ -130,6 +130,8 @@ NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
 	endif
 " }}}
 
+NeoBundle "osyo-manga/vim-brightest" " {{{
+" }}}
 " }}}
 
 " Textobj {{{
