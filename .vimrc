@@ -359,7 +359,7 @@ NeoBundle 'basyura/unite-rails' "{{{
 " }}}
 NeoBundle 'osyo-manga/unite-fold' " {{{
 	call unite#custom_filters('fold',['matcher_default', 'sorter_nothing', 'converter_default'])
-	function! g:vimrc_unite_fold_foldtext(bufnr, val)
+	function! g:Vimrc_unite_fold_foldtext(bufnr, val)
 		if has_key(a:val, 'word')
 			return a:val.word
 		else
@@ -371,7 +371,7 @@ NeoBundle 'osyo-manga/unite-fold' " {{{
 			endif
 		end
 	endfunction
-	let g:Unite_fold_foldtext=function('g:vimrc_unite_fold_foldtext')
+	let g:Unite_fold_foldtext=function('g:Vimrc_unite_fold_foldtext')
 
 	nnoremap <C-Q>d :<C-u>Unite fold<CR>
 " }}}
