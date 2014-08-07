@@ -200,10 +200,13 @@ let g:unite_enable_start_insert = 1
 let g:unite_update_time = 100
 let g:unite_cursor_line_highlight='CursorLine'
 
-let g:unite_source_file_rec_ignore_pattern =
+call unite#custom#source('file_rec', 'ignore_pattern',
 		\'\%(^\|/\)\.$\|\~$\|\.\%(o\|exe\|dll\|bak\|sw[po]\|class\)$'.
-		\'\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'.
 		\'\|\.\%(\gif\|jpg\|png\|swf\)$'
+		\)
+call unite#custom#source('file_rec', 'source__ignore_directory_pattern',
+		\'/\%(target\|.\%(git\|svn\|bzr\|hg\)\)$'
+		\)
 
 call unite#filters#sorter_default#use(['sorter_smart'])
 " }}}
