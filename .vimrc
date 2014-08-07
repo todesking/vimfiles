@@ -205,7 +205,7 @@ call unite#custom#source('file_rec', 'ignore_pattern',
 		\'\|\.\%(\gif\|jpg\|png\|swf\)$'
 		\)
 call unite#custom#source('file_rec', 'source__ignore_directory_pattern',
-		\'/\%(target\|.\%(git\|svn\|bzr\|hg\)\)$'
+		\'/\%(target\|.\%(git\|svn\|bzr\|hg\|\%(pygments\|sass\)-cache\|themes\)\)$'
 		\)
 
 call unite#filters#sorter_default#use(['sorter_smart'])
