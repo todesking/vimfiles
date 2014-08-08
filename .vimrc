@@ -712,6 +712,7 @@ NeoBundle 'mdreves/vim-scaladoc' " {{{
 		autocmd filetype scala nnoremap K :<C-U>call scaladoc#Search(expand("<cword>"))<CR>
 	augroup END
 " }}}
+NeoBundle 'todesking/qf_sbt.vim'
 " }}}
 NeoBundle 'roalddevries/yaml.vim' "{{{
 	function! Vimrc_autocmd_yaml_vim()
