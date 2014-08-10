@@ -1,6 +1,9 @@
 " vim:foldmethod=marker
 let $RUBY_DLL=$HOME.'/.rbenv/versions/2.1.1/lib/libruby.dylib'
 
+" なんか謎の再現不能エラーを抑制しているかんじがするやつ(よくわからない)
+let V = {}
+
 " NeoBundle {{{
 set nocompatible               " be iMproved
 filetype off                   " required!
