@@ -445,19 +445,28 @@ endfunction
 call unite#define_source(s:unite_source)
 " }}}
 " Git sources(original: https://github.com/aereal/dotfiles/blob/master/.vim/vimrc ) {{{
+function! s:git_read_path(cmd) abort " {{{
+	let base = fugitive#extract_git_dir(expand('%')) . "/.."
+	execute 'lcd ' . base
+	let output = unite#util#system('git diff-files --name-only --diff-filter=U')
+	lcd -
+	return [base, split(output, "\n")]
+endfunction " }}}
+function! s:git_make_candidates(source_name, cmd) abort " {{{
+	let [base, files] = s:git_read_path(a:cmd)
+	return map(files, '{
+				\ "word" : v:val,
+				\ "source" : a:source_name,
+				\ "kind" : "file",
+				\ "action__path" : fnamemodify(base . "/" . v:val, ":p"),
+				\ }')
+endfunction " }}}
 " unite-git-files-conflict {{{
 let s:unite_git_files_conflict = {
 			\   'name' : 'git/files/conflict',
 			\ }
 function! s:unite_git_files_conflict.gather_candidates(args, context)
-	let output = unite#util#system('git diff-files --name-only --diff-filter=U')
-	let candidates = map(split(output, "\n"), '{
-				\ "word" : fnamemodify(v:val, ":p"),
-				\ "source" : "git/files/conflict",
-				\ "kind" : "file",
-				\ "action__path" : fnamemodify(v:val, ":p"),
-				\ }')
-	return candidates
+	return s:git_make_candidates('git/files/conflict', 'git diff-files --name-only --diff-filter=U')
 endfunction
 call unite#define_source(s:unite_git_files_conflict)
 " }}}
@@ -466,14 +475,7 @@ let s:unite_git_files_modified = {
 			\   'name' : 'git/files/modified',
 			\ }
 function! s:unite_git_files_modified.gather_candidates(args, context)
-	let output = unite#util#system('git ls-files --modified')
-	let candidates = map(split(output, "\n"), '{
-				\ "word" : fnamemodify(v:val, ":p"),
-				\ "source" : "git/files/modified",
-				\ "kind" : "file",
-				\ "action__path" : fnamemodify(v:val, ":p"),
-				\ }')
-	return candidates
+	return s:git_make_candidates('git/files/modified', 'git ls-files --modified')
 endfunction
 call unite#define_source(s:unite_git_files_modified)
 " }}}
@@ -482,14 +484,7 @@ let s:unite_git_files_others = {
 			\   'name' : 'git/files/others',
 			\ }
 function! s:unite_git_files_others.gather_candidates(args, context)
-	let output = unite#util#system('git ls-files --others --exclude-standard')
-	let candidates = map(split(output, "\n"), '{
-				\ "word" : fnamemodify(v:val, ":p"),
-				\ "source" : "git/files/others",
-				\ "kind" : "file",
-				\ "action__path" : fnamemodify(v:val, ":p"),
-				\ }')
-	return candidates
+	return s:git_make_candidates('git/files/others', 'git ls-files --others --exclude-standard')
 endfunction
 call unite#define_source(s:unite_git_files_others)
 " }}}
