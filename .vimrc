@@ -204,6 +204,8 @@ let g:unite_enable_start_insert = 1
 let g:unite_update_time = 100
 let g:unite_cursor_line_highlight='CursorLine'
 
+let g:unite_source_rec_max_cache_files = 50000
+
 call unite#custom#source('file_rec', 'ignore_pattern',
 		\'\%(^\|/\)\.$\|\~$\|\.\%(o\|exe\|dll\|bak\|sw[po]\|class\)$'.
 		\'\|\.\%(\gif\|jpg\|png\|swf\)$'
