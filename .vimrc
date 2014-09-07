@@ -316,9 +316,9 @@ call unite#define_filter(s:filter)
 unlet s:filter
 " }}}
 
-call unite#custom#source('file_mru', 'filters', ['converter_remove_trash_files', 'matcher_default', 'sorter_default', 'converter_summarize_path', 'converter_hide_unimportant_path'])
-call unite#custom#source('file_rec', 'filters', ['converter_remove_trash_files', 'matcher_default', 'sorter_default', 'converter_summarize_path', 'converter_hide_unimportant_path'])
-call unite#custom#source('buffer', 'filters', ['matcher_default', 'sorter_default', 'converter_summarize_path', 'converter_hide_unimportant_path'])
+for source in ['file_mru', 'file_rec', 'buffer']
+	call unite#custom#source(source, 'converters', ['converter_remove_trash_files', 'converter_summarize_path', 'converter_hide_unimportant_path'])
+endfor
 " }}}
 NeoBundle 'tsukkee/unite-tag' "{{{
 let g:unite_source_tag_max_name_length = 50
@@ -345,13 +345,14 @@ function! s:c.filter(candidates, context) abort
 endfunction
 call unite#define_filter(s:c)
 unlet s:c
-call unite#custom_filters('tag',['matcher_default', 'sorter_smart', 'converter_tag'])
+call unite#custom#source('tag','converters', ['converter_tag'])
 " }}}
 NeoBundle 'Shougo/unite-outline' "{{{
 let g:unite_source_outline_scala_show_all_declarations = 1
 " }}}
 NeoBundle 'sgur/unite-qf' "{{{
 nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview<CR>
+call unite#custom#profile('source/qf', 'context', {'max_multi_lines': 20})
 " }}}
 NeoBundle 'basyura/unite-rails' "{{{
 	nnoremap <C-Q>r <ESC>
