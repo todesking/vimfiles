@@ -790,6 +790,10 @@ NeoBundle 'ujihisa/ref-hoogle'
 " }}}
 " }}}
 
+" coffeescript {{{
+NeoBundle 'kchmck/vim-coffee-script'
+" }}}
+
 " Git {{{
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'int3/vim-extradite'
