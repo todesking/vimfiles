@@ -122,7 +122,7 @@ NeoBundle 'a.vim'
 
 NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
 	if has('gui_running')
-		autocmd! indent_guides BufEnter
+		autocmd! indent_guides BufEnter *
 		augroup vimrc-indentguide
 			autocmd!
 			autocmd BufWinEnter,BufNew * highlight IndentGuidesOdd guifg=NONE guibg=NONE
