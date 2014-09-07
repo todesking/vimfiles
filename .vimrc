@@ -181,6 +181,7 @@ NeoBundle 'Shougo/neosnippet' " {{{
 	let g:neosnippet#snippets_directory='~/.vim/snippets'
 " }}}
 NeoBundle "tpope/vim-repeat"
+NeoBundle "mbbill/undotree"
 " }}}
 
 " Utilities {{{
