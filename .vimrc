@@ -101,6 +101,7 @@ if has('clientserver')
 	NeoBundle 'pydave/AsyncCommand'
 endif
 NeoBundle 'todesking/current_project.vim'
+NeoBundle 'mattn/webapi-vim'
 " }}}
 
 " Navigation/Highlight {{{
@@ -843,6 +844,7 @@ NeoBundle 'grep.vim' "{{{
 NeoBundle 'mileszs/ack.vim' "{{{
 	let g:ackprg = 'ag --nogroup --nocolor --column'
 	let g:ack_qhandler = ""
+	command! -nargs=1 Pag execute 'Ack ' . <q-args> . ' ' . CurrentProjectInfo().path
 " }}}
 
 NeoBundle 'Shougo/vimfiler.vim'
@@ -1226,6 +1228,31 @@ function! Vimrc_syntastic_notifier_try_refresh(notifier, loclist) " {{{
 		call a:notifier.refresh(a:loclist)
 	catch /^Vim\%((\a\+)\)\=:E523/
 	endtry
+endfunction " }}}
+" }}}
+
+" checkstyle to qf {{{
+command! -nargs=1 -complete=customlist,Vimrc_complete_current_project_files LoadCheckStyle call LoadCheckStyle(CurrentProjectInfo().path . '/' . <q-args>)
+
+function! LoadCheckStyle(xmlfile) abort " {{{
+    let xml = webapi#xml#parseFile(a:xmlfile)
+    let messages = []
+    for file in xml.childNodes('file')
+        let path = file.attr.name
+        for msg in file.childNodes()
+			if type(msg) != type({})
+				unlet msg
+				continue
+			endif
+            call add(messages, {
+            \'filename': path,
+            \'lnum': str2nr(msg.attr.line),
+            \'col': str2nr(get(msg.attr, 'column', '0')),
+            \'text': msg.attr.message,
+            \})
+        endfor
+    endfor
+    call setqflist(messages)
 endfunction " }}}
 " }}}
 
