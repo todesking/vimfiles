@@ -1235,10 +1235,6 @@ function! LoadCheckStyle(xmlfile) abort " {{{
     for file in xml.childNodes('file')
         let path = file.attr.name
         for msg in file.childNodes()
-			if type(msg) != type({})
-				unlet msg
-				continue
-			endif
             call add(messages, {
             \'filename': path,
             \'lnum': str2nr(msg.attr.line),
