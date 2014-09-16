@@ -207,15 +207,10 @@ let g:unite_cursor_line_highlight='CursorLine'
 
 let g:unite_source_rec_max_cache_files = 50000
 
-call unite#custom#source('file_rec', 'ignore_pattern',
-		\'\%(^\|/\)\.$\|\~$\|\.\%(o\|exe\|dll\|bak\|sw[po]\|class\)$'.
-		\'\|\.\%(\gif\|jpg\|png\|swf\)$'
-		\)
-call unite#custom#source('file_rec', 'source__ignore_directory_pattern',
-		\'/\%(target\|.\%(git\|svn\|bzr\|hg\|\%(pygments\|sass\)-cache\|themes\)\)$'
-		\)
-
 call unite#filters#sorter_default#use(['sorter_smart'])
+
+call unite#custom#profile('default', 'context', {'custom_rec_ignore_directory_pattern': 
+			\'/\..\+$\|/\%(\.hg\|\.git\|\.bzr\|\.svn\|target\|classes\|build\)/'})
 " }}}
 " unite-file_mru {{{
 let g:unite_source_file_mru_limit=1000
