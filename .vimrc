@@ -196,6 +196,7 @@ NeoBundle 'ciaranm/detectindent'
 " Games {{{
 NeoBundle 'mattn/habatobi-vim'
 NeoBundle 'thinca/vim-threes'
+NeoBundle 'katono/rogue.vim'
 " }}}
 
 " Unite {{{
