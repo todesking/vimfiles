@@ -896,6 +896,9 @@ inoremap <silent><C-L> <C-X><C-L>
 nnoremap j gj
 nnoremap k gk
 
+nnoremap \8 :<C-U>setlocal tabstop=8<CR>
+nnoremap \4 :<C-U>setlocal tabstop=4<CR>
+
 set visualbell
 set t_vb=
 
