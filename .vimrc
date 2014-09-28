@@ -348,7 +348,7 @@ NeoBundle 'Shougo/unite-outline' "{{{
 let g:unite_source_outline_scala_show_all_declarations = 1
 " }}}
 NeoBundle 'sgur/unite-qf' "{{{
-nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview<CR>
+nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview -no-split -winheight=30<CR>
 call unite#custom#profile('source/qf', 'context', {'max_multi_lines': 20})
 " }}}
 NeoBundle 'basyura/unite-rails' "{{{
