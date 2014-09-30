@@ -393,6 +393,12 @@ NeoBundle 'ujihisa/unite-font'
 NeoBundle 'Shougo/neomru.vim' " {{{
 	let g:neomru#do_validate = 1
 " }}}
+NeoBundle 'osyo-manga/unite-candidate_sorter' " {{{
+augroup vimrc-unite-candidate-sorter
+  autocmd!
+  autocmd FileType unite nmap <silent><buffer> S <Plug>(unite-candidate_sort)
+augroup END
+" }}}
 
 " Keymap {{{
 " in-unite {{{
