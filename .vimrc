@@ -191,6 +191,8 @@ NeoBundle 'osyo-manga/vim-over'
 NeoBundle 'taku-o/vim-zoom'
 NeoBundle 'tyru/capture.vim'
 NeoBundle 'ciaranm/detectindent'
+NeoBundle 'osyo-manga/vim-automatic' "{{{
+" }}}
 " }}}
 
 " Games {{{
