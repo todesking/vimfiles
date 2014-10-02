@@ -697,7 +697,11 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 			let s .= "[" . repeat(".", s:vimrc_build_status_version % 4 + 1) . "] "
 			if !empty(messages)
 				let m = matchlist(messages[-1], '\v^\[(error|warn|info|success)\] (.*)')
-				let s.= m[1][0] . ':' . m[2][0:20]
+				if empty(m)
+					let s .= messages[-1][0:20]
+				else
+					let s .= m[1][0] . ':' . m[2][0:20]
+				endif
 			endif
 		endif
 		if build_completed
