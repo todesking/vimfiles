@@ -1277,7 +1277,7 @@ function! JadDecompile() abort " {{{
 		let file = tempname() . '.class'
 		execute 'write ' . file
 	endif
-	execute '%!jad -noctor -ff -i -p ' . file
+	execute '%!jad -noctor -ff -i -p ' . fnameescape(file)
 	setlocal readonly
 	setlocal filetype=java
 	normal gg=G
