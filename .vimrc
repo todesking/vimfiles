@@ -214,7 +214,7 @@ let g:unite_source_rec_max_cache_files = 50000
 call unite#filters#sorter_default#use(['sorter_smart'])
 
 call unite#custom#profile('default', 'context', {'custom_rec_ignore_directory_pattern': 
-			\'\%(/\.[^/]\+$\)\|/\%(\.hg\|\.git\|\.bzr\|\.svn\|target\|classes\|build\)/'})
+			\'/\%(\.hg\|\.git\|\.bzr\|\.svn\|target\|classes\|build\)/'})
 " }}}
 " unite-file_mru {{{
 let g:unite_source_file_mru_limit=1000
