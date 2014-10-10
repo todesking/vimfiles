@@ -102,6 +102,7 @@ if has('clientserver')
 endif
 NeoBundle 'todesking/current_project.vim'
 NeoBundle 'mattn/webapi-vim'
+NeoBundle 'kana/vim-operator-user'
 " }}}
 
 " Navigation/Highlight {{{
@@ -140,7 +141,14 @@ NeoBundle "osyo-manga/vim-brightest" " {{{
 
 " Textobj {{{
 
-NeoBundle 'tpope/vim-surround'
+NeoBundle 'rhysd/vim-operator-surround' " {{{
+	map ys <Plug>(operator-surround-append)
+	map ds <Plug>(operator-surround-delete)
+	map cs <Plug>(operator-surround-replace)
+	let g:operator#surround#blocks = deepcopy(g:operator#surround#default_blocks)
+	call add(g:operator#surround#blocks['-'],
+	\     {'block': ['\<\[a-zA-z0-9_?!]\+\[(\[]', '\[)\]]'], 'motionwise': 'char', 'keys': ['c']} )
+" }}}
 
 NeoBundle 'kana/vim-textobj-user' " {{{
 	call textobj#user#plugin('lastmofified', {
@@ -152,6 +160,14 @@ NeoBundle 'kana/vim-textobj-user' " {{{
 	function! g:Vimrc_select_a_last_modified() abort
 		return ['v', getpos("'["), getpos("']")]
 	endfunction
+
+	call textobj#user#plugin('methodcall', {
+	\   'methodcall': {
+	\     'pattern': ['\<[a-zA-z0-9_?!]\+[(\[]', '[)\]]'],
+	\     'select-a': 'ac',
+	\     'select-i': 'ic'
+	\   },
+	\})
 " }}}
 
 " }}}
