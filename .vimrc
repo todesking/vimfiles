@@ -142,9 +142,9 @@ NeoBundle "osyo-manga/vim-brightest" " {{{
 " Textobj {{{
 
 NeoBundle 'rhysd/vim-operator-surround' " {{{
-	map ys <Plug>(operator-surround-append)
-	map ds <Plug>(operator-surround-delete)
-	map cs <Plug>(operator-surround-replace)
+	nmap ys <Plug>(operator-surround-append)
+	nmap ds <Plug>(operator-surround-delete)
+	nmap cs <Plug>(operator-surround-replace)
 	let g:operator#surround#blocks = deepcopy(g:operator#surround#default_blocks)
 	call add(g:operator#surround#blocks['-'],
 	\     {'block': ['\<\[a-zA-z0-9_?!]\+\[(\[]', '\[)\]]'], 'motionwise': 'char', 'keys': ['c']} )
