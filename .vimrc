@@ -815,11 +815,13 @@ NeoBundle 'plasticboy/vim-markdown' "{{{
 NeoBundle 'dag/vim2hs'
 NeoBundle 'ujihisa/ref-hoogle'
 " }}}
-" }}}
-
 " coffeescript {{{
 NeoBundle 'kchmck/vim-coffee-script'
 " }}}
+NeoBundle 'ekalinin/Dockerfile.vim'
+
+" }}}
+
 
 " Git {{{
 NeoBundle 'tpope/vim-fugitive'
