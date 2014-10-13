@@ -683,6 +683,9 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 		if(empty(proc))
 			return ""
 		endif
+		if !proc.is_valid()
+			return "(>_<)"
+		endif
 		let build_number = proc.last_build_number
 		let messages = proc.update()
 		if !empty(messages)
