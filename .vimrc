@@ -137,6 +137,13 @@ NeoBundle 'nathanaelkane/vim-indent-guides' " {{{
 
 NeoBundle "osyo-manga/vim-brightest" " {{{
 " }}}
+
+NeoBundle 'haya14busa/incsearch.vim' " {{{
+	map /  <Plug>(incsearch-forward)
+	map ?  <Plug>(incsearch-backward)
+	map g/ <Plug>(incsearch-stay)
+	let g:incsearch#consistent_n_direction = 1
+" }}}
 " }}}
 
 " Textobj {{{
