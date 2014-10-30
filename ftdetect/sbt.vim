@@ -1,1 +1,1 @@
-autocmd BufNew,BufRead,BufNewFile *.sbt   set filetype=sbt
+autocmd BufNew,BufRead,BufNewFile *.sbt   setf sbt

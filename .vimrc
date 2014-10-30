@@ -26,8 +26,6 @@ endif
 " }}}
 
 " basic settings {{{
-filetype on
-filetype plugin indent on
 set smartcase
 set wrapscan
 set incsearch
@@ -818,7 +816,7 @@ NeoBundle 'roalddevries/yaml.vim' "{{{
 " }}}
 NeoBundle 'evanmiller/nginx-vim-syntax'
 NeoBundle 'wavded/vim-stylus'
-NeoBundle 'plasticboy/vim-markdown' "{{{
+" markdown {{{
 	let g:markdown_fenced_languages = ['ruby', 'scala', 'vim']
 " }}}
 " Haskell {{{
@@ -831,7 +829,6 @@ NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'ekalinin/Dockerfile.vim'
 
 " }}}
-
 
 " Git {{{
 NeoBundle 'tpope/vim-fugitive'
@@ -895,6 +892,9 @@ NeoBundle 'todesking/ttodo.vim' " {{{
 " }}}
 
 " }}}
+
+filetype on
+filetype plugin indent on
 
 " Profile {{{
 command! -nargs=1 ProfileStart profile start <args> | profile file * | profile func *
