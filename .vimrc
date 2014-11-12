@@ -819,7 +819,7 @@ NeoBundle 'roalddevries/yaml.vim' "{{{
 NeoBundle 'evanmiller/nginx-vim-syntax'
 NeoBundle 'wavded/vim-stylus'
 " markdown {{{
-	let g:markdown_fenced_languages = ['ruby', 'scala', 'vim']
+	let g:markdown_fenced_languages = ['ruby', 'scala', 'vim', 'java']
 " }}}
 " Haskell {{{
 NeoBundle 'dag/vim2hs'
