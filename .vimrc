@@ -561,13 +561,13 @@ function! s:sorter_smart_sort_val(text, keywords)
 		let sort_val .= printf('%05d', stridx(a:text, kw)).'_'
 		let sort_val .= printf('%05d', len(text_without_keywords)).'_'
 		let text_without_keywords =
-					\ substitute(text_without_keywords, kw, '', 'g')
+					\ substitute(text_without_keywords, '\V' . escape(kw, '\'), '', 'g')
 	endfor
 	let sort_val .= text_without_keywords
 	return sort_val
 endfunction
 function! s:matches(str, pat_str)
-	let pat = escape(a:pat_str, '\')
+	let pat = '\V' . escape(a:pat_str, '\')
 	let n = 0
 	let i = match(a:str, pat, 0)
 	while i != -1
