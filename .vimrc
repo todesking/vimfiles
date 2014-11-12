@@ -1141,6 +1141,10 @@ function! Vimrc_complete_current_project_files(ArgLead, CmdLine, CursorPos) abor
 	return Vimrc_complete_dir(prefix, a:ArgLead, a:CmdLine, a:CursorPos)
 endfunction " }}}
 
+" Dox {{{
+command! Dox :Unite file:.dox/ -default-action=rec
+" }}}
+
 " P! {{{
 command! -bang -nargs=+ P :exec ':! cd ' . CurrentProjectInfo().main_path . ' && ' . <q-args>
 " }}}
