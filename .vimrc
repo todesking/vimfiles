@@ -142,6 +142,8 @@ NeoBundle 'haya14busa/incsearch.vim' " {{{
 	map g/ <Plug>(incsearch-stay)
 	let g:incsearch#consistent_n_direction = 1
 " }}}
+
+NeoBundle 'deris/vim-shot-f'
 " }}}
 
 " Textobj {{{
