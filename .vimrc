@@ -255,7 +255,7 @@ function! Vimrc_summarize_path(path)
 		let path = substitute(path, '\v\~\/\.vim\/bundle\/([^/]+)\/', '[.vim/\1] ', '')
 	endif
 	if path[0] != '['
-		let info = Vimrc_file_info(a:path)
+		let info = CurrentProjectFileInfo(a:path)
 		if !empty(info.name)
 			let path = '['.info['name'].'] '.info['file_path']
 		endif
@@ -641,7 +641,7 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 				\   'readonly': '%{&readonly?has("gui_running")?"":"ro":""}',
 				\   'modified': '%{&modified?"+":""}',
 				\   'project_name': '%{CurrentProjectInfo().name}',
-				\   'project_path': '%{Vimrc_summarize_project_path(Vimrc_file_info(expand(''%''))["file_path"])}',
+				\   'project_path': '%{Vimrc_summarize_project_path(CurrentProjectFileInfo(expand(''%''))["file_path"])}',
 				\   'charinfo': '%{printf("%6s",GetB())}',
 				\ },
 				\ 'component_function': {
@@ -1106,12 +1106,6 @@ endfunction"}}}
 
 " }}}
 " }}}
-
-function! Vimrc_file_info(file_path)
-	let info = CurrentProjectInfo(a:file_path)
-	let info.file_path = substitute(fnamemodify(a:file_path, ':p'), '^' . info.path . '/', '', '')
-	return info
-endfunction
 
 " Ce command(e based on Currend dir) {{{
 command! -complete=customlist,Vimrc_complete_current_dir -nargs=1 Ce :exec ':e '.expand('%:p:h').'/'."<args>"
