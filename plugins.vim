@@ -704,12 +704,6 @@ NeoBundle 'slim-template/vim-slim' "{{{
 		autocmd FileType slim setlocal shiftwidth=2 expandtab
 	augroup END
 " }}}
-NeoBundle 'mdreves/vim-scaladoc' " {{{
-	augroup vimrc-vim-scladoc
-		autocmd!
-		autocmd filetype scala nnoremap K :<C-U>call scaladoc#Search(expand("<cword>"))<CR>
-	augroup END
-" }}}
 NeoBundle 'todesking/qf_sbt.vim'
 " }}}
 NeoBundle 'roalddevries/yaml.vim' "{{{
