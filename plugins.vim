@@ -3,7 +3,14 @@
 " plugins/filetypes {{{
 
 " Library {{{
-NeoBundle 'Shougo/vimproc'
+NeoBundle 'Shougo/vimproc', {
+      \ 'build' : {
+      \     'windows' : 'tools\\update-dll-mingw',
+      \     'cygwin' : 'make -f make_cygwin.mak',
+      \     'mac' : 'make -f make_mac.mak',
+      \     'unix' : 'make -f make_unix.mak',
+      \    },
+      \ }
 if has('clientserver')
 	NeoBundle 'pydave/AsyncCommand'
 endif
