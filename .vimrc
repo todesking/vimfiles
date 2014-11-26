@@ -899,17 +899,29 @@ NeoBundle 'todesking/ttodo.vim' " {{{
 filetype on
 filetype plugin indent on
 
-" scala {{{
-" disable vim-scala ftdetect
-augroup filetypedetect
-	autocmd! BufNew,BufRead,BufNewFile *.scala
-	autocmd BufNew,BufRead,BufNewFile *.scala setfiletype scala
+function! Vimrc_setft(ft) abort " {{{
+	if(!exists('b:current_syntax'))
+		let &filetype = a:ft
+	endif
+endfunction " }}}
 
-	autocmd! BufNew,BufRead,BufNewFile *.sbt
-	autocmd BufNew,BufRead,BufNewFile *.sbt   setfiletype sbt
-augroup END
-" }}}
+function! Vimrc_override_ftdetect(ext, ...) abort " {{{
+	if a:0 == 1
+		let ft = a:1
+	else
+		let ft = a:ext
+	endif
+	let events = 'BufNew,BufRead,BufNewFile'
+	augroup filetypedetect
+		execute 'autocmd! ' . events . ' *.' . a:ext
+		execute 'autocmd ' . events . ' *.' . a:ext . ' call Vimrc_setft("' . ft . '")'
+	augroup END
+endfunction " }}}
 
+call Vimrc_override_ftdetect('scala')
+call Vimrc_override_ftdetect('sbt')
+call Vimrc_override_ftdetect('md', 'markdown')
+call Vimrc_override_ftdetect('coffee')
 " }}}
 
 " Profile {{{
