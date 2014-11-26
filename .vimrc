@@ -895,8 +895,22 @@ NeoBundle 'todesking/ttodo.vim' " {{{
 
 " }}}
 
+" ftdetect {{{
 filetype on
 filetype plugin indent on
+
+" scala {{{
+" disable vim-scala ftdetect
+augroup filetypedetect
+	autocmd! BufNew,BufRead,BufNewFile *.scala
+	autocmd BufNew,BufRead,BufNewFile *.scala setfiletype scala
+
+	autocmd! BufNew,BufRead,BufNewFile *.sbt
+	autocmd BufNew,BufRead,BufNewFile *.sbt   setfiletype sbt
+augroup END
+" }}}
+
+" }}}
 
 " Profile {{{
 command! -nargs=1 ProfileStart profile start <args> | profile file * | profile func *
