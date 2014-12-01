@@ -94,29 +94,42 @@ runtime plugins.vim
 filetype on
 filetype plugin indent on
 
+augroup filetypedetect
+	autocmd!
+	runtime! ftdetect/*.vim
+augroup END
+
 function! Vimrc_setft(ft) abort " {{{
 	if(!exists('b:current_syntax'))
 		let &filetype = a:ft
 	endif
 endfunction " }}}
 
-function! Vimrc_override_ftdetect(ext, ...) abort " {{{
+function! Vimrc_override_ftdetect(pat, ...) abort " {{{
 	if a:0 == 1
 		let ft = a:1
 	else
-		let ft = a:ext
+		let ft = substitute(a:pat, '\V\^*.', '', '')
 	endif
-	let events = 'BufNew,BufRead,BufNewFile'
+	let events = 'BufNew,BufRead,BufNewFile,'
 	augroup filetypedetect
-		execute 'autocmd! ' . events . ' *.' . a:ext
-		execute 'autocmd ' . events . ' *.' . a:ext . ' call Vimrc_setft("' . ft . '")'
+		execute 'autocmd! ' . events . ' ' . a:pat
+		execute 'autocmd ' . events . ' ' . a:pat . ' call Vimrc_setft("' . ft . '")'
 	augroup END
 endfunction " }}}
 
-call Vimrc_override_ftdetect('scala')
-call Vimrc_override_ftdetect('sbt')
-call Vimrc_override_ftdetect('md', 'markdown')
-call Vimrc_override_ftdetect('coffee')
+for s:ft in [
+	\ '*.scala',
+	\ '*.sbt',
+	\ '*.md:markdown',
+	\ '*.coffee',
+	\ '*.vim',
+	\ '.vimrc:vim',
+	\ '*.c'
+\ ]
+	call call(function('Vimrc_override_ftdetect'), split(s:ft, '\V:'))
+endfor
+unlet s:ft
 " }}}
 
 " Profile {{{
