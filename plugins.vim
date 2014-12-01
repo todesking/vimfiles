@@ -258,6 +258,8 @@ unlet s:filter
 for source in ['file_mru', 'file_rec', 'buffer']
 	call unite#custom#source(source, 'converters', ['converter_remove_trash_files', 'converter_summarize_path', 'converter_hide_unimportant_path'])
 endfor
+
+call unite#custom#source('file_rec', 'max_candidates', 0)
 " }}}
 NeoBundle 'tsukkee/unite-tag' "{{{
 let g:unite_source_tag_max_name_length = 50
