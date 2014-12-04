@@ -121,6 +121,7 @@ endfunction " }}}
 for s:ft in [
 	\ '*.scala',
 	\ '*.sbt',
+	\ 'plugins.sbt:sbt',
 	\ '*.md:markdown',
 	\ '*.coffee',
 	\ '*.vim',

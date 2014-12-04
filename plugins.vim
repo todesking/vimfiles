@@ -361,6 +361,7 @@ nnoremap <C-Q>c :<C-u>exec 'Unite file_rec:'.expand('%:p:h').'/'<CR>
 nnoremap <C-Q>l :<C-u>Unite line<CR>
 nnoremap <C-Q>b :<C-u>Unite buffer<CR>
 nnoremap <C-Q>gc :<C-u>Unite git/files/conflict<CR>
+nnoremap <C-Q><C-N> :<C-u>UniteNext<CR>
 " }}}
 
 " Sources {{{
