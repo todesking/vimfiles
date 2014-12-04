@@ -125,7 +125,9 @@ for s:ft in [
 	\ '*.coffee',
 	\ '*.vim',
 	\ '.vimrc:vim',
-	\ '*.c'
+	\ '*.c',
+	\ '*.sh',
+	\ '*.yml:yaml',
 \ ]
 	call call(function('Vimrc_override_ftdetect'), split(s:ft, '\V:'))
 endfor
@@ -364,8 +366,13 @@ endfunction  " }}}
 
 " e-in-current-project
 command! -complete=customlist,Vimrc_complete_current_project_files -nargs=1 Pe :exec ':e ' . CurrentProjectInfo().path . '/' . "<args>"
+command! -complete=customlist,Vimrc_complete_current_main_project_files -nargs=1 PE :exec ':e ' . CurrentProjectInfo().main_path . '/' . "<args>"
 function! Vimrc_complete_current_project_files(ArgLead, CmdLine, CursorPos) abort " {{{
 	let prefix = CurrentProjectInfo(expand('%')).path
+	return Vimrc_complete_dir(prefix, a:ArgLead, a:CmdLine, a:CursorPos)
+endfunction " }}}
+function! Vimrc_complete_current_main_project_files(ArgLead, CmdLine, CursorPos) abort " {{{
+	let prefix = CurrentProjectInfo(expand('%')).main_path
 	return Vimrc_complete_dir(prefix, a:ArgLead, a:CmdLine, a:CursorPos)
 endfunction " }}}
 
