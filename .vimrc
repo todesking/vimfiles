@@ -129,6 +129,7 @@ for s:ft in [
 	\ '*.c',
 	\ '*.sh',
 	\ '*.yml:yaml',
+	\ '*.js:javascript',
 \ ]
 	call call(function('Vimrc_override_ftdetect'), split(s:ft, '\V:'))
 endfor
