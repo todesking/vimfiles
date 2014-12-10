@@ -123,6 +123,7 @@ for s:ft in [
 	\ '*.sbt',
 	\ 'plugins.sbt:sbt',
 	\ '*.md:markdown',
+	\ '*.markdown',
 	\ '*.coffee',
 	\ '*.vim',
 	\ '.vimrc:vim',

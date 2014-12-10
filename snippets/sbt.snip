@@ -1,0 +1,23 @@
+snippet sbt
+    name :=
+
+    organization := "com.todesking"
+
+    scalacVersion := "2.10.4"
+
+    scalacOptions ++= Seq(
+      "-deprecation",
+      "-feature",
+      "-unchecked",
+      "-Xlint",
+      "-Ywarn-dead-code",
+      "-Ywarn-numeric-widen",
+      "-Ywarn-unused",
+      "-Ywarn-unused-import",
+      "-Ywarn-value-discard"
+      // "-Xfatal-warnings"
+    )
+
+    resolvers += "linter" at "http://hairyfotr.github.io/linteRepo/releases"
+
+    addCompilerPlugin("com.foursquare.lint" %% "linter" % "0.1-SNAPSHOT")
