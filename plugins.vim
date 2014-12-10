@@ -596,72 +596,23 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 			return ''
 		endif
 	endfunction " }}}
-	let s:vimrc_build_status_version = 0
 	function! Vimrc_build_status() abort " {{{
-		if !exists('b:vimrc_build_status_last_updated')
-			let b:vimrc_build_status_last_updated = reltime()
-			let b:vimrc_build_status_last = ''
-		endif
-		if str2float(reltimestr(reltime(b:vimrc_build_status_last_updated))) < 0.5
-			return b:vimrc_build_status_last
-		endif
 		let proc = qf_sbt#get_proc()
-		if(empty(proc))
-			return ""
-		endif
-		if !proc.is_valid()
-			return "(>_<)"
-		endif
-		let build_number = proc.last_build_number
-		let messages = proc.update()
-		if !empty(messages)
-			let s:vimrc_build_status_version += 1
-		endif
-		let build_completed = proc.last_build_number > build_number
-		let s = ""
-		let error_count = 0
-		let warn_count = 0
-		if proc.state == 'startup'
-			let s .= repeat(".", s:vimrc_build_status_version % 4 + 1)
-		elseif proc.state == 'idle'
-			if proc.last_compile_result == 'success'
-				let s .= "[S]"
-			elseif proc.last_compile_result == 'error'
-				let s .= "[E]"
+		if empty(proc) " sbt not started
+			return ''
+		elseif !qf_sbt#is_valid(proc) " sbt started, but died unexpectedly.
+			return '(>_<)'
+		else
+			" throttle for prevent too many updates
+			if !exists('b:vimrc_build_status_last_updated')
+				let b:vimrc_build_status_last_updated = reltime()
 			endif
-			for e in proc.last_compile_events
-				if e.type == 'error'
-					let error_count += 1
-				elseif e.type == 'warn'
-					let warn_count += 1
-				else
-					echoerr "WARN: Unknown compile event type: " . e.type
-				endif
-			endfor
-		elseif proc.state == 'compile'
-			let s .= "[" . repeat(".", s:vimrc_build_status_version % 4 + 1) . "] "
-			if !empty(messages)
-				let m = matchlist(messages[-1], '\v^\[(error|warn|info|success)\] (.*)')
-				if empty(m)
-					let s .= messages[-1][0:20]
-				else
-					let s .= m[1][0] . ':' . m[2][0:20]
-				endif
+			if str2float(reltimestr(reltime(b:vimrc_build_status_last_updated))) > 0.5
+				call proc.update()
+				let b:vimrc_build_status_last_updated = reltime()
 			endif
+			return proc.build_status_string
 		endif
-		if build_completed
-			call proc.set_qf()
-			call Vimrc_sync_qf_to_syntastic()
-		endif
-		if error_count > 0
-			let s .= "E" . error_count
-		endif
-		if warn_count > 0
-			let s .= "W" . warn_count
-		endif
-		let b:vimrc_build_status_last_updated = reltime()
-		let b:vimrc_build_status_last = s
-		return s
 	endfunction " }}}
 " }}}
 
