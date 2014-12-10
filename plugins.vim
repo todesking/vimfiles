@@ -361,6 +361,7 @@ nnoremap <C-Q>c :<C-u>exec 'Unite file_rec:'.expand('%:p:h').'/'<CR>
 nnoremap <C-Q>l :<C-u>Unite line<CR>
 nnoremap <C-Q>b :<C-u>Unite buffer<CR>
 nnoremap <C-Q>gc :<C-u>Unite git/files/conflict<CR>
+nnoremap <C-Q><C-P> :<C-u>UnitePrevious<CR>
 nnoremap <C-Q><C-N> :<C-u>UniteNext<CR>
 " }}}
 
@@ -607,9 +608,10 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 			if !exists('b:vimrc_build_status_last_updated')
 				let b:vimrc_build_status_last_updated = reltime()
 			endif
-			if str2float(reltimestr(reltime(b:vimrc_build_status_last_updated))) > 0.5
+			if str2float(reltimestr(reltime(b:vimrc_build_status_last_updated))) > 1.0
 				call proc.update()
 				call proc.set_qf() " Set build result to quickfix
+				call  Vimrc_sync_qf_to_syntastic()
 				let b:vimrc_build_status_last_updated = reltime()
 			endif
 			return proc.build_status_string
