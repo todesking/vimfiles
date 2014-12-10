@@ -174,7 +174,7 @@ function! Vimrc_summarize_path(path)
 		let path = substitute(path, '\v\~\/\.vim\/bundle\/([^/]+)\/', '[.vim/\1] ', '')
 	endif
 	if path[0] != '['
-		let info = CurrentProjectFileInfo(a:path)
+		let info = current_project#file_info(a:path)
 		if !empty(info.name)
 			let path = '['.info['name'].'] '.info['file_path']
 		endif
@@ -355,8 +355,8 @@ nnoremap <C-Q>  <ESC>
 
 nnoremap <C-Q>u :UniteResume<CR>
 nnoremap <C-Q>o m':<C-u>Unite outline<CR>
-nnoremap <C-Q>P :<C-u>exec 'Unite file_rec:'.CurrentProjectInfo(expand('%')).main_path<CR>
-nnoremap <C-Q>p :<C-u>exec 'Unite file_rec:'.CurrentProjectInfo(expand('%')).sub_path<CR>
+nnoremap <C-Q>P :<C-u>exec 'Unite file_rec:'.current_project#info(expand('%')).main_path<CR>
+nnoremap <C-Q>p :<C-u>exec 'Unite file_rec:'.current_project#info(expand('%')).sub_path<CR>
 nnoremap <C-Q>c :<C-u>exec 'Unite file_rec:'.expand('%:p:h').'/'<CR>
 nnoremap <C-Q>l :<C-u>Unite line<CR>
 nnoremap <C-Q>b :<C-u>Unite buffer<CR>
@@ -562,8 +562,8 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 				\ 'component': {
 				\   'readonly': '%{&readonly?has("gui_running")?"":"ro":""}',
 				\   'modified': '%{&modified?"+":""}',
-				\   'project_name': '%{CurrentProjectInfo().name}',
-				\   'project_path': '%{Vimrc_summarize_project_path(CurrentProjectFileInfo(expand(''%''))["file_path"])}',
+				\   'project_name': '%{current_project#info().name}',
+				\   'project_path': '%{Vimrc_summarize_project_path(current_project#file_info(expand(''%''))["file_path"])}',
 				\   'charinfo': '%{printf("%6s",GetB())}',
 				\ },
 				\ 'component_function': {
@@ -605,7 +605,7 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 		if str2float(reltimestr(reltime(b:vimrc_build_status_last_updated))) < 0.5
 			return b:vimrc_build_status_last
 		endif
-		let proc = SbtGetProc()
+		let proc = qf_sbt#get_proc()
 		if(empty(proc))
 			return ""
 		endif
@@ -797,7 +797,7 @@ NeoBundle 'grep.vim' "{{{
 NeoBundle 'mileszs/ack.vim' "{{{
 	let g:ackprg = 'ag --nogroup --nocolor --column'
 	let g:ack_qhandler = ""
-	command! -nargs=1 Pag execute 'Ack ' . <q-args> . ' ' . CurrentProjectInfo().path
+	command! -nargs=1 Pag execute 'Ack ' . <q-args> . ' ' . current_project#info().path
 " }}}
 
 NeoBundle 'Shougo/vimfiler.vim'

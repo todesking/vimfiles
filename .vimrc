@@ -368,14 +368,14 @@ function! Vimrc_complete_dir(prefix, ArgLead, CmdLine, CursorPos) abort " {{{
 endfunction  " }}}
 
 " e-in-current-project
-command! -complete=customlist,Vimrc_complete_current_project_files -nargs=1 Pe :exec ':e ' . CurrentProjectInfo().path . '/' . "<args>"
-command! -complete=customlist,Vimrc_complete_current_main_project_files -nargs=1 PE :exec ':e ' . CurrentProjectInfo().main_path . '/' . "<args>"
+command! -complete=customlist,Vimrc_complete_current_project_files -nargs=1 Pe :exec ':e ' . current_project#info().path . '/' . "<args>"
+command! -complete=customlist,Vimrc_complete_current_main_project_files -nargs=1 PE :exec ':e ' . current_project#info().main_path . '/' . "<args>"
 function! Vimrc_complete_current_project_files(ArgLead, CmdLine, CursorPos) abort " {{{
-	let prefix = CurrentProjectInfo(expand('%')).path
+	let prefix = current_project#info(expand('%')).path
 	return Vimrc_complete_dir(prefix, a:ArgLead, a:CmdLine, a:CursorPos)
 endfunction " }}}
 function! Vimrc_complete_current_main_project_files(ArgLead, CmdLine, CursorPos) abort " {{{
-	let prefix = CurrentProjectInfo(expand('%')).main_path
+	let prefix = current_project#info(expand('%')).main_path
 	return Vimrc_complete_dir(prefix, a:ArgLead, a:CmdLine, a:CursorPos)
 endfunction " }}}
 
@@ -384,13 +384,13 @@ command! Dox :Unite file:.dox/ -default-action=rec
 " }}}
 
 " P! {{{
-command! -bang -nargs=+ P :exec ':! cd ' . CurrentProjectInfo().main_path . ' && ' . <q-args>
+command! -bang -nargs=+ P :exec ':! cd ' . current_project#info().main_path . ' && ' . <q-args>
 " }}}
 
 " Rename file {{{
 " http://vim-users.jp/2009/05/hack17/
 command! -nargs=1 -complete=file Rename f <args>|call delete(expand('#'))|w
-command! -complete=customlist,Vimrc_complete_current_project_files -nargs=1 PRename exec "f " . CurrentProjectInfo().main_path . "/<args>"|call delete(expand('#'))|w
+command! -complete=customlist,Vimrc_complete_current_project_files -nargs=1 PRename exec "f " . current_project#info().main_path . "/<args>"|call delete(expand('#'))|w
 command! -complete=customlist,Vimrc_complete_current_dir -nargs=1 CRename exec "f ".expand('%:p:h')."/<args>"|call delete(expand('#'))|w
 " }}}
 
@@ -405,7 +405,7 @@ endfunction
 
 " Status line {{{
 function! Vimrc_current_project()
-	let project = CurrentProjectInfo()
+	let project = current_project#info()
 	if project['name']
 		return '['.project['name'].'] '.project['path']
 	else
@@ -485,7 +485,7 @@ endfunction
 command! PTags call Vimrc_PTags()
 
 function! Vimrc_PTags() abort " {{{
-	let pinfo = CurrentProjectInfo()
+	let pinfo = current_project#info()
 	execute '!cd ' . pinfo.path . ' && ctags -R .'
 endfunction " }}}
 
@@ -517,7 +517,7 @@ endfunction " }}}
 " }}}
 
 " checkstyle to qf {{{
-command! -nargs=1 -complete=customlist,Vimrc_complete_current_project_files LoadCheckStyle call LoadCheckStyle(CurrentProjectInfo().path . '/' . <q-args>)
+command! -nargs=1 -complete=customlist,Vimrc_complete_current_project_files LoadCheckStyle call LoadCheckStyle(current_project#info().path . '/' . <q-args>)
 
 function! LoadCheckStyle(xmlfile) abort " {{{
     let xml = webapi#xml#parseFile(a:xmlfile)
