@@ -609,8 +609,11 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 				let b:vimrc_build_status_last_updated = reltime()
 			endif
 			if str2float(reltimestr(reltime(b:vimrc_build_status_last_updated))) > 1.0
+				let build_number = proc.last_build_number
 				call proc.update()
-				call proc.set_qf() " Set build result to quickfix
+				if build_number < proc.last_build_number
+					call proc.set_qf() " Set build result to quickfix
+				endif
 				call  Vimrc_sync_qf_to_syntastic()
 				let b:vimrc_build_status_last_updated = reltime()
 			endif
