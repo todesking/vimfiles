@@ -608,7 +608,7 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 			if !exists('b:vimrc_build_status_last_updated')
 				let b:vimrc_build_status_last_updated = reltime()
 			endif
-			if str2float(reltimestr(reltime(b:vimrc_build_status_last_updated))) > 1.0
+			if str2float(reltimestr(reltime(b:vimrc_build_status_last_updated))) > 0.5
 				let build_number = proc.last_build_number
 				call proc.update()
 				if build_number < proc.last_build_number
