@@ -629,6 +629,7 @@ endif
 
 NeoBundle 'scrooloose/syntastic' " {{{
 	let g:syntastic_scala_checkers=['fsc']
+	command! SyntasticSetQF call setqflist(g:SyntasticLoclist.current().getRaw())
 " }}}
 
 " Colors {{{
