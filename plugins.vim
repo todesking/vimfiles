@@ -1,7 +1,5 @@
 " vim:foldmethod=marker
 
-" plugins/filetypes {{{
-
 " Library {{{
 NeoBundle 'Shougo/vimproc.vim', {
       \ 'build' : {
@@ -146,7 +144,7 @@ NeoBundle 'Shougo/unite.vim' "{{{
 let g:unite_enable_start_insert = 1
 let g:unite_update_time = 100
 let g:unite_cursor_line_highlight='CursorLine'
-let g:unite_redraw_hold_candidates=100000
+let g:unite_redraw_hold_candidates=300000
 
 let g:unite_source_rec_max_cache_files = 50000
 
@@ -764,6 +762,4 @@ NeoBundle 'Shougo/vimshell.vim' "{{{
 
 NeoBundle 'todesking/ttodo.vim' " {{{
 	let &titlestring='[TODO] %{g:todo_current_doing}'
-" }}}
-
 " }}}

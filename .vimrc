@@ -131,6 +131,7 @@ for s:ft in [
 	\ '*.sh',
 	\ '*.yml:yaml',
 	\ '*.js:javascript',
+	\ '*.java',
 \ ]
 	call call(function('Vimrc_override_ftdetect'), split(s:ft, '\V:'))
 endfor
@@ -368,16 +369,8 @@ function! Vimrc_complete_dir(prefix, ArgLead, CmdLine, CursorPos) abort " {{{
 endfunction  " }}}
 
 " e-in-current-project
-command! -complete=customlist,Vimrc_complete_current_project_files -nargs=1 Pe :exec ':e ' . current_project#info().path . '/' . "<args>"
-command! -complete=customlist,Vimrc_complete_current_main_project_files -nargs=1 PE :exec ':e ' . current_project#info().main_path . '/' . "<args>"
-function! Vimrc_complete_current_project_files(ArgLead, CmdLine, CursorPos) abort " {{{
-	let prefix = current_project#info(expand('%')).path
-	return Vimrc_complete_dir(prefix, a:ArgLead, a:CmdLine, a:CursorPos)
-endfunction " }}}
-function! Vimrc_complete_current_main_project_files(ArgLead, CmdLine, CursorPos) abort " {{{
-	let prefix = current_project#info(expand('%')).main_path
-	return Vimrc_complete_dir(prefix, a:ArgLead, a:CmdLine, a:CursorPos)
-endfunction " }}}
+command! -complete=customlist,current_project#complete -nargs=1 Pe :exec ':e ' . current_project#info().path . '/' . "<args>"
+command! -complete=customlist,current_project#complete_main -nargs=1 PE :exec ':e ' . current_project#info().main_path . '/' . "<args>"
 
 " Dox {{{
 command! Dox :Unite file:.dox/ -default-action=rec
