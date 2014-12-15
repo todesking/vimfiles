@@ -1,4 +1,7 @@
 " vim:foldmethod=marker
+
+scriptencoding utf-8
+
 let $RUBY_DLL=$HOME.'/.rbenv/versions/2.1.1/lib/libruby.dylib'
 
 " NeoBundle {{{
@@ -285,7 +288,6 @@ function! My_foldtext()
 	let dots=repeat('.',float2nr(ceil(foldlength/10.0)))
 
 	return printf('%-'.alignment.'.'.alignment.'s %3d ',line.' '.dots,foldlength)
-	return printf('%-'.alignment.'.'.alignment.'s   [%4d  Lv%-2d]%s',line.'...',foldlength,v:foldlevel,v:folddashes)
 endfunction
 function! s:fold_navi() "{{{
 if foldlevel('.')
@@ -354,6 +356,7 @@ function! Vimrc_complete_current_dir(ArgLead, CmdLine, CursorPos)
 endfunction
 " }}}
 
+" @vimlint(EVL103, 1)
 function! Vimrc_complete_dir(prefix, ArgLead, CmdLine, CursorPos) abort " {{{
 	let prefix = a:prefix . '/'
 	let candidates = glob(prefix.a:ArgLead.'*', 1, 1)
@@ -367,6 +370,7 @@ function! Vimrc_complete_dir(prefix, ArgLead, CmdLine, CursorPos) abort " {{{
 	endfor
 	return result
 endfunction  " }}}
+" @vimlint(EVL103, 0)
 
 " e-in-current-project
 command! -complete=customlist,current_project#complete -nargs=1 Pe :exec ':e ' . current_project#info().path . '/' . "<args>"
