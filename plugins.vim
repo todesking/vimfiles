@@ -294,6 +294,9 @@ call unite#custom#source('tag','converters', ['converter_tag'])
 " }}}
 NeoBundle 'Shougo/unite-outline' "{{{
 let g:unite_source_outline_scala_show_all_declarations = 1
+let g:unite_source_outline_info = {
+\  'ref-man': unite#sources#outline#defaults#man#outline_info(),
+\ }
 " }}}
 NeoBundle 'sgur/unite-qf' "{{{
 nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview -no-split -winheight=30<CR>
