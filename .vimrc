@@ -100,6 +100,11 @@ filetype plugin indent on
 augroup filetypedetect
 	autocmd!
 	runtime! ftdetect/*.vim
+
+	autocmd BufNewFile,BufRead *
+		\ if !did_filetype() && expand("<amatch>") !~ g:ft_ignore_pat
+		\ | runtime! scripts.vim | endif
+au StdinReadPost * if !did_filetype() | runtime! scripts.vim | endif
 augroup END
 
 function! Vimrc_setft(ft) abort " {{{
@@ -126,6 +131,7 @@ for s:ft in [
 	\ '*.sbt',
 	\ 'plugins.sbt:sbt',
 	\ '*.md:markdown',
+	\ '*.mkd:markdown',
 	\ '*.markdown',
 	\ '*.coffee',
 	\ '*.vim',
@@ -202,20 +208,20 @@ function! s:open_current_fold()
 	endif
 endfunction
 
-call s:register_jump_key('n')
-call s:register_jump_key('N')
-call s:register_jump_key('*')
-call s:register_jump_key('#')
-call s:register_jump_key('g*')
-call s:register_jump_key('g#')
-call s:register_jump_key('{')
-call s:register_jump_key('}')
+" call s:register_jump_key('n')
+" call s:register_jump_key('N')
+" call s:register_jump_key('*')
+" call s:register_jump_key('#')
+" call s:register_jump_key('g*')
+" call s:register_jump_key('g#')
+" call s:register_jump_key('{')
+" call s:register_jump_key('}')
 " call s:register_jump_key('<C-I>')
 " call s:register_jump_key('<C-O>')
-call s:register_jump_key('zz')
-call s:register_jump_key('H')
-call s:register_jump_key('M')
-call s:register_jump_key('L')
+" call s:register_jump_key('zz')
+" call s:register_jump_key('H')
+" call s:register_jump_key('M')
+" call s:register_jump_key('L')
 " call s:register_jump_key('<C-T>')
 " call s:register_jump_key('<C-]>')
 

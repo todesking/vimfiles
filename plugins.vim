@@ -51,13 +51,19 @@ NeoBundle "osyo-manga/vim-brightest" " {{{
 " }}}
 
 NeoBundle 'haya14busa/incsearch.vim' " {{{
+	let g:incsearch#consistent_n_direction = 1
 	map /  <Plug>(incsearch-forward)
 	map ?  <Plug>(incsearch-backward)
 	map g/ <Plug>(incsearch-stay)
-	let g:incsearch#consistent_n_direction = 1
+	map   n <Plug>(incsearch-nohl-n)
+	map   N <Plug>(incsearch-nohl-N)
+	nmap  n <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)
+	nmap  N <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)
 " }}}
 
 NeoBundle 'deris/vim-shot-f'
+
+NeoBundle 'osyo-manga/vim-anzu'
 " }}}
 
 " Textobj {{{
