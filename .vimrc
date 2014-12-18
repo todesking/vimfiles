@@ -382,8 +382,8 @@ endfunction  " }}}
 command! -complete=customlist,current_project#complete -nargs=1 Pe :exec ':e ' . current_project#info().path . '/' . "<args>"
 command! -complete=customlist,current_project#complete_main -nargs=1 PE :exec ':e ' . current_project#info().main_path . '/' . "<args>"
 
-" Dox {{{
-command! Dox :Unite file:.dox/ -default-action=rec
+" Nyandoc {{{
+command! Nyandoc :Unite file:.nyandoc/ -default-action=rec
 " }}}
 
 " P! {{{

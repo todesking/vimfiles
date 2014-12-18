@@ -709,6 +709,7 @@ NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'ekalinin/Dockerfile.vim'
 " Vim " {{{
 NeoBundle 'syngan/vim-vimlint', {'depends' : 'ynkdir/vim-vimlparser'}
+let g:vim_indent_cont = 0
 " }}}
 
 " }}}
