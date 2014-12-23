@@ -621,8 +621,11 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 				if build_number < proc.last_build_number
 					call proc.set_qf() " Set build result to quickfix
 				endif
-				call  Vimrc_sync_qf_to_syntastic()
 				let b:vimrc_build_status_last_updated = reltime()
+			endif
+			if !exists('w:Vimrc_build_status_sync') || w:Vimrc_build_status_sync != proc.last_build_number
+				call  Vimrc_sync_qf_to_syntastic()
+				let w:Vimrc_build_status_sync = proc.last_build_number
 			endif
 			return proc.build_status_string
 		endif
@@ -651,6 +654,8 @@ NeoBundle 'w0ng/vim-hybrid'
 " }}}
 
 " Filetypes {{{
+
+NeoBundle 'wting/rust.vim'
 
 " ruby {{{
 NeoBundle 'tpope/vim-rvm' "{{{
