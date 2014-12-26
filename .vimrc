@@ -55,6 +55,7 @@ set history=500
 set nobackup
 
 set directory=$HOME/.vim/swp
+set noswapfile
 
 set foldtext=My_foldtext()
 let s:foldcolumn_default=10
@@ -68,6 +69,9 @@ set ttimeout
 set ttimeoutlen=100
 
 set helplang=en,ja
+
+set showmatch
+set matchtime=1
 
 let $PATH=substitute("~/bin:~/local/bin:~/.rbenv/shims:~/.svm/current/rt/bin:", "\\~", $HOME, "g").$PATH
 " }}}
@@ -191,6 +195,7 @@ nnoremap k gk
 
 nnoremap \8 :<C-U>setlocal tabstop=8<CR>
 nnoremap \4 :<C-U>setlocal tabstop=4<CR>
+nnoremap Y y$
 
 set visualbell
 set t_vb=
