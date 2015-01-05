@@ -657,6 +657,8 @@ NeoBundle 'w0ng/vim-hybrid'
 
 NeoBundle 'wting/rust.vim'
 
+NeoBundle 'GEverding/vim-hocon'
+
 " ruby {{{
 NeoBundle 'tpope/vim-rvm' "{{{
 " }}}
