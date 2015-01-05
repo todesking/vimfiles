@@ -1,4 +1,5 @@
 " vim:foldmethod=marker
+scriptencoding utf-8
 
 " Library {{{
 NeoBundle 'Shougo/vimproc.vim', {
@@ -651,6 +652,7 @@ NeoBundle 'newspaper.vim'
 NeoBundle 'Zenburn'
 NeoBundle 'ciaranm/inkpot'
 NeoBundle 'w0ng/vim-hybrid'
+NeoBundle 'chriskempson/vim-tomorrow-theme'
 " }}}
 
 " Filetypes {{{
