@@ -70,9 +70,6 @@ set ttimeoutlen=100
 
 set helplang=en,ja
 
-set showmatch
-set matchtime=1
-
 let $PATH=substitute("~/bin:~/local/bin:~/.rbenv/shims:~/.svm/current/rt/bin:", "\\~", $HOME, "g").$PATH
 " }}}
 
