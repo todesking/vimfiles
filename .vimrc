@@ -232,7 +232,17 @@ try
 catch
 endtry
 nnoremap <silent> <leader>w :let &wrap=!&wrap<CR>:set wrap?<CR>
-nnoremap <silent>_ :let &hlsearch=!&hlsearch<CR>:set hlsearch?<CR>
+nnoremap <silent>_ :<C-u>call Vimrc_toggle_highlight()<CR>
+
+function! Vimrc_toggle_highlight() abort " {{{
+	if(&hlsearch)
+		set nohlsearch
+		BrightestDisable
+	else
+		set hlsearch
+		BrightestEnable
+	endif
+endfunction " }}}
 " }}}
 
 autocmd FileType * setlocal formatoptions-=ro
