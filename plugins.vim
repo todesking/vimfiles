@@ -260,9 +260,10 @@ call unite#define_filter(s:filter)
 unlet s:filter
 " }}}
 
-for source in ['file_mru', 'file_rec', 'buffer']
-	call unite#custom#source(source, 'converters', ['converter_remove_trash_files', 'converter_summarize_path', 'converter_hide_unimportant_path'])
+for g:source in ['file_mru', 'file_rec', 'buffer']
+	call unite#custom#source(g:source, 'converters', ['converter_remove_trash_files', 'converter_summarize_path', 'converter_hide_unimportant_path'])
 endfor
+unlet g:source
 
 call unite#custom#source('file_rec', 'max_candidates', 0)
 " }}}
@@ -468,21 +469,25 @@ let s:sorter_smart = {
 function! s:sorter_smart.filter(candidates, context)
 	let do_nothing = 0
 				\ || len(a:context.input) == 0
-				\ || len(a:candidates) > 100
-				\ || a:context.source.name == 'file_mru'
+				\ || len(a:candidates) > 1000
 	if do_nothing
 		return a:candidates
 	endif
 
+	let preserve_rough_order = a:context.source.name == 'file_mru'
+
 	let keywords = split(a:context.input, '\s\+')
+	let i = 0
 	for candidate in a:candidates
+		let prefix = preserve_rough_order ? printf('%05d', i / 5) : ''
 		let candidate.filter__sort_val =
-					\ s:sorter_smart_sort_val(candidate.word, keywords)
+					\ s:sorter_smart_sort_val(prefix, candidate.word, keywords)
+		let i += 1
 	endfor
 	return unite#util#sort_by(a:candidates, 'v:val.filter__sort_val')
 endfunction
-function! s:sorter_smart_sort_val(text, keywords)
-	let sort_val = ''
+function! s:sorter_smart_sort_val(prefix, text, keywords)
+	let sort_val = a:prefix
 	let text_without_keywords = a:text
 	for kw in a:keywords
 		let sort_val .= printf('%05d', 100 - s:matches(a:text, kw)).'_'
@@ -518,6 +523,10 @@ let g:neocomplete#force_overwrite_completefunc = 1
 let g:neocomplete#enable_prefetch=1
 let g:neocomplete#enable_smart_case = 1
 let g:neocomplete#lock_iminsert = 1
+if !exists('g:neocomplete#keyword_patterns')
+	let g:neocomplete#keyword_patterns = {}
+endif
+let g:neocomplete#keyword_patterns.scala = '\v\h\w*%(\.\h\w*)*'
 augroup vimrc-neocomplete
 	autocmd!
 	autocmd CursorMovedI * call Vimrc_neocomplete_control()
@@ -653,6 +662,7 @@ NeoBundle 'Zenburn'
 NeoBundle 'ciaranm/inkpot'
 NeoBundle 'w0ng/vim-hybrid'
 NeoBundle 'chriskempson/vim-tomorrow-theme'
+NeoBundle 'endel/vim-github-colorscheme'
 " }}}
 
 " Filetypes {{{

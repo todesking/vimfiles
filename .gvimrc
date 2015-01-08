@@ -8,7 +8,7 @@ if has('gui')
 	set noballooneval
 	set guioptions=erL
 
-	colorscheme molokai
+	colorscheme github
 	highlight VertSplit guifg=#ffff00
 	highlight PmenuSel guibg=#444444 guifg=#D8D8D2
 	highlight CursorLine gui=bold guibg=NONE guifg=NONE
