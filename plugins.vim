@@ -127,6 +127,7 @@ NeoBundle 'Shougo/neosnippet' " {{{
 " }}}
 NeoBundle "tpope/vim-repeat"
 NeoBundle "mbbill/undotree"
+NeoBundle 'tpope/vim-commentary'
 " }}}
 
 " Utilities {{{
