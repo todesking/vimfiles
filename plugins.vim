@@ -719,14 +719,21 @@ NeoBundle 'taka84u9/vim-ref-ri', {'rev': 'master'} "{{{
 " }}}
 " }}}
 
-NeoBundle 'grep.vim' "{{{
-	let Grep_OpenQuickfixWindow = 0
-" }}}
-
 NeoBundle 'mileszs/ack.vim' "{{{
 	let g:ackprg = 'ag --nogroup --nocolor --column'
 	let g:ack_qhandler = ""
-	command! -nargs=1 Pag execute 'Ack ' . <q-args> . ' ' . current_project#info().path
+	command! -nargs=+ Pag call Vimrc_ag(current_project#info().path, <f-args>)
+	command! -nargs=+ PAg call Vimrc_ag(current_project#info().main_path, <f-args>)
+	function! Vimrc_ag(path, ...) abort " {{{
+		if a:0 == 1
+			let path = a:path
+			let query = a:1
+		else
+			let path = a:path . '/' . a:2
+			let query = a:1
+		endif
+		execute 'Ack ' . query . ' ' . path
+	endfunction " }}}
 " }}}
 
 NeoBundle 'Shougo/vimfiler.vim'
