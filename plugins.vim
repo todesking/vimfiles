@@ -301,6 +301,9 @@ let g:unite_source_outline_scala_show_all_declarations = 1
 let g:unite_source_outline_info = {
 \  'ref-man': unite#sources#outline#defaults#man#outline_info(),
 \ }
+let s:x = unite#sources#outline#modules#ctags#import()
+let s:x.exe .= ' --languages=+Java'
+unlet s:x
 " }}}
 NeoBundle 'sgur/unite-qf' "{{{
 nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview -no-split -winheight=30<CR>
