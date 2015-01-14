@@ -550,8 +550,14 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 			return b:vimrc_statusline_git_branch
 		endif
 		if exists("*fugitive#head")
-			let _ = fugitive#head()
-			let s = strlen(_) ? (has('gui_running')?'':'†')._ : ''
+			let head = fugitive#head()
+			if exists('*gitreview#get_base_commit')
+				let base_commit_id = gitreview#get_base_commit(expand('%'), 1)
+				if len(base_commit_id)
+					let head = base_commit_id . '..' . head
+				endif
+			endif
+			let s = strlen(head) ? '(' . head . ')': ''
 			let b:vimrc_statusline_git_branch = s
 			let b:vimrc_statusline_git_branch_updated_at = reltime()
 			return s
@@ -579,7 +585,7 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 				let b:vimrc_build_status_last_updated = reltime()
 			endif
 			if !exists('w:Vimrc_build_status_sync') || w:Vimrc_build_status_sync != proc.last_build_number
-				call  Vimrc_sync_qf_to_syntastic()
+				SyntasticSetQF
 				let w:Vimrc_build_status_sync = proc.last_build_number
 			endif
 			return proc.build_status_string
@@ -698,7 +704,7 @@ NeoBundle 'airblade/vim-gitgutter' " {{{
 	endfunction
 	function! s:vimrc_gitgutter_bufenter()
 		if !exists('b:vimrc_gitgutter_version') || b:vimrc_gitgutter_version != g:vimrc_gitgutter_version
-			GitGutter
+			call gitreview#gitgutter#process_buffer(bufnr(''), 0)
 			let b:vimrc_gitgutter_version = g:vimrc_gitgutter_version
 		endif
 	endfunction
@@ -708,6 +714,7 @@ NeoBundle 'airblade/vim-gitgutter' " {{{
 	augroup END
 
 " }}}
+NeoBundle 'todesking/gitreview.vim'
 " }}}
 
 " ref {{{
