@@ -376,6 +376,7 @@ nnoremap <C-Q>c :<C-u>exec 'Unite file_rec:'.expand('%:p:h').'/'<CR>
 nnoremap <C-Q>l :<C-u>Unite line<CR>
 nnoremap <C-Q>b :<C-u>Unite buffer<CR>
 nnoremap <C-Q>gc :<C-u>Unite git/files/conflict<CR>
+nnoremap <C-Q>gf :<C-u>Unite gitreview/changed_files<CR>
 nnoremap <C-Q><C-P> :<C-u>UnitePrevious<CR>
 nnoremap <C-Q><C-N> :<C-u>UniteNext<CR>
 " }}}
@@ -716,7 +717,10 @@ NeoBundle 'airblade/vim-gitgutter' " {{{
 	augroup END
 
 " }}}
-NeoBundle 'todesking/gitreview.vim'
+NeoBundle 'todesking/gitreview.vim' " {{{
+nmap ,gg <Plug>(gitreview-gitgutter-next-sign)
+nmap ,gp <Plug>(gitreview-gitgutter-prev-sign)
+" }}}
 " }}}
 
 " ref {{{
