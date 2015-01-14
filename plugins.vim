@@ -163,7 +163,7 @@ call unite#custom#profile('default', 'context', {'custom_rec_ignore_directory_pa
 " }}}
 " unite-file_mru {{{
 let g:unite_source_file_mru_limit=1000
-let g:unite_source_file_mru_time_format=""
+let g:unite_source_file_mru_time_format=''
 let g:unite_source_mru_do_validate=0
 " }}}
 " summarize-path {{{
@@ -174,12 +174,12 @@ let s:home_path = expand('~')
 function! Vimrc_summarize_path(path)
 	let path = simplify(a:path)
 	let path = substitute(path, s:home_path, '~', '')
-	if path =~ '\v\.rbenv|gems|\.vim'
+	if path =~# '\v\.rbenv|gems|\.vim'
 		let path = substitute(path, '\v\~\/.rbenv\/versions\/([^/]+)\/', '[rbenv:\1] ', '')
 		let path = substitute(path, '\v[\/ ]lib\/ruby\/gems\/([^/]+)\/gems\/([^/]+)\/', '[gem:\2] ', '')
 		let path = substitute(path, '\v\~\/\.vim\/bundle\/([^/]+)\/', '[.vim/\1] ', '')
 	endif
-	if path[0] != '['
+	if path[0] !=# '['
 		let info = current_project#file_info(a:path)
 		if !empty(info.name)
 			let path = '['.info['name'].'] '.info['file_path']
