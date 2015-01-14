@@ -6,8 +6,6 @@ let g:loaded_syntastic_vim_vint_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-let g:syntastic_vim_checkers = ['vint']
-
 function! SyntaxCheckers_vim_vint_IsAvailable() abort dict " {{{
 	return executable(self.getExec())
 endfunction " }}}
