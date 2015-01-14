@@ -2,7 +2,7 @@
 
 scriptencoding utf-8
 
-let $RUBY_DLL=$HOME.'/.rbenv/versions/2.1.1/lib/libruby.dylib'
+let $RUBY_DLL=$HOME.'/.rbenv/versions/2.2.0/lib/libruby.dylib'
 
 " NeoBundle {{{
 set nocompatible               " be iMproved

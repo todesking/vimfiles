@@ -623,7 +623,9 @@ NeoBundle 'tpope/vim-rbenv'
 NeoBundle 'vim-ruby/vim-ruby'
 NeoBundle 'tpope/vim-rails'
 NeoBundle 'rhysd/vim-textobj-ruby'
-NeoBundle 'todesking/ruby_hl_lvar.vim'
+NeoBundle 'todesking/ruby_hl_lvar.vim' " {{{
+	let g:ruby_hl_lvar_show_warnings = 1
+" }}}
 " RSense.vim {{{
 let g:rsenseHome = expand('~/local/rsense/')
 if exists('*RSenseInstalled') && RSenseInstalled()
