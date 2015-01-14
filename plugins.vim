@@ -605,6 +605,10 @@ NeoBundle 'scrooloose/syntastic' " {{{
 	command! SyntasticSetQF call setqflist(g:SyntasticLoclist.current().getRaw())
 " }}}
 
+NeoBundle 'todesking/vint-syntastic'
+let g:syntastic_vim_checkers = ['vint']
+
+
 " Colors {{{
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'pyte'
@@ -683,8 +687,6 @@ NeoBundle 'ekalinin/Dockerfile.vim'
 " NeoBundle 'syngan/vim-vimlint', {'depends' : 'ynkdir/vim-vimlparser'}
 
 let g:vim_indent_cont = 0
-let g:syntastic_vim_checkers = ['vint']
-
 " }}}
 
 " }}}
