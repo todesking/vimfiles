@@ -720,6 +720,7 @@ NeoBundle 'airblade/vim-gitgutter' " {{{
 NeoBundle 'todesking/gitreview.vim' " {{{
 nmap ,gg <Plug>(gitreview-gitgutter-next-sign)
 nmap ,gp <Plug>(gitreview-gitgutter-prev-sign)
+nmap ,gd :<C-u>GitReviewDiff<CR>
 " }}}
 " }}}
 
