@@ -324,7 +324,7 @@ NeoBundle 'basyura/unite-rails' "{{{
 	nnoremap <C-Q>rh :<C-u>Unite rails/helper<CR>
 " }}}
 NeoBundle 'osyo-manga/unite-fold' " {{{
-	call unite#custom_filters('fold',['matcher_default', 'sorter_nothing', 'converter_default'])
+	" call unite#custom_filters('fold',['matcher_default', 'sorter_nothing', 'converter_default'])
 	function! g:Vimrc_unite_fold_foldtext(bufnr, val)
 		if has_key(a:val, 'word')
 			return a:val.word
@@ -553,7 +553,7 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 		if exists('*gitreview#fugitive#branch_string')
 			let s = gitreview#fugitive#branch_string()
 			if len(s)
-				let s .= '(' . s . ')'
+				let s = '(' . s . ')'
 			endif
 			let b:vimrc_statusline_git_branch = s
 			let b:vimrc_statusline_git_branch_updated_at = reltime()
@@ -563,29 +563,17 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 	endfunction " }}}
 	function! Vimrc_build_status() abort " {{{
 		let proc = qf_sbt#get_proc()
-		if empty(proc) " sbt not started
+		if !qf_sbt#is_valid(proc)
 			return ''
-		elseif !qf_sbt#is_valid(proc) " sbt started, but died unexpectedly.
-			return '(>_<)'
-		else
-			" throttle for prevent too many updates
-			if !exists('b:vimrc_build_status_last_updated')
-				let b:vimrc_build_status_last_updated = reltime()
-			endif
-			if str2float(reltimestr(reltime(b:vimrc_build_status_last_updated))) > 0.5
-				let build_number = proc.last_build_number
-				call proc.update()
-				if build_number < proc.last_build_number
-					call proc.set_qf() " Set build result to quickfix
-				endif
-				let b:vimrc_build_status_last_updated = reltime()
-			endif
-			if !exists('w:Vimrc_build_status_sync') || w:Vimrc_build_status_sync != proc.last_build_number
-				SyntasticSetQF
-				let w:Vimrc_build_status_sync = proc.last_build_number
-			endif
-			return proc.build_status_string
 		endif
+		let build_number = proc.last_build_number
+		let status = qf_sbt#status_string(1)
+		let sync = [proc.path, proc.last_build_number]
+		if !exists('w:Vimrc_build_status_sync') || w:Vimrc_build_status_sync != sync
+			SyntasticSetQF
+			let w:Vimrc_build_status_sync = sync
+		endif
+		return status
 	endfunction " }}}
 " }}}
 
@@ -736,16 +724,19 @@ NeoBundle 'taka84u9/vim-ref-ri', {'rev': 'master'} "{{{
 
 NeoBundle 'mileszs/ack.vim' "{{{
 	let g:ackprg = 'ag --nogroup --nocolor --column'
-	let g:ack_qhandler = ""
-	command! -nargs=+ Pag call Vimrc_ag(current_project#info().path, <f-args>)
-	command! -nargs=+ PAg call Vimrc_ag(current_project#info().main_path, <f-args>)
-	function! Vimrc_ag(path, ...) abort " {{{
-		if a:0 == 1
+	let g:ack_qhandler = ''
+	command! -nargs=* Pag call Vimrc_ag(current_project#info().path, [<f-args>])
+	command! -nargs=* PAg call Vimrc_ag(current_project#info().main_path, [<f-args>])
+	function! Vimrc_ag(path, args) abort " {{{
+		if len(a:args) == 0
 			let path = a:path
-			let query = a:1
+			let query = expand('<cword>')
+		elseif len(a:args) == 1
+			let path = a:path
+			let query = a:args[0]
 		else
-			let path = a:path . '/' . a:2
-			let query = a:1
+			let path = a:path . '/' . a:args[1]
+			let query = a:args[0]
 		endif
 		execute 'Ack ' . query . ' ' . path
 	endfunction " }}}
