@@ -510,27 +510,6 @@ endfunction " }}}
 command! S call SourceThis()
 " }}}
 
-" qf to syntastic {{{
-function! Vimrc_sync_qf_to_syntastic() abort " {{{
-	if g:SyntasticLoclist.current().getRaw() == getqflist()
-		return
-	endif
-	let notifier = g:SyntasticNotifiers.Instance()
-    call notifier.reset(g:SyntasticLoclist.current())
-	call b:syntastic_loclist.destroy()
-
-	let loclist = g:SyntasticLoclist.New(getqflist())
-	call loclist.deploy()
-	call Vimrc_syntastic_notifier_try_refresh(notifier, loclist)
-endfunction " }}}
-function! Vimrc_syntastic_notifier_try_refresh(notifier, loclist) " {{{
-	try
-		call a:notifier.refresh(a:loclist)
-	catch /^Vim\%((\a\+)\)\=:E523/
-	endtry
-endfunction " }}}
-" }}}
-
 " checkstyle to qf {{{
 command! -nargs=1 -complete=customlist,Vimrc_complete_current_project_files LoadCheckStyle call LoadCheckStyle(current_project#info().path . '/' . <q-args>)
 

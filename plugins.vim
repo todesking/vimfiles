@@ -557,6 +557,7 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 			endif
 			let b:vimrc_statusline_git_branch = s
 			let b:vimrc_statusline_git_branch_updated_at = reltime()
+			return s
 		else
 			return ''
 		endif
@@ -570,7 +571,7 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 		let status = qf_sbt#status_string(1)
 		let sync = [proc.path, proc.last_build_number]
 		if !exists('w:Vimrc_build_status_sync') || w:Vimrc_build_status_sync != sync
-			SyntasticSetQF
+			call Vimrc_sync_qf_to_syntastic()
 			let w:Vimrc_build_status_sync = sync
 		endif
 		return status
@@ -587,6 +588,28 @@ endif
 NeoBundle 'scrooloose/syntastic' " {{{
 	let g:syntastic_scala_checkers=['fsc']
 	command! SyntasticSetQF call setqflist(g:SyntasticLoclist.current().getRaw())
+
+	" qf to syntastic {{{
+	function! Vimrc_sync_qf_to_syntastic() abort " {{{
+		if g:SyntasticLoclist.current().getRaw() == getqflist()
+			return
+		endif
+		let notifier = g:SyntasticNotifiers.Instance()
+		call notifier.reset(g:SyntasticLoclist.current())
+		call b:syntastic_loclist.destroy()
+
+		let loclist = g:SyntasticLoclist.New(getqflist())
+		call loclist.deploy()
+		call Vimrc_syntastic_notifier_try_refresh(notifier, loclist)
+	endfunction " }}}
+	function! Vimrc_syntastic_notifier_try_refresh(notifier, loclist) " {{{
+		try
+			call a:notifier.refresh(a:loclist)
+		catch /^Vim\%((\a\+)\)\=:E523/
+		endtry
+	endfunction " }}}
+	" }}}
+
 " }}}
 
 NeoBundle 'todesking/vint-syntastic'
