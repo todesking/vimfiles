@@ -761,7 +761,7 @@ NeoBundle 'mileszs/ack.vim' "{{{
 			let path = a:path . '/' . a:args[1]
 			let query = a:args[0]
 		endif
-		execute 'Ack ' . query . ' ' . path
+		execute 'Ack ' . shellescape(query) . ' ' . shellescape(path)
 	endfunction " }}}
 " }}}
 
