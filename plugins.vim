@@ -307,7 +307,7 @@ let s:x.exe .= ' --languages=+Java'
 unlet s:x
 " }}}
 NeoBundle 'sgur/unite-qf' "{{{
-nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview -no-split -winheight=30<CR>
+nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview -no-split -winheight=30 -wipe<CR>
 call unite#custom#profile('source/qf', 'context', {'max_multi_lines': 20})
 " }}}
 NeoBundle 'basyura/unite-rails' "{{{

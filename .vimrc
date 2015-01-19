@@ -109,7 +109,7 @@ au StdinReadPost * if !did_filetype() | runtime! scripts.vim | endif
 augroup END
 
 function! Vimrc_setft(ft) abort " {{{
-	if(!exists('b:current_syntax'))
+	if(!exists('b:current_syntax') || b:current_syntax == a:ft)
 		let &filetype = a:ft
 	endif
 endfunction " }}}
@@ -142,6 +142,8 @@ for s:ft in [
 	\ '*.yml:yaml',
 	\ '*.js:javascript',
 	\ '*.java',
+	\ '\.bashrc:sh',
+	\ '\.bash_profile:sh'
 \ ]
 	call call(function('Vimrc_override_ftdetect'), split(s:ft, '\V:'))
 endfor
