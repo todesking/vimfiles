@@ -550,8 +550,8 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 		if exists('b:vimrc_statusline_git_branch') && str2float(reltimestr(reltime(b:vimrc_statusline_git_branch_updated_at))) < 3.0
 			return b:vimrc_statusline_git_branch
 		endif
-		if exists('*gitreview#fugitive#branch_string')
-			let s = gitreview#fugitive#branch_string()
+		if exists('*gitreview#branch_string')
+			let s = gitreview#branch_string(expand('%'))
 			if len(s)
 				let s = '(' . s . ')'
 			endif
