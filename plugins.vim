@@ -547,33 +547,41 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 		let g:lightline['subseparator'] = { 'left': '', 'right': '' }
 	endif
 	function! Vimrc_statusline_git_branch() abort " {{{
-		if exists('b:vimrc_statusline_git_branch') && str2float(reltimestr(reltime(b:vimrc_statusline_git_branch_updated_at))) < 3.0
-			return b:vimrc_statusline_git_branch
+		let throttle_key = 'Vimrc_statusline_git_branch'
+		if !throttle#can_enter('b', throttle_key, 3.0)
+			return throttle#previous_data('b', throttle_key)
 		endif
+
 		if exists('*gitreview#branch_string')
 			let s = gitreview#branch_string(expand('%'))
 			if len(s)
 				let s = '(' . s . ')'
 			endif
-			let b:vimrc_statusline_git_branch = s
-			let b:vimrc_statusline_git_branch_updated_at = reltime()
-			return s
 		else
-			return ''
+			let s = ''
 		endif
+		call throttle#entered('b', throttle_key, s)
+		return s
 	endfunction " }}}
 	function! Vimrc_build_status() abort " {{{
+		let throttle_key = 'Vimrc_statusline_build_status'
+		if !throttle#can_enter('b', throttle_key, 3.0)
+			return throttle#previous_data('b', throttle_key)
+		endif
+
 		let proc = qf_sbt#get_proc()
 		if !qf_sbt#is_valid(proc)
-			return ''
+			let status = ''
+		else
+			let build_number = proc.last_build_number
+			let status = qf_sbt#status_string(1)
+			let sync = [proc.path, proc.last_build_number]
+			if !exists('w:Vimrc_build_status_sync') || w:Vimrc_build_status_sync != sync
+				call Vimrc_sync_qf_to_syntastic()
+				let w:Vimrc_build_status_sync = sync
+			endif
 		endif
-		let build_number = proc.last_build_number
-		let status = qf_sbt#status_string(1)
-		let sync = [proc.path, proc.last_build_number]
-		if !exists('w:Vimrc_build_status_sync') || w:Vimrc_build_status_sync != sync
-			call Vimrc_sync_qf_to_syntastic()
-			let w:Vimrc_build_status_sync = sync
-		endif
+		call throttle#entered('b', throttle_key, status)
 		return status
 	endfunction " }}}
 " }}}
