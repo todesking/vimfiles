@@ -309,6 +309,21 @@ unlet s:x
 NeoBundle 'sgur/unite-qf' "{{{
 nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview -no-split -winheight=30 -wipe<CR>
 call unite#custom#profile('source/qf', 'context', {'max_multi_lines': 20})
+call unite#custom#source('qf', 'converters', ['converter_pretty_qf'])
+
+let s:filter = {'name': 'converter_pretty_qf'}
+
+function! s:filter.filter(candidates, context) abort " {{{
+	for c in a:candidates
+		let message = substitute(c.word, '^.\{-}|\d\+| ', '', '')
+		let message = join(map(split(message, "\n"), '"| " . v:val'), "\n") . "\n|"
+		let c.word = Vimrc_summarize_path(c.action__path) . ':' . c.action__line . "\n" . message
+	endfor
+	return a:candidates
+endfunction " }}}
+
+call unite#define_filter(s:filter)
+unlet s:filter
 " }}}
 NeoBundle 'basyura/unite-rails' "{{{
 	nnoremap <C-Q>r <ESC>
@@ -324,7 +339,7 @@ NeoBundle 'basyura/unite-rails' "{{{
 	nnoremap <C-Q>rh :<C-u>Unite rails/helper<CR>
 " }}}
 NeoBundle 'osyo-manga/unite-fold' " {{{
-	" call unite#custom_filters('fold',['matcher_default', 'sorter_nothing', 'converter_default'])
+	call unite#custom#source('fold','sorters', ['sorter_nothing'])
 	function! g:Vimrc_unite_fold_foldtext(bufnr, val)
 		if has_key(a:val, 'word')
 			return a:val.word
@@ -565,7 +580,7 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 	endfunction " }}}
 	function! Vimrc_build_status() abort " {{{
 		let throttle_key = 'Vimrc_statusline_build_status'
-		if !throttle#can_enter('b', throttle_key, 3.0)
+		if !throttle#can_enter('b', throttle_key, 1.0)
 			return throttle#previous_data('b', throttle_key)
 		endif
 
