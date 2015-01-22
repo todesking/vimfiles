@@ -18,6 +18,14 @@ NeoBundle 'mattn/webapi-vim'
 NeoBundle 'kana/vim-operator-user'
 " }}}
 
+let s:def = {'name': 'current_project'}
+function! s:def.scope_identifier() abort " {{{
+	return current_project#info().main_path
+endfunction " }}}
+call metascope#register(s:def)
+unlet s:def
+
+
 " Navigation/Highlight {{{
 
 " matchparen {{{
