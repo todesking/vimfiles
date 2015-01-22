@@ -22,6 +22,9 @@ NeoBundle 'todesking/metascope.vim' " {{{
 	call metascope#register(s:def)
 	unlet s:def
 " }}}
+NeoBundle 'todesking/scoped_qf' " {{{
+	let g:scoped_qf_scope_type = 'current_project'
+" }}}
 NeoBundle 'mattn/webapi-vim'
 NeoBundle 'kana/vim-operator-user'
 " }}}
@@ -316,8 +319,12 @@ unlet s:x
 " }}}
 NeoBundle 'sgur/unite-qf' "{{{
 nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview -no-split -winheight=30 -wipe<CR>
-call unite#custom#profile('source/qf', 'context', {'max_multi_lines': 20})
-call unite#custom#source('qf', 'converters', ['converter_pretty_qf'])
+nnoremap <C-Q>F :<C-u>Unite locationlist -no-start-insert -auto-preview -no-split -winheight=30 -wipe<CR>
+
+for s in ['qf', 'locationlist']
+	call unite#custom#profile('source/' . s, 'context', {'max_multi_lines': 20})
+	call unite#custom#source(s, 'converters', ['converter_pretty_qf'])
+endfor
 
 let s:filter = {'name': 'converter_pretty_qf'}
 
@@ -630,6 +637,7 @@ endif
 NeoBundle 'scrooloose/syntastic' " {{{
 	let g:syntastic_scala_checkers=['fsc']
 	command! SyntasticSetQF call setqflist(g:SyntasticLoclist.current().getRaw())
+	let g:syntastic_always_populate_loc_list=1
 
 	" qf to syntastic {{{
 	function! Vimrc_sync_qf_to_syntastic() abort " {{{
