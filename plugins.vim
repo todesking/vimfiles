@@ -594,10 +594,21 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 
 		let proc = qf_sbt#get_proc()
 		if !qf_sbt#is_valid(proc)
-			let status = ''
+			if empty(proc)
+				let status = ''
+			else
+				let status = '(>_<)'
+			endif
 		else
 			let build_number = proc.last_build_number
-			let status = qf_sbt#status_string(1)
+			call proc.update()
+			let status = proc.build_status_string
+			let build_finished = proc.last_build_number != build_number
+
+			if build_finished
+				call scoped_qf#set(proc.getqflist())
+			endif
+
 			let sync = [proc.path, proc.last_build_number]
 			if !exists('w:Vimrc_build_status_sync') || w:Vimrc_build_status_sync != sync
 				call Vimrc_sync_qf_to_syntastic()
