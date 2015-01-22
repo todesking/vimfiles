@@ -17,12 +17,13 @@ NeoBundle 'todesking/current_project.vim'
 NeoBundle 'todesking/metascope.vim' " {{{
 	let s:def = {'name': 'current_project'}
 	function! s:def.scope_identifier() abort " {{{
-		return current_project#info().main_path
+		let path = current_project#info().main_path
+		return len(path) ? path : '__ROOT__'
 	endfunction " }}}
 	call metascope#register(s:def)
 	unlet s:def
 " }}}
-NeoBundle 'todesking/scoped_qf' " {{{
+NeoBundle 'todesking/scoped_qf.vim' " {{{
 	let g:scoped_qf_scope_type = 'current_project'
 " }}}
 NeoBundle 'mattn/webapi-vim'
@@ -636,7 +637,6 @@ endif
 
 NeoBundle 'scrooloose/syntastic' " {{{
 	let g:syntastic_scala_checkers=['fsc']
-	command! SyntasticSetQF call setqflist(g:SyntasticLoclist.current().getRaw())
 	let g:syntastic_always_populate_loc_list=1
 
 	" qf to syntastic {{{
