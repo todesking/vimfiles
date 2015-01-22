@@ -14,17 +14,17 @@ if has('clientserver')
 	NeoBundle 'pydave/AsyncCommand'
 endif
 NeoBundle 'todesking/current_project.vim'
+NeoBundle 'todesking/metascope.vim' " {{{
+	let s:def = {'name': 'current_project'}
+	function! s:def.scope_identifier() abort " {{{
+		return current_project#info().main_path
+	endfunction " }}}
+	call metascope#register(s:def)
+	unlet s:def
+" }}}
 NeoBundle 'mattn/webapi-vim'
 NeoBundle 'kana/vim-operator-user'
 " }}}
-
-let s:def = {'name': 'current_project'}
-function! s:def.scope_identifier() abort " {{{
-	return current_project#info().main_path
-endfunction " }}}
-call metascope#register(s:def)
-unlet s:def
-
 
 " Navigation/Highlight {{{
 
