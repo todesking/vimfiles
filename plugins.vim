@@ -1,6 +1,8 @@
 " vim:foldmethod=marker
 scriptencoding utf-8
 
+" vint: -ProhibitUnnecessaryDoubleQuote
+
 " Library {{{
 NeoBundle 'Shougo/vimproc.vim', {
       \ 'build' : {
@@ -267,7 +269,7 @@ let s:filter = {
 			\ 'name': 'converter_remove_trash_files',
 			\}
 function s:filter.filter(candidates, context)
-	return filter(a:candidates, 'v:val.word !~ ''\.cache$\|/resolution-cache/\|\.DS_Store\|\.jar$\|/target/''')
+	return filter(a:candidates, 'v:val.word !~# ''\.cache$\|/resolution-cache/\|\.DS_Store\|\.jar$\|/target/''')
 endfunction
 call unite#define_filter(s:filter)
 unlet s:filter
@@ -716,7 +718,7 @@ NeoBundle 'todesking/qf_sbt.vim'
 " }}}
 NeoBundle 'roalddevries/yaml.vim' "{{{
 	function! Vimrc_autocmd_yaml_vim()
-		if &foldmethod != 'syntax'
+		if &foldmethod !=# 'syntax'
 			runtime yaml.vim
 			set foldmethod=syntax
 		endif
