@@ -240,9 +240,9 @@ function! Vimrc_toggle_highlight() abort " {{{
 	" b,h
 	let transition = {
 	\ '00': [1, 1],
-	\ '01': [1, 1],
-	\ '10': [1, 1],
-	\ '11': [0, 0],
+	\ '01': [1, 0],
+	\ '10': [0, 0],
+	\ '11': [1, 0],
 	\ }
 	let brightest = g:brightest_enable && get(b:, 'brightest_enable', 1)
 	let hlsearch = !!&hlsearch
