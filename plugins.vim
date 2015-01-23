@@ -735,7 +735,7 @@ NeoBundle 'wavded/vim-stylus'
 	let g:markdown_fenced_languages = ['ruby', 'scala', 'vim', 'java']
 " }}}
 " Haskell {{{
-NeoBundle 'dag/vim2hs'
+" NeoBundle 'dag/vim2hs'
 NeoBundle 'ujihisa/ref-hoogle'
 " }}}
 " coffeescript {{{

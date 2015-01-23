@@ -574,3 +574,5 @@ endfunction " }}}
 " jar {{{
 autocmd BufReadCmd *.jar call zip#Browse(expand("<amatch>"))
 " }}}
+
+let g:html_number_lines = 0
