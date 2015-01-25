@@ -447,6 +447,67 @@ function! s:unite_source.gather_candidates(args, context)
 endfunction
 call unite#define_source(s:unite_source)
 " }}}
+
+" Unite vim-functions {{{
+
+let s:def = {'name': 'vim-functions', 'default_action': 'open'}
+
+let s:unite_vim_functions_cache = []
+
+function! s:def.gather_candidates(args, context) abort " {{{
+	if len(s:unite_vim_functions_cache)
+		return s:unite_vim_functions_cache
+	endif
+	let s:unite_vim_functions_cache = s:make_cache_functions()
+	for c in s:unite_vim_functions_cache
+		let c.kind = 'common'
+		let c.action__tagname = c.word . ')'
+		let c.abbr = substitute(c.abbr, '\t', '        ', 'g')
+	endfor
+	return s:unite_vim_functions_cache
+endfunction " }}}
+
+let s:def.action_table = {}
+let s:def.action_table.open = {}
+
+function! s:def.action_table.open.func(candidate) abort " {{{
+    execute 'help ' . a:candidate.action__tagname
+endfunction " }}}
+
+call unite#define_source(s:def)
+unlet s:def
+
+" from NeoComplete(https://github.com/Shougo/neocomplete.vim)
+" autoload/neocomplete/sources/vim/helper.vim
+function! s:make_cache_functions() "{{{
+  let helpfile = expand(findfile('doc/eval.txt', &runtimepath))
+  if !filereadable(helpfile)
+    return []
+  endif
+
+  let lines = readfile(helpfile)
+  let functions = []
+  let start = match(lines, '^abs')
+  let end = match(lines, '^abs', start, 2)
+  let desc = ''
+  for i in range(end-1, start, -1)
+    let desc = substitute(lines[i], '^\s\+\ze\S', '', '').' '.desc
+    let _ = matchlist(desc,
+          \'^\s*\(\(\i\+(\).*)\)\s\+\(\w*\)\s\+\(.\+[^*]\)$')
+    if !empty(_)
+      call insert(functions, {
+            \ 'word' : _[2],
+            \ 'abbr' : substitute(_[0], '(\zs\s\+', '', ''),
+            \ })
+      let desc = ''
+    endif
+  endfor
+
+  return functions
+endfunction"}}}
+" }}}
+
+
 " Git sources(original: https://github.com/aereal/dotfiles/blob/master/.vim/vimrc ) {{{
 function! s:git_read_path(cmd) abort " {{{
 	let base = fugitive#extract_git_dir(expand('%')) . "/.."

@@ -510,7 +510,7 @@ augroup END
 
 " IM hack(disable im if normal mode) {{{
 function! s:disable_im_if_normal_mode()
-	if mode() == 'n'
+	if mode() ==# 'n'
 		call feedkeys('zz') " I don't know how it works but it works
 	endif
 endfunction
