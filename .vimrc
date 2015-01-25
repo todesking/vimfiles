@@ -78,7 +78,7 @@ let $PATH=substitute("~/bin:~/local/bin:~/.rbenv/shims:~/.svm/current/rt/bin:", 
 set list
 set listchars=tab:»\ ,trail:_,extends:»,precedes:«,nbsp:%
 
-if has("syntax")
+if has('syntax')
 	" PODバグ対策
 	syn sync fromstart
 	function! ActivateInvisibleIndicator()
@@ -93,6 +93,19 @@ endif
 " }}}
 
 runtime plugins.vim
+
+" Sandbox {{{
+function! s:register_sandbox(path) abort " {{{
+	let files = glob(a:path . '/*', 1, 1)
+	for f in files
+		if isdirectory(f)
+			execute 'set runtimepath += ' . fnamemodify(f, ':p')
+		endif
+	endfor
+endfunction " }}}
+
+call s:register_sandbox(expand('~/.vim/sandbox'))
+" }}}
 
 " ftdetect {{{
 filetype on
