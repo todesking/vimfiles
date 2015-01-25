@@ -143,7 +143,8 @@ for s:ft in [
 	\ '*.js:javascript',
 	\ '*.java',
 	\ '\.bashrc:sh',
-	\ '\.bash_profile:sh'
+	\ '\.bash_profile:sh',
+	\ '*.rst',
 \ ]
 	call call(function('Vimrc_override_ftdetect'), split(s:ft, '\V:'))
 endfor
