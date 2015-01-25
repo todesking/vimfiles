@@ -180,41 +180,6 @@ let g:unite_source_file_mru_limit=1000
 let g:unite_source_file_mru_time_format=''
 let g:unite_source_mru_do_validate=0
 " }}}
-" summarize-path {{{
-let s:summarize_path = {
-			\ 'name': 'converter_summarize_path',
-			\}
-let s:home_path = expand('~')
-function! Vimrc_summarize_path(path)
-	let path = simplify(a:path)
-	let path = substitute(path, s:home_path, '~', '')
-	if path =~# '\v\.rbenv|gems|\.vim'
-		let path = substitute(path, '\v\~\/.rbenv\/versions\/([^/]+)\/', '[rbenv:\1] ', '')
-		let path = substitute(path, '\v[\/ ]lib\/ruby\/gems\/([^/]+)\/gems\/([^/]+)\/', '[gem:\2] ', '')
-		let path = substitute(path, '\v\~\/\.vim\/bundle\/([^/]+)\/', '[.vim/\1] ', '')
-	endif
-	if path[0] !=# '['
-		let info = current_project#file_info(a:path)
-		if !empty(info.name)
-			let path = '['.info['name'].'] '.info['file_path']
-		endif
-	endif
-	return path
-endfunction
-function! s:summarize_path.filter(candidates, context)
-	let candidates = copy(a:candidates)
-	for cand in candidates
-		let path = Vimrc_summarize_path(cand.word)
-		let cand.word = path
-		if !empty(cand.word)
-			let cand.abbr = path
-		endif
-	endfor
-	return candidates
-endfunction
-call unite#define_filter(s:summarize_path)
-unlet s:summarize_path
-" }}}
 
 " hide_unimportant_path {{{
 let s:filter={'name': 'converter_hide_unimportant_path'}
@@ -278,7 +243,7 @@ unlet s:filter
 call unite#custom#source('file_mru', 'matchers', ['converter_index', 'matcher_context'])
 
 for g:source in ['file_mru', 'file_rec', 'buffer']
-	call unite#custom#source(g:source, 'converters', ['converter_remove_trash_files', 'converter_summarize_path', 'converter_hide_unimportant_path'])
+	call unite#custom#source(g:source, 'converters', ['converter_remove_trash_files', 'converter_summarize_project_path', 'converter_hide_unimportant_path'])
 endfor
 unlet g:source
 
@@ -301,7 +266,7 @@ augroup END
 let s:c = {'name': 'converter_tag'}
 function! s:c.filter(candidates, context) abort
 	for c in a:candidates
-		let spath = Vimrc_summarize_path(c.action__path)
+		let spath = current_project#summarize_path(c.action__path)
 		let c.abbr = printf('%-25s @%-100s', c.action__tagname, spath)
 		let c.word = c.action__tagname . ' ' . spath
 	endfor
@@ -335,7 +300,7 @@ function! s:filter.filter(candidates, context) abort " {{{
 	for c in a:candidates
 		let message = substitute(c.word, '^.\{-}|\d\+| ', '', '')
 		let message = join(map(split(message, "\n"), '"| " . v:val'), "\n") . "\n|"
-		let c.word = Vimrc_summarize_path(c.action__path) . ':' . c.action__line . "\n" . message
+		let c.word = current_project#summarize_path(c.action__path) . ':' . c.action__line . "\n" . message
 	endfor
 	return a:candidates
 endfunction " }}}
