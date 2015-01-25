@@ -150,6 +150,7 @@ for s:ft in [
 	\ '*.coffee',
 	\ '*.vim',
 	\ '.vimrc:vim',
+	\ '.gvimrc:vim',
 	\ '*.c',
 	\ '*.sh',
 	\ '*.yml:yaml',
