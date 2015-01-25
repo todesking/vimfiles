@@ -605,7 +605,21 @@ NeoBundle 'itchyny/lightline.vim' "{{{
 		let proc = qf_sbt#get_proc()
 		if !qf_sbt#is_valid(proc)
 			if empty(proc)
+				let loc_list = g:SyntasticLoclist.current()
 				let status = ''
+
+				let errors = len(loc_list.errors())
+				let warns = len(loc_list.warnings())
+
+				if 0 < errors
+					let status .= 'E' . string(errors)
+				endif
+				if 0 < warns
+					let status .= 'W' . string(errors)
+				endif
+				if len(status)
+					let status = '[' . status . ']'
+				endif
 			else
 				let status = '(>_<)'
 			endif
