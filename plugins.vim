@@ -846,14 +846,17 @@ NeoBundle 'mileszs/ack.vim' "{{{
 		if len(a:args) == 0
 			let path = a:path
 			let query = expand('<cword>')
+			let opts = []
 		elseif len(a:args) == 1
 			let path = a:path
 			let query = a:args[0]
+			let opts = []
 		else
 			let path = a:path . '/' . a:args[1]
 			let query = a:args[0]
+			let opts = a:args[2:-1]
 		endif
-		execute 'Ack ' . shellescape(query) . ' ' . shellescape(path)
+		execute 'Ack ' . join(map(opts, 'v:val'), ' ') . ' ' . query . ' ' . path
 	endfunction " }}}
 " }}}
 
