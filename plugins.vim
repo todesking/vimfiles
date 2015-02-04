@@ -83,14 +83,6 @@ NeoBundle 'osyo-manga/vim-anzu'
 
 " Textobj {{{
 
-NeoBundle 'rhysd/vim-operator-surround' " {{{
-	nmap ys <Plug>(operator-surround-append)
-	nmap ds <Plug>(operator-surround-delete)
-	nmap cs <Plug>(operator-surround-replace)
-	let g:operator#surround#blocks =
-		\ textobj#methodcall#operator_surround_blocks(deepcopy(g:operator#surround#default_blocks), 'c')
-" }}}
-
 NeoBundle 'kana/vim-textobj-user' " {{{
 	call textobj#user#plugin('lastmofified', {
 	\   'lastmodified': {
@@ -102,6 +94,18 @@ NeoBundle 'kana/vim-textobj-user' " {{{
 		return ['v', getpos("'["), getpos("']")]
 	endfunction
 " }}}
+
+NeoBundle 'rhysd/vim-operator-surround' " {{{
+	nmap ys <Plug>(operator-surround-append)
+	nmap ds <Plug>(operator-surround-delete)
+	nmap cs <Plug>(operator-surround-replace)
+" }}}
+
+NeoBundle 'todesking/vim-textobj-methodcall' " {{{
+	let g:operator#surround#blocks =
+		\ textobj#methodcall#operator_surround_blocks(deepcopy(g:operator#surround#default_blocks), 'c')
+" }}}
+
 
 " }}}
 
