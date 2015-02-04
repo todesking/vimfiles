@@ -96,20 +96,12 @@ NeoBundle 'kana/vim-textobj-user' " {{{
 	call textobj#user#plugin('lastmofified', {
 	\   'lastmodified': {
 	\     'select-a': 'al',
-	\     '*select-a-function*': 'g:Vimrc_select_a_last_modified',
+	\     'select-a-function': 'g:Vimrc_select_a_last_modified',
 	\   },
 	\ })
 	function! g:Vimrc_select_a_last_modified() abort
 		return ['v', getpos("'["), getpos("']")]
 	endfunction
-
-	call textobj#user#plugin('methodcall', {
-	\   'methodcall': {
-	\     'pattern': ['\<[a-zA-z0-9_?!]\+[(\[]', '[)\]]'],
-	\     'select-a': 'ac',
-	\     'select-i': 'ic'
-	\   },
-	\})
 " }}}
 
 " }}}
