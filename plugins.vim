@@ -838,7 +838,8 @@ NeoBundle 'taka84u9/vim-ref-ri', {'rev': 'master'} "{{{
 " }}}
 
 NeoBundle 'mileszs/ack.vim' "{{{
-	let g:ackprg = 'ag --nogroup --nocolor --column'
+	let g:ackprg = 'ag'
+	let g:ack_default_options = '-s -H --nogroup --nocolor --column'
 	let g:ack_qhandler = ''
 	command! -nargs=* Pag call Vimrc_ag(current_project#info().path, [<f-args>])
 	command! -nargs=* PAg call Vimrc_ag(current_project#info().main_path, [<f-args>])

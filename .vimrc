@@ -592,3 +592,22 @@ autocmd BufReadCmd *.jar call zip#Browse(expand("<amatch>"))
 " }}}
 
 let g:html_number_lines = 0
+
+" Shorten qf {{{
+augroup vimrc-shorten-qf
+	autocmd!
+	autocmd! QuickFixCmdPost * call Vimrc_shorten_qf()
+augroup END
+
+function! Vimrc_shorten_qf() abort " {{{
+	let max = 100
+	let qfs = getqflist()
+	for qf in qfs
+		if(len(qf.text) > max)
+			let qf.text = qf.text[0:max]
+		endif
+	endfor
+	let qfs = filter(qfs, 'v:val.valid')
+	call scoped_qf#set(qfs)
+endfunction " }}}
+" }}}
