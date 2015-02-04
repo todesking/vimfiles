@@ -1,5 +1,8 @@
+" filetype | '-' => pattern
+let s:word_patterns = {'-': '\v\.?[a-zA-Z0-9_#]+'}
+
 function! textobj#methodcall#select_a() abort " {{{
-	let [a, i] = s:get()
+	let [a, i] = s:get(&filetype)
 	if empty(a)
 		return 0
 	endif
@@ -9,7 +12,7 @@ function! textobj#methodcall#select_a() abort " {{{
 endfunction " }}}
 
 function! textobj#methodcall#select_i() abort " {{{
-	let [a, i] = s:get()
+	let [a, i] = s:get(&filetype)
 	if empty(i)
 		return 0
 	endif
@@ -18,12 +21,36 @@ function! textobj#methodcall#select_i() abort " {{{
 	return ['v', start, end]
 endfunction " }}}
 
-function! s:get() abort " {{{
+function! textobj#methodcall#register_word_pattern(filetype, pattern) abort " {{{
+	let s:word_patterns[a:filetype] = a:pattern
+endfunction " }}}
+
+function! textobj#methodcall#operator_surround_blocks(base, key) abort " {{{
+	let defs = deepcopy(a:base)
+	for ft in keys(s:word_patterns)
+		let wp = s:word_patterns[ft]
+		let def = {'block': [wp . '\v[[(]\V', '\v[)\]]\V'], 'motionwise': ['char'], 'keys': a:key}
+		if has_key(defs, ft)
+			call add(defs[ft], def)
+		else
+			let defs[ft] = [def]
+		endif
+	endfor
+	return defs
+endfunction " }}}
+
+function! textobj#methodcall#word_pattern(filetype) abort " {{{
+	return get(s:word_patterns, a:filetype, s:word_patterns['-'])
+endfunction " }}}
+
+function! s:get(ft) abort " {{{
 	let o_cursor = getcurpos()
 
 	let stopline = line('.')
 
-	let start_pattern = '\v[a-zA-Z_]+[[(]'
+	let word_pattern = textobj#methodcall#word_pattern(a:ft)
+
+	let start_pattern = word_pattern . '\v[[(]'
 
 	let start = searchpos(start_pattern, 'bc', stopline)
 	if start == [0, 0]
@@ -40,9 +67,9 @@ function! s:get() abort " {{{
 
 	let brace = getline(brace_start[0])[brace_start[1] - 1]
 	if brace ==# '('
-		let [a, b] = ['(', ')']
+		let [a, b] = ['\V(', '\V)']
 	elseif brace ==# '['
-		let [a, b] = ['[', ']']
+		let [a, b] = ['\V[', '\V]']
 	else
 		throw 'assertion error: unknown brace: ' . brace
 	endif
