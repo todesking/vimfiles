@@ -106,6 +106,7 @@ NeoBundle 'todesking/vim-textobj-methodcall' " {{{
 		\ textobj#methodcall#operator_surround_blocks(deepcopy(g:operator#surround#default_blocks), 'c')
 " }}}
 
+NeoBundle 'argtextobj.vim'
 
 " }}}
 
@@ -767,7 +768,7 @@ NeoBundle 'roalddevries/yaml.vim' "{{{
 NeoBundle 'evanmiller/nginx-vim-syntax'
 NeoBundle 'wavded/vim-stylus'
 " markdown {{{
-	let g:markdown_fenced_languages = ['ruby', 'scala', 'vim', 'java']
+	let g:markdown_fenced_languages = ['ruby', 'scala', 'vim', 'java', 'javascript']
 " }}}
 " Haskell {{{
 " NeoBundle 'dag/vim2hs'
