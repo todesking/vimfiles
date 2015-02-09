@@ -6,7 +6,7 @@ let s:sorter_smart = {
 "  keyword is 'user'
 "   more is better   : user/user.rb > user/aaa.rb
 "   first is better  : user > active_user
-"   file > directory : user.rb > user/active_user.rb
+"   file > directory : user.rb > user/active_user.rb (TODO)
 "   alphabetical     : a_user.rb > b_user.rb
 function! s:sorter_smart.filter(candidates, context)
 	let do_nothing = 0
@@ -33,7 +33,6 @@ function! s:sorter_smart_sort_val(prefix, text, keywords)
 	for kw in a:keywords
 		let sort_val .= printf('%05d_', 100 - s:matches(a:text, kw))
 		let sort_val .= printf('%05d_', stridx(a:text, kw))
-		let sort_val .= printf('%05d_', len(text_without_keywords))
 		let text_without_keywords =
 					\ substitute(text_without_keywords, '\V' . escape(kw, '\'), '', 'g')
 	endfor

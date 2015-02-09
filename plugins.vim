@@ -115,6 +115,7 @@ NeoBundle 'todesking/YankRing.vim' " {{{
 let g:yankring_max_element_length = 0
 let g:yankring_max_history_element_length = 1000 * 10
 " }}}
+NeoBundle 'junegunn/vim-easy-align'
 NeoBundle 'Align' " {{{
 	let g:Align_xstrlen='strwidth'
 	map (trashbox-leader-rwp) <Plug>RestoreWinPosn

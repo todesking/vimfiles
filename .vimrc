@@ -160,6 +160,7 @@ for s:ft in [
 	\ '\.bash_profile:sh',
 	\ '*.rst',
 	\ '*.sql',
+	\ '*.html',
 \ ]
 	call call(function('Vimrc_override_ftdetect'), split(s:ft, '\V:'))
 endfor
