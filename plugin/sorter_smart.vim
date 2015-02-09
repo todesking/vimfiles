@@ -16,7 +16,7 @@ function! s:sorter_smart.filter(candidates, context)
 		return a:candidates
 	endif
 
-	let preserve_rough_order = a:context.source.name == 'file_mru'
+	let preserve_rough_order = a:context.source.name ==# 'file_mru'
 
 	let keywords = split(a:context.input, '\s\+')
 	for candidate in a:candidates
@@ -24,7 +24,7 @@ function! s:sorter_smart.filter(candidates, context)
 		let candidate.filter__sort_val =
 					\ s:sorter_smart_sort_val(prefix, candidate.word, keywords)
 	endfor
-	let g:sort_vals = map(copy(a:candidates), 'v:val["filter__sort_val"]')
+	let g:sort_vals = map(copy(a:candidates), 'v:val[''filter__sort_val'']')
 	return unite#util#sort_by(a:candidates, 'v:val.filter__sort_val')
 endfunction
 function! s:sorter_smart_sort_val(prefix, text, keywords)
