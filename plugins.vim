@@ -125,7 +125,17 @@ NeoBundle 'Align' " {{{
 NeoBundle "godlygeek/tabular" " {{{
 " }}}
 NeoBundle 'closetag.vim' " {{{
-	 autocmd Filetype html,xml,xsl,eruby runtime plugin/closetag.vim
+	augroup vimrc-closetag-vim
+		autocmd!
+		autocmd Filetype * call Vimrc_ft_closetag()
+	augroup END
+	function! Vimrc_ft_closetag() abort " {{{
+		if &filetype ==# 'xml'
+			let b:unaryTagsStack = ''
+		else
+			let b:unaryTagsStack='area base br dd dt hr img input link meta param'
+		endif
+	endfunction " }}}
 " }}}
 NeoBundle 'Shougo/neosnippet' " {{{
 	let g:neosnippet#disable_runtime_snippets = {
