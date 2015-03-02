@@ -15,6 +15,7 @@ if has('gui')
 		" highlight PmenuSel guibg=#444444 guifg=#D8D8D2
 		" highlight CursorLine gui=bold guibg=NONE guifg=NONE
 		highlight ColorColumn guibg=#F3F3FF
+		highlight Error guibg=#FF6666
 	augroup END
 	MenuLang en_US.UTF-8
 	set lines=49
