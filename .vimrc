@@ -5,7 +5,9 @@ scriptencoding utf-8
 let $RUBY_DLL=$HOME.'/.rbenv/versions/2.2.0/lib/libruby.dylib'
 
 " NeoBundle {{{
-set nocompatible               " be iMproved
+if &compatible
+	set nocompatible               " be iMproved
+endif
 filetype off                   " required!
 filetype plugin indent off     " required!
 
@@ -429,6 +431,10 @@ endfunction  " }}}
 " e-in-current-project
 command! -complete=customlist,current_project#complete -nargs=1 Pe :exec ':e ' . current_project#info().path . '/' . "<args>"
 command! -complete=customlist,current_project#complete_main -nargs=1 PE :exec ':e ' . current_project#info().main_path . '/' . "<args>"
+
+" Unite project {{{
+command! Projects :Unite file:~/projects/ -default-action=rec
+" }}}
 
 " Nyandoc {{{
 command! Nyandoc :Unite file:.nyandoc/ -default-action=rec
