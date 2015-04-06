@@ -289,7 +289,7 @@ let g:unite_source_outline_info = {
 \  'ref-man': unite#sources#outline#defaults#man#outline_info(),
 \ }
 let s:x = unite#sources#outline#modules#ctags#import()
-let s:x.exe .= ' --languages=+Java'
+let s:x.exe .= ' --languages=+Java,C,C++'
 unlet s:x
 " }}}
 NeoBundle 'sgur/unite-qf' "{{{
