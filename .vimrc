@@ -433,7 +433,7 @@ command! -complete=customlist,current_project#complete -nargs=1 Pe :exec ':e ' .
 command! -complete=customlist,current_project#complete_main -nargs=1 PE :exec ':e ' . current_project#info().main_path . '/' . "<args>"
 
 " Unite project {{{
-command! Projects :Unite file:~/projects/ -default-action=rec
+command! Projects :Unite file:~/projects/ file:~/.vim/bundle/ -default-action=rec
 " }}}
 
 " Nyandoc {{{

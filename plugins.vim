@@ -176,6 +176,7 @@ let g:unite_cursor_line_highlight='CursorLine'
 let g:unite_redraw_hold_candidates=300000
 
 let g:unite_source_rec_max_cache_files = 50000
+let g:unite_source_rec_async_command=expand('~/.vim/bin/list_file_rec')
 
 call unite#filters#sorter_default#use(['sorter_smart'])
 
@@ -223,9 +224,9 @@ unlet s:filter
 
 " Vimrc_unite_syntax {{{
 function! Vimrc_unite_syntax()
-	syntax match unite__word_tag /\[[^]]\+\]/ contained containedin=uniteSource__FileMru,uniteSource__FileRec
+	syntax match unite__word_tag /\[[^]]\+\]/ contained containedin=uniteSource__FileMru,uniteSource__FileRec,uniteSource__FileRecAsync
 	highlight link unite__word_tag Identifier
-	syntax region UniteUnimportant keepend excludenl matchgroup=UniteUnimportantMarker start=/!!!{/ end=/}!!!/ concealends containedin=uniteSource__FileMru,uniteSource__FileRec,uniteSource__Buffer
+	syntax region UniteUnimportant keepend excludenl matchgroup=UniteUnimportantMarker start=/!!!{/ end=/}!!!/ concealends containedin=uniteSource__FileMru,uniteSource__FileRec,uniteSource__FileRecAsync,uniteSource__Buffer
 	highlight link UniteUnimportant Comment
 	setlocal concealcursor+=i
 endfunction
@@ -249,12 +250,13 @@ unlet s:filter
 
 call unite#custom#source('file_mru', 'matchers', ['converter_index', 'matcher_context'])
 
-for g:source in ['file_mru', 'file_rec', 'buffer']
+for g:source in ['file_mru', 'file_rec', 'file_rec/async', 'buffer']
 	call unite#custom#source(g:source, 'converters', ['converter_remove_trash_files', 'converter_summarize_project_path', 'converter_hide_unimportant_path'])
 endfor
 unlet g:source
 
 call unite#custom#source('file_rec', 'max_candidates', 0)
+call unite#custom#source('file_rec/async', 'max_candidates', 0)
 " }}}
 NeoBundle 'tsukkee/unite-tag' "{{{
 let g:unite_source_tag_max_name_length = 50
@@ -375,8 +377,8 @@ nnoremap <C-Q>  <ESC>
 
 nnoremap <C-Q>u :UniteResume<CR>
 nnoremap <C-Q>o m':<C-u>Unite outline<CR>
-nnoremap <C-Q>P :<C-u>exec 'Unite file_rec:'.current_project#info(expand('%')).main_path<CR>
-nnoremap <C-Q>p :<C-u>exec 'Unite file_rec:'.current_project#info(expand('%')).sub_path<CR>
+nnoremap <C-Q>P :<C-u>exec 'Unite file_rec/async:'.current_project#info(expand('%')).main_path<CR>
+nnoremap <C-Q>p :<C-u>exec 'Unite file_rec/async:'.current_project#info(expand('%')).sub_path<CR>
 nnoremap <C-Q>c :<C-u>exec 'Unite file_rec:'.expand('%:p:h').'/'<CR>
 nnoremap <C-Q>l :<C-u>Unite line<CR>
 nnoremap <C-Q>b :<C-u>Unite buffer<CR>
@@ -384,6 +386,8 @@ nnoremap <C-Q>gc :<C-u>Unite git/files/conflict<CR>
 nnoremap <C-Q>gf :<C-u>Unite gitreview/changed_files<CR>
 nnoremap <C-Q><C-P> :<C-u>UnitePrevious<CR>
 nnoremap <C-Q><C-N> :<C-u>UniteNext<CR>
+nnoremap <C-Q><C-Q>p :<C-u>Projects<CR>
+nnoremap <C-Q><C-Q>n :<C-u>Nyandoc<CR>
 " }}}
 
 " Sources {{{
