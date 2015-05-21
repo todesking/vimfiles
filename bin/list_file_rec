@@ -12,7 +12,8 @@ fi
 
 cd "$1"
 if git rev-parse --show-toplevel > /dev/null 2>&1; then
-	git ls-files -o -m -c --exclude-standard
+	ROOT=$(pwd)
+	git ls-files -o -m -c --exclude-standard | xargs -I % echo "$ROOT"/%
 else
 	cd - > /dev/null
 	find "$1"
