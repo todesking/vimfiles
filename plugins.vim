@@ -179,9 +179,6 @@ let g:unite_source_rec_max_cache_files = 50000
 let g:unite_source_rec_async_command=expand('~/.vim/bin/list_file_rec')
 
 call unite#filters#sorter_default#use(['sorter_smart'])
-
-call unite#custom#profile('default', 'context', {'custom_rec_ignore_directory_pattern': 
-			\'/\%(\.hg\|\.git\|\.bzr\|\.svn\|\.\%(sass\|pygments\)-cache\|\.themes\|target\|classes\|build\)/'})
 " }}}
 " unite-file_mru {{{
 let g:unite_source_file_mru_limit=1000
@@ -237,21 +234,10 @@ augroup vimrc-untie-syntax
 augroup END
 " }}}
 
-" converter_remove_trash_files {{{
-let s:filter = {
-			\ 'name': 'converter_remove_trash_files',
-			\}
-function s:filter.filter(candidates, context)
-	return filter(a:candidates, 'v:val.word !~# ''\.cache$\|/resolution-cache/\|\.DS_Store\|\.jar$\|/target/''')
-endfunction
-call unite#define_filter(s:filter)
-unlet s:filter
-" }}}
-
 call unite#custom#source('file_mru', 'matchers', ['converter_index', 'matcher_context'])
 
 for g:source in ['file_mru', 'file_rec', 'file_rec/async', 'buffer']
-	call unite#custom#source(g:source, 'converters', ['converter_remove_trash_files', 'converter_summarize_project_path', 'converter_hide_unimportant_path'])
+	call unite#custom#source(g:source, 'converters', ['converter_summarize_project_path', 'converter_hide_unimportant_path'])
 endfor
 unlet g:source
 
