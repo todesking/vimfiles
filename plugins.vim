@@ -241,6 +241,11 @@ for g:source in ['file_mru', 'file_rec', 'file_rec/async', 'buffer']
 endfor
 unlet g:source
 
+for g:source in ['file_rec', 'file_rec/async']
+	call unite#custom#source(g:source, 'matchers', ['matcher_default'])
+endfor
+unlet g:source
+
 call unite#custom#source('file_rec', 'max_candidates', 0)
 call unite#custom#source('file_rec/async', 'max_candidates', 0)
 " }}}
