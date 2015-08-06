@@ -756,7 +756,15 @@ NeoBundle 'slim-template/vim-slim' "{{{
 		autocmd FileType slim setlocal shiftwidth=2 expandtab
 	augroup END
 " }}}
-NeoBundle 'todesking/qf_sbt.vim'
+NeoBundle 'todesking/qf_sbt.vim' " {{{
+	let g:qf_sbt_additional_args___ = [
+	\ 'set commands += Command.command("qf_sbt_disable_scalariform"){s =>'
+	\ . 'val key = "scalariformFormat";'
+	\ . 'if(Project.extract(s).getOpt(SettingKey[Any](key)).isDefined || true){println("found");'
+	\ . 's"""set SettingKey[List[Nothing]]("${key}") in compile := List()""" :: s}else{s}}',
+	\ 'qf_sbt_disable_scalariform'
+	\ ]
+" }}}
 " }}}
 NeoBundle 'roalddevries/yaml.vim' "{{{
 	function! Vimrc_autocmd_yaml_vim()
