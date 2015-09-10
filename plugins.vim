@@ -176,7 +176,8 @@ let g:unite_cursor_line_highlight='CursorLine'
 let g:unite_redraw_hold_candidates=300000
 
 let g:unite_source_rec_max_cache_files = 50000
-let g:unite_source_rec_async_command=expand('~/.vim/bin/list_file_rec')
+let g:unite_source_rec_async_command=[expand('~/.vim/bin/list_file_rec')]
+let g:unite_source_file_async_command=expand('~/.vim/bin/list_file_rec')
 
 call unite#filters#sorter_default#use(['sorter_smart'])
 " }}}
@@ -223,7 +224,7 @@ unlet s:filter
 function! Vimrc_unite_syntax()
 	syntax match unite__word_tag /\[[^]]\+\]/ contained containedin=uniteSource__FileMru,uniteSource__FileRec,uniteSource__FileRecAsync
 	highlight link unite__word_tag Identifier
-	syntax region UniteUnimportant keepend excludenl matchgroup=UniteUnimportantMarker start=/!!!{/ end=/}!!!/ concealends containedin=uniteSource__FileMru,uniteSource__FileRec,uniteSource__FileRecAsync,uniteSource__Buffer
+	syntax region UniteUnimportant keepend excludenl matchgroup=UniteUnimportantMarker start=/!!!{/ end=/}!!!/ concealends containedin=uniteSource__FileMru,uniteSource_File,uniteSource__FileRec,uniteSource__FileRecAsync,uniteSource__Buffer
 	highlight link UniteUnimportant Comment
 	setlocal concealcursor+=i
 endfunction
@@ -236,7 +237,7 @@ augroup END
 
 call unite#custom#source('file_mru', 'matchers', ['converter_index', 'matcher_context'])
 
-for g:source in ['file_mru', 'file_rec', 'file_rec/async', 'buffer']
+for g:source in ['file', 'file_mru', 'file_rec', 'file_rec/async', 'buffer']
 	call unite#custom#source(g:source, 'converters', ['converter_summarize_project_path', 'converter_hide_unimportant_path'])
 endfor
 unlet g:source
@@ -749,6 +750,7 @@ endif
 NeoBundle 'derekwyatt/vim-scala'
 NeoBundle 'derekwyatt/vim-sbt'
 NeoBundle 'gre/play2vim'
+NeoBundle 'ensime/ensime-vim'
 NeoBundle 'slim-template/vim-slim' "{{{
 	augroup vimrc-plugin-vim-slim
 		autocmd!

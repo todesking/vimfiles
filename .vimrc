@@ -4,6 +4,8 @@ scriptencoding utf-8
 
 let $RUBY_DLL=$HOME.'/.rbenv/versions/2.2.0/lib/libruby.dylib'
 
+let $LC_ALL='en_US.UTF8'
+
 " NeoBundle {{{
 if &compatible
 	set nocompatible               " be iMproved
@@ -163,6 +165,7 @@ for s:ft in [
 	\ '*.rst',
 	\ '*.sql',
 	\ '*.html',
+	\ '*.py:python',
 \ ]
 	call call(function('Vimrc_override_ftdetect'), split(s:ft, '\V:'))
 endfor
