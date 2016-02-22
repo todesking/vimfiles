@@ -34,6 +34,8 @@ set smartcase
 set wrapscan
 set incsearch
 
+set mouse=
+
 set noundofile
 
 set ambiwidth=single
@@ -52,6 +54,7 @@ set shiftwidth=4
 
 set wildmode=list:longest
 set completeopt=menuone,preview
+set completeopt-=preview
 
 set hidden
 
