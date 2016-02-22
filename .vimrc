@@ -148,6 +148,7 @@ function! Vimrc_override_ftdetect(pat, ...) abort " {{{
 endfunction " }}}
 
 for s:ft in [
+	\ '*.dot',
 	\ '*.scala',
 	\ '*.sbt',
 	\ 'plugins.sbt:sbt',
@@ -158,7 +159,10 @@ for s:ft in [
 	\ '*.vim',
 	\ '.vimrc:vim',
 	\ '.gvimrc:vim',
-	\ '*.c',
+	\ '*.c:cpp',
+	\ '*.cpp',
+	\ '*.h:cpp',
+	\ '*.hpp:cpp',
 	\ '*.sh',
 	\ '*.yml:yaml',
 	\ '*.js:javascript',
@@ -169,6 +173,7 @@ for s:ft in [
 	\ '*.sql',
 	\ '*.html',
 	\ '*.py:python',
+	\ '*.hs:haskell',
 \ ]
 	call call(function('Vimrc_override_ftdetect'), split(s:ft, '\V:'))
 endfor
@@ -185,10 +190,6 @@ command! GitLabOpenFile :execute 'Git lab open-file '.expand('%:p').' '.line('.'
 " }}}
 
 " General keymap {{{
-" :(
-cnoremap <C-U><C-P> up
-cnoremap u<C-P> up
-
 nnoremap <silent>y= :<C-U>call setreg("*", getreg("0"))<CR>:<C-U>echo "yanked to *: " . getreg("*")[0:30]<CR>
 
 nnoremap ,cn :<C-U>cnext<CR>
@@ -626,3 +627,8 @@ function! Vimrc_shorten_qf() abort " {{{
 	call scoped_qf#set(qfs)
 endfunction " }}}
 " }}}
+
+nnoremap <C-B> :<C-U>up<CR>
+
+map y <Plug>(operator-flashy)
+nmap Y <Plug>(operator-flashy)$

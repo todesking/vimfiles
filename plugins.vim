@@ -79,6 +79,13 @@ NeoBundle 'haya14busa/incsearch.vim' " {{{
 NeoBundle 'deris/vim-shot-f'
 
 NeoBundle 'osyo-manga/vim-anzu'
+
+NeoBundle 'haya14busa/vim-operator-flashy' " {{{
+map y <Plug>(operator-flashy)
+nmap Y <Plug>(operator-flashy)$
+" }}}
+
+NeoBundle 'Konfekt/FastFold'
 " }}}
 
 " Textobj {{{
@@ -114,6 +121,8 @@ NeoBundle 'argtextobj.vim'
 NeoBundle 'todesking/YankRing.vim' " {{{
 let g:yankring_max_element_length = 0
 let g:yankring_max_history_element_length = 1000 * 10
+map y <Plug>(operator-flashy)
+nmap Y <Plug>(operator-flashy)$
 " }}}
 NeoBundle 'junegunn/vim-easy-align'
 NeoBundle 'Align' " {{{
@@ -724,6 +733,8 @@ NeoBundle 'endel/vim-github-colorscheme'
 
 " Filetypes {{{
 
+NeoBundle 'tmhedberg/SimpylFold'
+
 NeoBundle 'wting/rust.vim'
 
 NeoBundle 'GEverding/vim-hocon'
@@ -750,7 +761,9 @@ endif
 NeoBundle 'derekwyatt/vim-scala'
 NeoBundle 'derekwyatt/vim-sbt'
 NeoBundle 'gre/play2vim'
-NeoBundle 'ensime/ensime-vim'
+NeoBundle 'ensime/ensime-vim' "{{{
+let g:ensime_auto_start = 0
+"}}}
 NeoBundle 'slim-template/vim-slim' "{{{
 	augroup vimrc-plugin-vim-slim
 		autocmd!
@@ -837,6 +850,7 @@ nmap ,gd :<C-u>GitReviewDiff<CR>
 " ref {{{
 NeoBundle 'thinca/vim-ref' "{{{
 	let g:ref_refe_cmd="~/local/bin/refe"
+	let g:ref_man_cmd = 'man'
 	command! -nargs=1 Man :Ref man <args>
 	command! -nargs=1 Refe :Ref refe <args>
 	augroup vimrc-filetype-ref
