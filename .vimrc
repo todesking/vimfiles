@@ -15,20 +15,9 @@ filetype plugin indent off     " required!
 
 if has('vim_starting')
 	set runtimepath+=~/.vim/bundle/neobundle.vim/
-	call neobundle#rc(expand('~/.vim/bundle/'))
 endif
 let g:neobundle#types#git#default_protocol = 'git'
 " }}}
-
-NeoBundle 'todesking/loadenv.vim' " {{{
-if executable('/usr/local/bin/bash')
-	call loadenv#load(
-	\ '/usr/local/bin/bash -i -c __CMD__',
-	\ ['PATH', 'JAVA_HOME']
-	\ )
-endif
-" }}}
-
 " basic settings {{{
 set smartcase
 set wrapscan
