@@ -35,7 +35,6 @@ endfunction " }}}
 
 call neobundle#begin(expand('~/.vim/bundle/'))
 
-
 call s:bundle('todesking/loadenv.vim')
 function! s:the_bundle.hooks.on_post_source(bundle) abort " {{{
 	if executable('/usr/local/bin/bash')
@@ -95,7 +94,7 @@ function! s:the_bundle.hooks.on_post_source(bundle) abort " {{{
 	let g:EasyMotion_keys = 'siogkmjferndlhyuxvtcbwa'
 endfunction " }}}
 
-call s:bundle('a.vim')
+call s:bundle('vim-scripts/a.vim')
 
 call s:bundle('nathanaelkane/vim-indent-guides')
 function! s:the_bundle.hooks.on_post_source(bundle) abort " {{{
@@ -136,6 +135,8 @@ function! s:the_bundle.hooks.on_post_source(bundle) abort " {{{
 endfunction " }}}
 
 call s:bundle('Konfekt/FastFold')
+
+" }}}
 
 
 " Textobj {{{
@@ -220,6 +221,7 @@ endfunction " }}}
 call s:bundle('tpope/vim-repeat')
 call s:bundle('mbbill/undotree')
 call s:bundle('tpope/vim-commentary')
+call s:bundle('AndrewRadev/splitjoin.vim')
 " }}}
 
 
@@ -252,6 +254,8 @@ function! s:the_bundle.hooks.on_post_source(bundle) abort " {{{
 	let g:unite_source_rec_async_command=[expand('~/.vim/bin/list_file_rec')]
 	let g:unite_source_file_async_command=expand('~/.vim/bin/list_file_rec')
 
+	let g:unite_source_history_unite_limit = 1
+
 	call unite#filters#sorter_default#use(['sorter_smart'])
 
 	" unite-file_mru {{{
@@ -264,6 +268,9 @@ function! s:the_bundle.hooks.on_post_source(bundle) abort " {{{
 	" hide_unimportant_path {{{
 	let filter={'name': 'converter_hide_unimportant_path'}
 	function! filter.filter(candidates, context)
+		if len(a:candidates) > 1000
+			return a:candidates
+		endif
 		let header_pat = '^\[[^\]]\+\] '
 		let prev = []
 		for cand in a:candidates
@@ -426,7 +433,6 @@ endfunction " }}}
 call s:bundle('ujihisa/unite-colorscheme')
 function! s:the_bundle.hooks.on_post_source(bundle) abort " {{{
 	command! Colors Unite colorscheme -auto-preview
-	nnoremap <C-Q>c :<C-u>Colors<CR>
 endfunction " }}}
 
 call s:bundle('ujihisa/unite-font')
@@ -810,11 +816,12 @@ endfunction " }}}
 
 " }}}
 
+
 " Colors {{{
 call s:bundle('altercation/vim-colors-solarized')
-call s:bundle('pyte')
-call s:bundle('newspaper.vim')
-call s:bundle('Zenburn')
+call s:bundle('vim-scripts/pyte')
+call s:bundle('vim-scripts/newspaper.vim')
+call s:bundle('vim-scripts/Zenburn')
 call s:bundle('ciaranm/inkpot')
 call s:bundle('w0ng/vim-hybrid')
 call s:bundle('chriskempson/vim-tomorrow-theme')
@@ -912,6 +919,7 @@ let g:vim_indent_cont = 0
 " }}}
 
 " }}}}
+
 
 " Git {{{
 call s:bundle('tpope/vim-fugitive')
