@@ -975,13 +975,13 @@ function! s:the_bundle.hooks.on_post_source(bundle) abort " {{{
 endfunction " }}}
 
 call s:bundle('mileszs/ack.vim')
-function! s:the_bundle.hooks.on_post_source(bundle) abort " {{{
+function! s:the_bundle.hooks.on_source(bundle) abort " {{{
 	let g:ackprg = 'ag'
 	let g:ack_default_options = '-s -H --nogroup --nocolor --column'
 	let g:ack_qhandler = ''
-	command! -nargs=* Pag call Vimrc_ag(current_project#info().path, [<f-args>])
-	command! -nargs=* PAg call Vimrc_ag(current_project#info().main_path, [<f-args>])
-	function! Vimrc_ag(path, args) abort " {{{
+	command! -nargs=* Pag call g:Vimrc_ag(current_project#info().path, [<f-args>])
+	command! -nargs=* PAg call g:Vimrc_ag(current_project#info().main_path, [<f-args>])
+	function! g:Vimrc_ag(path, args) abort " {{{
 		if len(a:args) == 0
 			let path = a:path
 			let query = expand('<cword>')
