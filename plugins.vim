@@ -643,7 +643,7 @@ if(has('lua'))
 		let g:neocomplete#keyword_patterns.scala = '\v\h\w*%(\.\h\w*)*'
 		augroup vimrc-neocomplete
 			autocmd!
-			autocmd CursorMovedI * call Vimrc_neocomplete_control()
+			" autocmd CursorMovedI * call Vimrc_neocomplete_control()
 		augroup END
 		function! Vimrc_is_ime_enabled()
 			if(!executable('is_ascii_capable'))

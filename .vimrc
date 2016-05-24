@@ -163,6 +163,7 @@ for s:ft in [
 	\ '*.html',
 	\ '*.py:python',
 	\ '*.hs:haskell',
+	\ '*.swift',
 \ ]
 	call call(function('Vimrc_override_ftdetect'), split(s:ft, '\V:'))
 endfor
