@@ -288,10 +288,12 @@ function! s:the_bundle.hooks.on_post_source(bundle) abort " {{{
 				let i = i + 1
 			endwhile
 
-			if i > 1
-				let cand.abbr = '!!!{'.components[0].join(components[1: i-1], '/').'/}!!!'.join(components[i :], '/')
-			elseif i == 1
-				let cand.abbr = '!!!{'.components[0].'}!!!'.join(components[i :], '/')
+			if len(components[0]) > 0
+				if i > 1
+					let cand.abbr = '!!!{'.components[0].join(components[1: i-1], '/').'/}!!!'.join(components[i :], '/')
+				elseif i == 1
+					let cand.abbr = '!!!{'.components[0].'}!!!'.join(components[i :], '/')
+				endif
 			endif
 			let prev = components
 		endfor
@@ -636,7 +638,7 @@ if(has('lua'))
 		let g:neocomplete#force_overwrite_completefunc = 1
 		let g:neocomplete#enable_prefetch=1
 		let g:neocomplete#enable_smart_case = 1
-		let g:neocomplete#lock_iminsert = 1
+		" let g:neocomplete#lock_iminsert = 1
 		if !exists('g:neocomplete#keyword_patterns')
 			let g:neocomplete#keyword_patterns = {}
 		endif
@@ -856,7 +858,7 @@ call s:bundle('derekwyatt/vim-scala')
 call s:bundle('derekwyatt/vim-sbt')
 call s:bundle('gre/play2vim')
 
-call s:bundle('ensime/ensime-vim')
+" call s:bundle('ensime/ensime-vim')
 function! s:the_bundle.hooks.on_post_source(bundle) abort " {{{
 	let g:ensime_auto_start = 0
 endfunction " }}}

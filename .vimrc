@@ -137,6 +137,7 @@ function! Vimrc_override_ftdetect(pat, ...) abort " {{{
 endfunction " }}}
 
 for s:ft in [
+	\ '*.css',
 	\ '*.dot',
 	\ '*.scala',
 	\ '*.sbt',
