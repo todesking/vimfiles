@@ -3,95 +3,20 @@ scriptencoding utf-8
 
 " vint: -ProhibitUnnecessaryDoubleQuote
 
-" [[type, hooks]]
-" type:
-"   {type: "bundle", name: "", args: []}
-"   {type: "hooks", name: ""}
-let s:plugins = []
+let g:todespm#engine = 'dein'
 
-let s:hooks = {}
-
-function! s:bundle(name, ...) abort " {{{
-	let s:hooks = {}
-	let type = {"type": "bundle", "name": a:name, "hooks": s:hooks}
-	if a:0 == 0
-		let type.args = []
-	elseif a:0 == 1
-		let type.args = a:000
-	else
-		throw 's:bundle: invalid options' . string(a:000)
-	endif
-	call add(s:plugins, type)
+function! s:bundle(...) abort " {{{
+	return call('todespm#bundle', a:000)
 endfunction " }}}
 
-function! s:new_hooks(name) abort " {{{
-	let s:hooks = {}
-	call add(s:plugins, {"type": "hooks", "name": a:name, "hooks": s:hooks})
+function! s:new_hooks(...) abort " {{{
+	return call('todespm#new_hooks', a:000)
 endfunction " }}}
 
-let s:manager_neobundle = {} " {{{
-function! s:manager_neobundle.begin() abort " {{{
-	call neobundle#begin(expand('~/.vim/bundle/'))
-endfunction " }}}
-function! s:manager_neobundle.end() abort " {{{
-	call neobundle#end()
-endfunction " }}}
-function! s:manager_neobundle.bundle(name, args) abort " {{{
-	let url = 'https://github.com/' . a:name . '.git'
-	call call('neobundle#bundle', [url] + a:args)
-endfunction " }}}
-function! s:manager_neobundle.enabled(name) abort " {{{
-	return neobundle#is_installed(split(a:name, '/')[-1])
-endfunction " }}}
-" }}}
-
-let s:manager_dein = {} " {{{
-function! s:manager_dein.begin() abort " {{{
-	call dein#begin(expand('~/.vim/bundle/'))
-	call dein#add('Shougo/dein.vim')
-endfunction " }}}
-function! s:manager_dein.end() abort " {{{
-	call dein#end()
-endfunction " }}}
-function! s:manager_dein.bundle(name, args) abort " {{{
-	call call('dein#add', [a:name] + a:args)
-endfunction " }}}
-function! s:manager_dein.enabled(name) abort " {{{
-	return dein#check_install([a:name])
-endfunction " }}}
-" }}}
-
-let s:manager = s:manager_neobundle
-
-function! s:run() abort " {{{
-	call s:manager.begin()
-	for p in s:plugins
-		if p.type == "bundle"
-			call s:manager.bundle(p.name, p.args)
-		endif
-	endfor
-	call s:manager.end()
-
-	for p in s:plugins
-		if s:manager.enabled(p.name) && has_key(p.hooks, 'after')
-			let m = ''
-			try
-				call p.hooks.after()
-			catch /.*/
-				let m = 'Error in setting ' . p.name . ': ' . v:exception
-			endtry
-			if !empty(m)
-				echoerr m
-			endif
-		endif
-	endfor
-endfunction " }}}
-
-function! s:run_hook(name, f) " {{{
-endfunction " }}}
+call todespm#begin()
 
 call s:bundle('todesking/loadenv.vim')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	if executable('/usr/local/bin/bash')
 		call loadenv#load(
 		\ '/usr/local/bin/bash -i -c __CMD__',
@@ -112,7 +37,7 @@ call s:bundle('Shougo/vimproc.vim', {
 call s:bundle('todesking/current_project.vim')
 
 call s:bundle('todesking/metascope.vim')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	let def = {'name': 'current_project'}
 	function! def.scope_identifier() abort " {{{
 		let path = current_project#info().main_path
@@ -122,7 +47,7 @@ function! s:hooks.after() abort " {{{
 endfunction " }}}
 
 call s:bundle('todesking/scoped_qf.vim')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	let g:scoped_qf_scope_type = 'current_project'
 endfunction " }}}
 
@@ -135,13 +60,13 @@ call s:bundle('kana/vim-operator-user')
 " Navigation/Highlight {{{
 
 call s:new_hooks('matchparen')
-function! s:hooks.after() abort " matchparen {{{
+function! g:todespm#the_hooks.after() abort " matchparen {{{
 	let g:matchparen_timeout = 10
 	let g:matchparen_insert_timeout = 10
 endfunction " }}}
 
 call s:bundle('Lokaltog/vim-easymotion')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	nmap <silent><C-J> <Plug>(easymotion-w)
 	nmap <silent><C-K> <Plug>(easymotion-b)
 	vmap <silent><C-J> <Plug>(easymotion-w)
@@ -152,7 +77,7 @@ endfunction " }}}
 call s:bundle('vim-scripts/a.vim')
 
 call s:bundle('nathanaelkane/vim-indent-guides')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	if has('gui_running')
 		autocmd! indent_guides BufEnter *
 		augroup vimrc-indentguide
@@ -168,7 +93,7 @@ endfunction " }}}
 call s:bundle('osyo-manga/vim-brightest')
 
 call s:bundle('haya14busa/incsearch.vim')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	let g:incsearch#consistent_n_direction = 1
 	map /  <Plug>(incsearch-forward)
 	map ?  <Plug>(incsearch-backward)
@@ -184,7 +109,7 @@ call s:bundle('deris/vim-shot-f')
 call s:bundle('osyo-manga/vim-anzu')
 
 call s:bundle('haya14busa/vim-operator-flashy')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	map y <Plug>(operator-flashy)
 	nmap Y <Plug>(operator-flashy)$
 endfunction " }}}
@@ -197,7 +122,7 @@ call s:bundle('Konfekt/FastFold')
 " Textobj {{{
 
 call s:bundle('kana/vim-textobj-user')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	call textobj#user#plugin('lastmofified', {
 	\   'lastmodified': {
 	\     'select-a': 'al',
@@ -210,14 +135,14 @@ function! s:hooks.after() abort " {{{
 endfunction " }}}
 
 call s:bundle('rhysd/vim-operator-surround')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	nmap ys <Plug>(operator-surround-append)
 	nmap ds <Plug>(operator-surround-delete)
 	nmap cs <Plug>(operator-surround-replace)
 endfunction " }}}
 
 call s:bundle('todesking/vim-textobj-methodcall')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	let g:operator#surround#blocks =
 		\ textobj#methodcall#operator_surround_blocks(deepcopy(g:operator#surround#default_blocks), 'c')
 endfunction " }}}
@@ -228,7 +153,7 @@ call s:bundle('vim-scripts/argtextobj.vim')
 
 " Edit support {{{
 call s:bundle('todesking/YankRing.vim')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	let g:yankring_max_element_length = 0
 	let g:yankring_max_history_element_length = 1000 * 10
 	map y <Plug>(operator-flashy)
@@ -238,7 +163,7 @@ endfunction " }}}
 call s:bundle('junegunn/vim-easy-align')
 
 call s:bundle('vim-scripts/Align')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	let g:Align_xstrlen='strwidth'
 	map (trashbox-leader-rwp) <Plug>RestoreWinPosn
 	map (trashbox-leader-swp) <Plug>SaveWinPosn
@@ -248,7 +173,7 @@ endfunction " }}}
 call s:bundle('godlygeek/tabular')
 
 call s:bundle('vim-scripts/closetag.vim')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	augroup vimrc-closetag-vim
 		autocmd!
 		autocmd Filetype * call Vimrc_ft_closetag()
@@ -263,7 +188,7 @@ function! s:hooks.after() abort " {{{
 endfunction " }}}
 
 call s:bundle('Shougo/neosnippet.vim')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	let g:neosnippet#disable_runtime_snippets = {
 	\ '_': 1,
 	\ }
@@ -299,7 +224,7 @@ call s:bundle('katono/rogue.vim')
 
 " Unite {{{
 call s:bundle('Shougo/unite.vim')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	let g:unite_enable_start_insert = 1
 	let g:unite_update_time = 100
 	let g:unite_cursor_line_highlight='CursorLine'
@@ -391,7 +316,7 @@ augroup END
 " }}}
 
 call s:bundle('tsukkee/unite-tag')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	let g:unite_source_tag_max_name_length = 50
 	let g:unite_source_tag_max_fname_length = 999
 	let g:unite_source_tag_strict_truncate_string = 1
@@ -419,7 +344,7 @@ function! s:hooks.after() abort " {{{
 endfunction " }}}
 
 call s:bundle('Shougo/unite-outline')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	let g:unite_source_outline_scala_show_all_declarations = 1
 	let g:unite_source_outline_info = {
 	\  'ref-man': unite#sources#outline#defaults#man#outline_info(),
@@ -429,7 +354,7 @@ function! s:hooks.after() abort " {{{
 endfunction " }}}
 
 call s:bundle('sgur/unite-qf')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview -no-split -winheight=30 -wipe<CR>
 	nnoremap <C-Q>F :<C-u>Unite locationlist -no-start-insert -auto-preview -no-split -winheight=30 -wipe<CR>
 
@@ -453,7 +378,7 @@ function! s:hooks.after() abort " {{{
 endfunction " }}}
 
 call s:bundle('basyura/unite-rails')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	nnoremap <C-Q>r <ESC>
 	nnoremap <C-Q>j  :<C-u>Unite jump<CR>
 	nnoremap <C-Q>ra :<C-u>Unite rails/asset<CR>
@@ -468,7 +393,7 @@ function! s:hooks.after() abort " {{{
 endfunction " }}}
 
 call s:bundle('osyo-manga/unite-fold')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	call unite#custom#source('fold','sorters', ['sorter_nothing'])
 	function! g:Vimrc_unite_fold_foldtext(bufnr, val)
 		if has_key(a:val, 'word')
@@ -488,19 +413,19 @@ function! s:hooks.after() abort " {{{
 endfunction " }}}
 
 call s:bundle('ujihisa/unite-colorscheme')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	command! Colors Unite colorscheme -auto-preview
 endfunction " }}}
 
 call s:bundle('ujihisa/unite-font')
 
 call s:bundle('Shougo/neomru.vim')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	let g:neomru#do_validate = 1
 endfunction " }}}
 
 call s:bundle('osyo-manga/unite-candidate_sorter')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	augroup vimrc-unite-candidate-sorter
 	  autocmd!
 	  autocmd FileType unite nmap <silent><buffer> S <Plug>(unite-candidate_sort)
@@ -537,7 +462,7 @@ nnoremap <C-Q><C-Q>n :<C-u>Nyandoc<CR>
 
 " Sources {{{
 call s:new_hooks('unite-neco')
-function! s:hooks.after() abort " unite-neco {{{
+function! g:todespm#the_hooks.after() abort " unite-neco {{{
 	" from: https://github.com/ujihisa/config/blob/master/_vimrc
 	let s:unite_source = {'name': 'neco'}
 	function! s:unite_source.gather_candidates(args, context)
@@ -560,7 +485,7 @@ function! s:hooks.after() abort " unite-neco {{{
 endfunction " }}}
 
 call s:new_hooks('unite-massive-candidates')
-function! s:hooks.after() abort " unite-massive-candidates {{{
+function! g:todespm#the_hooks.after() abort " unite-massive-candidates {{{
 	let s:unite_source = {'name': 'massive-candidates'}
 	function! s:unite_source.gather_candidates(args, context)
 		return map(repeat(['a', 'b', 'c'], 10000), '{
@@ -573,7 +498,7 @@ function! s:hooks.after() abort " unite-massive-candidates {{{
 endfunction " }}}
 
 call s:new_hooks('unite vim-functions')
-function! s:hooks.after() abort " Unite vim-functions {{{
+function! g:todespm#the_hooks.after() abort " Unite vim-functions {{{
 	let def = {'name': 'vim-functions', 'default_action': 'open'}
 
 	let s:unite_vim_functions_cache = []
@@ -631,7 +556,7 @@ function! s:hooks.after() abort " Unite vim-functions {{{
 endfunction "}}}
 
 call s:new_hooks('unite git sources')
-function! s:hooks.after() abort " Git sources {{{
+function! g:todespm#the_hooks.after() abort " Git sources {{{
 	" (original: https://github.com/aereal/dotfiles/blob/master/.vim/vimrc )
 	function! s:git_read_path(cmd) abort " {{{
 		let base = fugitive#extract_git_dir(expand('%')) . "/.."
@@ -688,7 +613,7 @@ endfunction " }}}
 
 if(has('lua'))
 	call s:bundle('Shougo/neocomplete.vim')
-	function! s:hooks.after() abort " {{{
+	function! g:todespm#the_hooks.after() abort " {{{
 		let g:neocomplete#enable_at_startup = 1
 		let g:neocomplete#force_overwrite_completefunc = 1
 		let g:neocomplete#enable_prefetch=1
@@ -725,7 +650,7 @@ if(has('lua'))
 endif
 
 call s:bundle('itchyny/lightline.vim')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	function! Vimrc_summarize_project_path(path) abort " {{{
 		let path = a:path
 		" JVM subproject
@@ -840,7 +765,7 @@ function! s:hooks.after() abort " {{{
 endfunction " }}}
 
 call s:bundle('scrooloose/syntastic')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	let g:syntastic_scala_checkers=['fsc']
 	let g:syntastic_always_populate_loc_list=1
 
@@ -867,7 +792,7 @@ function! s:hooks.after() abort " {{{
 endfunction " }}}
 
 call s:bundle('todesking/vint-syntastic')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	let g:syntastic_vim_checkers = ['vint']
 endfunction " }}}
 
@@ -902,7 +827,7 @@ call s:bundle('vim-ruby/vim-ruby')
 call s:bundle('tpope/vim-rails')
 call s:bundle('rhysd/vim-textobj-ruby')
 call s:bundle('todesking/ruby_hl_lvar.vim')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	let g:ruby_hl_lvar_show_warnings = 1
 endfunction " }}}
 " }}}
@@ -914,12 +839,12 @@ call s:bundle('derekwyatt/vim-sbt')
 call s:bundle('gre/play2vim')
 
 " call s:bundle('ensime/ensime-vim')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	let g:ensime_auto_start = 0
 endfunction " }}}
 
 call s:bundle('slim-template/vim-slim')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	augroup vimrc-plugin-vim-slim
 		autocmd!
 		autocmd BufNewFile,BufRead *.slim set filetype=slim
@@ -928,7 +853,7 @@ function! s:hooks.after() abort " {{{
 endfunction " }}}
 
 call s:bundle('todesking/qf_sbt.vim')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	let g:qf_sbt_additional_args___ = [
 	\ 'set commands += Command.command("qf_sbt_disable_scalariform"){s =>'
 	\ . 'val key = "scalariformFormat";'
@@ -942,7 +867,7 @@ endfunction " }}}
 
 
 call s:bundle('roalddevries/yaml.vim')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	function! Vimrc_autocmd_yaml_vim()
 		if &foldmethod !=# 'syntax'
 			runtime yaml.vim
@@ -961,7 +886,7 @@ call s:bundle('evanmiller/nginx-vim-syntax')
 call s:bundle('wavded/vim-stylus')
 
 call s:new_hooks('ft: markdown') " markdown {{{
-function! s:hooks.after() abort
+function! g:todespm#the_hooks.after() abort
 	let g:markdown_fenced_languages = ['ruby', 'scala', 'vim', 'java', 'javascript']
 endfunction " }}}
 
@@ -984,7 +909,7 @@ call s:bundle('int3/vim-extradite')
 call s:bundle('Kocha/vim-unite-tig')
 call s:bundle('gregsexton/gitv')
 call s:bundle('airblade/vim-gitgutter')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	let g:gitgutter_eager = 0
 	nnoremap <leader>g :<C-U>call <SID>vimrc_gitgutter_refresh()<CR>
 	let g:vimrc_gitgutter_version = 0
@@ -1005,7 +930,7 @@ function! s:hooks.after() abort " {{{
 endfunction " }}}
 
 call s:bundle('todesking/gitreview.vim')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	nmap ,gg <Plug>(gitreview-gitgutter-next-sign)
 	nmap ,gp <Plug>(gitreview-gitgutter-prev-sign)
 	nmap ,gd :<C-u>GitReviewDiff<CR>
@@ -1015,7 +940,7 @@ endfunction " }}}
 
 
 call s:bundle('thinca/vim-ref')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	let g:ref_refe_cmd="~/local/bin/refe"
 	let g:ref_man_cmd = 'man'
 	command! -nargs=1 Man :Ref man <args>
@@ -1027,12 +952,12 @@ function! s:hooks.after() abort " {{{
 endfunction " }}}
 
 call s:bundle('taka84u9/vim-ref-ri', {'rev': 'master'})
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	command! -nargs=1 Ri :Ref ri <args>
 endfunction " }}}
 
 call s:bundle('mileszs/ack.vim')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	let g:ackprg = 'ag'
 	let g:ack_default_options = '-s -H --nogroup --nocolor --column'
 	let g:ack_qhandler = ''
@@ -1061,8 +986,8 @@ call s:bundle('Shougo/vimfiler.vim')
 call s:bundle('Shougo/vimshell.vim')
 
 call s:bundle('todesking/ttodo.vim')
-function! s:hooks.after() abort " {{{
+function! g:todespm#the_hooks.after() abort " {{{
 	let &titlestring='[TODO] %{g:todo_current_doing}'
 endfunction " }}}
 
-call s:run()
+call todespm#end()

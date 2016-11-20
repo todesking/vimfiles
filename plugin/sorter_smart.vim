@@ -1,3 +1,7 @@
+if !todespm#enabled('Shougo/unite.vim')
+	finish
+endif
+
 let s:sorter_smart = {
 			\ 'name': 'sorter_smart',
 			\ 'description': 'smart sorter(depends on converter_index)',

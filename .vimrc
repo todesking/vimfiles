@@ -10,6 +10,20 @@ if version < 800
 	finish
 endif
 
+" Sandbox {{{
+function! s:register_sandbox(path) abort " {{{
+	let files = glob(a:path . '/*', 1, 1)
+	for f in files
+		" TODO: check rtp
+		if isdirectory(f)
+			execute 'set runtimepath+=' . fnamemodify(f, ':p')
+		endif
+	endfor
+endfunction " }}}
+
+call s:register_sandbox(expand('~/.vim/sandbox'))
+" }}}
+
 " NeoBundle {{{
 if &compatible
 	set nocompatible               " be iMproved
@@ -95,19 +109,6 @@ endif
 " }}}
 
 runtime plugins.vim
-
-" Sandbox {{{
-function! s:register_sandbox(path) abort " {{{
-	let files = glob(a:path . '/*', 1, 1)
-	for f in files
-		if isdirectory(f)
-			execute 'set runtimepath+=' . fnamemodify(f, ':p')
-		endif
-	endfor
-endfunction " }}}
-
-call s:register_sandbox(expand('~/.vim/sandbox'))
-" }}}
 
 " ftdetect {{{
 filetype on
@@ -468,6 +469,9 @@ endfunction
 
 " Status line {{{
 function! Vimrc_current_project()
+	if !todespm#enabled('todesking/current_project.vim')
+		return ''
+	endif
 	let project = current_project#info()
 	if project['name']
 		return '['.project['name'].'] '.project['path']

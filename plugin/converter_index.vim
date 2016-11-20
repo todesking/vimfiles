@@ -1,3 +1,7 @@
+if !todespm#enabled('Shougo/unite.vim')
+	finish
+endif
+
 let s:converter = {
 			\ 'name': 'converter_index',
 			\ 'description': 'add converter__index to candidate',
