@@ -82,7 +82,9 @@ call s:bundle('vim-scripts/a.vim')
 call s:bundle('nathanaelkane/vim-indent-guides')
 function! g:todespm#the_hooks.after() abort " {{{
 	if has('gui_running')
-		autocmd! indent_guides BufEnter *
+		if exists('#indent_guides')
+			autocmd! indent_guides BufEnter *
+		endif
 		augroup vimrc-indentguide
 			autocmd!
 			autocmd BufWinEnter,BufNew * highlight IndentGuidesOdd guifg=NONE guibg=NONE
@@ -669,7 +671,6 @@ function! g:todespm#the_hooks.after() abort " {{{
 	endfunction " }}}
 	" let g:lightline {{{
 	let g:lightline = {
-				\ 'colorscheme': 'solarized_dark',
 				\ 'active': {
 				\   'left': [['project_component'], ['path_component']],
 				\   'right': [['lineinfo'], ['fileformat', 'fileencoding', 'filetype'], ['build_status', 'charinfo'] ],
