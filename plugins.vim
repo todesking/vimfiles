@@ -15,10 +15,9 @@ function! s:bundle(name, ...) abort " {{{
 	let s:hooks = {}
 	let type = {"type": "bundle", "name": a:name, "hooks": s:hooks}
 	if a:0 == 0
-		let type.args = [a:name]
+		let type.args = []
 	elseif a:0 == 1
-		let options = a:000
-		let type.args = [a:name] + options
+		let type.args = a:000
 	else
 		throw 's:bundle: invalid options' . string(a:000)
 	endif
@@ -30,17 +29,34 @@ function! s:new_hooks(name) abort " {{{
 	call add(s:plugins, {"type": "hooks", "name": a:name, "hooks": s:hooks})
 endfunction " }}}
 
-function! s:run() abort " {{{
+let s:manager_neobundle = {}
+function! s:manager_neobundle.begin() abort " {{{
 	call neobundle#begin(expand('~/.vim/bundle/'))
+endfunction " }}}
+function! s:manager_neobundle.end() abort " {{{
+	call neobundle#end()
+endfunction " }}}
+function! s:manager_neobundle.bundle(name, args) abort " {{{
+	let url = 'https://github.com/' . a:name . '.git'
+	call call('neobundle#bundle', [url] + a:args)
+endfunction " }}}
+function! s:manager_neobundle.enabled(name) abort " {{{
+	return neobundle#is_installed(split(a:name, '/')[-1])
+endfunction " }}}
+
+let s:manager = s:manager_neobundle
+
+function! s:run() abort " {{{
+	call s:manager.begin()
 	for p in s:plugins
 		if p.type == "bundle"
-			let url = 'https://github.com/' . p['args'][0] . '.git'
-			call call('neobundle#bundle', [url] + p.args[1:-1])
+			call s:manager.bundle(p.name, p.args)
 		endif
 	endfor
-	call neobundle#end()
+	call s:manager.end()
+
 	for p in s:plugins
-		if has_key(p.hooks, 'after')
+		if s:manager.enabled(p.name) && has_key(p.hooks, 'after')
 			let m = ''
 			try
 				call p.hooks.after()
