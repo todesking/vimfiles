@@ -13,7 +13,10 @@ function! s:new_hooks(...) abort " {{{
 	return call('todespm#new_hooks', a:000)
 endfunction " }}}
 
-call todespm#begin()
+call todespm#begin(expand('~/.vim/bundle/'))
+
+
+call s:bundle('Shougo/dein.vim')
 
 call s:bundle('todesking/loadenv.vim')
 function! g:todespm#the_hooks.after() abort " {{{

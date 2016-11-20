@@ -3,6 +3,7 @@
 "   {type: "bundle", name: "", args: []}
 "   {type: "hooks", name: ""}
 let s:plugins = []
+let s:home = expand('~/.vim/')
 
 function! todespm#engine(name) abort " {{{
 	return call('todespm#engine#' . a:name . '#get', [])
@@ -12,13 +13,12 @@ function! todespm#current() abort " {{{
 	return todespm#engine(g:todespm#engine)
 endfunction " }}}
 
-function! todespm#begin() abort " {{{
+function! todespm#begin(home) abort " {{{
 	let s:plugins = []
-	call todespm#current().begin()
+	let s:home = a:home
 endfunction " }}}
 
 function! todespm#end() abort " {{{
-	call todespm#current().end()
 	call todespm#run_after_hooks()
 endfunction " }}}
 
@@ -47,7 +47,7 @@ function! todespm#new_hooks(name) abort " {{{
 endfunction " }}}
 
 function! todespm#run_after_hooks() abort " {{{
-	call todespm#current().begin()
+	call todespm#current().begin(s:home)
 	for p in s:plugins
 		if p.type == "bundle"
 			call todespm#current().bundle(p.name, p.args)

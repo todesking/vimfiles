@@ -1,7 +1,6 @@
 let s:manager_dein = {} " {{{
-function! s:manager_dein.begin() abort " {{{
-	call dein#begin(expand('~/.vim/bundle/'))
-	call dein#add('Shougo/dein.vim')
+function! s:manager_dein.begin(home) abort " {{{
+	call dein#begin(a:home)
 endfunction " }}}
 function! s:manager_dein.end() abort " {{{
 	call dein#end()

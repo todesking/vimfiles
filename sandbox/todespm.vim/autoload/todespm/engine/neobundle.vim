@@ -1,6 +1,6 @@
 let s:manager_neobundle = {} " {{{
-function! s:manager_neobundle.begin() abort " {{{
-	call neobundle#begin(expand('~/.vim/bundle/'))
+function! s:manager_neobundle.begin(home) abort " {{{
+	call neobundle#begin(a:home)
 endfunction " }}}
 function! s:manager_neobundle.end() abort " {{{
 	call neobundle#end()
