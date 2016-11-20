@@ -1,11 +1,6 @@
 if has('gui')
 	let g:molokai_original=1
-	if hostname() =~# 'MacBook-Pro'
-		set guifont=Sauce\ Code\ Powerline:h12
-		set guifont=Droid\ Sans\ Mono\ for\ Powerline:h11
-	else
-		set guifont=Sauce\ Code\ Powerline:h14,Source\ Code\ Pro:h14,Osaka-Mono:h16
-	endif
+	set guifont=Sauce\ Code\ Powerline:h11
 	set noballooneval
 	set guioptions=erL
 	set colorcolumn=120

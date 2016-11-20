@@ -6,6 +6,10 @@ let $RUBY_DLL=$HOME.'/.rbenv/versions/2.2.0/lib/libruby.dylib'
 
 let $LC_ALL='en_US.UTF8'
 
+if version < 800
+	finish
+endif
+
 " NeoBundle {{{
 if &compatible
 	set nocompatible               " be iMproved
@@ -18,6 +22,7 @@ if has('vim_starting')
 endif
 let g:neobundle#types#git#default_protocol = 'git'
 " }}}
+
 " basic settings {{{
 set smartcase
 set wrapscan
