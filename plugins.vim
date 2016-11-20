@@ -29,7 +29,7 @@ function! s:new_hooks(name) abort " {{{
 	call add(s:plugins, {"type": "hooks", "name": a:name, "hooks": s:hooks})
 endfunction " }}}
 
-let s:manager_neobundle = {}
+let s:manager_neobundle = {} " {{{
 function! s:manager_neobundle.begin() abort " {{{
 	call neobundle#begin(expand('~/.vim/bundle/'))
 endfunction " }}}
@@ -43,6 +43,23 @@ endfunction " }}}
 function! s:manager_neobundle.enabled(name) abort " {{{
 	return neobundle#is_installed(split(a:name, '/')[-1])
 endfunction " }}}
+" }}}
+
+let s:manager_dein = {} " {{{
+function! s:manager_dein.begin() abort " {{{
+	call dein#begin(expand('~/.vim/bundle/'))
+	call dein#add('Shougo/dein.vim')
+endfunction " }}}
+function! s:manager_dein.end() abort " {{{
+	call dein#end()
+endfunction " }}}
+function! s:manager_dein.bundle(name, args) abort " {{{
+	call call('dein#add', [a:name] + a:args)
+endfunction " }}}
+function! s:manager_dein.enabled(name) abort " {{{
+	return dein#check_install([a:name])
+endfunction " }}}
+" }}}
 
 let s:manager = s:manager_neobundle
 
