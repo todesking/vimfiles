@@ -469,7 +469,7 @@ endfunction
 
 " Status line {{{
 function! Vimrc_current_project()
-	if !todespm#enabled('todesking/current_project.vim')
+	if !exists('*current_project#info')
 		return ''
 	endif
 	let project = current_project#info()
@@ -520,11 +520,13 @@ func! String2Hex(str)
 endfunc
 
 "入力モード時、ステータスラインのカラーを変更
-augroup InsertHook
-autocmd!
-autocmd InsertEnter * highlight StatusLine guifg=#ccdc90 guibg=#2E4340
-autocmd InsertLeave * highlight StatusLine guifg=#2E4340 guibg=#ccdc90
-augroup END
+if 0
+	augroup InsertHook
+	autocmd!
+	autocmd InsertEnter * highlight StatusLine guifg=#ccdc90 guibg=#2E4340
+	autocmd InsertLeave * highlight StatusLine guifg=#2E4340 guibg=#ccdc90
+	augroup END
+endif
 " }}}
 
 " IM hack(disable im if normal mode) {{{

@@ -1,4 +1,4 @@
-if !todespm#enabled('Shougo/unite.vim')
+if !exists(':Unite')
 	finish
 endif
 
