@@ -4,6 +4,7 @@ function! s:manager_dein.begin(home) abort " {{{
 endfunction " }}}
 function! s:manager_dein.end() abort " {{{
 	call dein#end()
+	call dein#save_state()
 endfunction " }}}
 function! s:manager_dein.bundle(name, args) abort " {{{
 	call call('dein#add', [a:name] + a:args)

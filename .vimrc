@@ -26,18 +26,14 @@ endfunction " }}}
 call s:register_sandbox(expand('~/.vim/sandbox'))
 " }}}
 
-" NeoBundle {{{
+" Dein {{{
 if &compatible
-	set nocompatible               " be iMproved
+  set nocompatible
 endif
-filetype off                   " required!
-filetype plugin indent off     " required!
+let &runtimepath.=','.expand('~/.vim/bundle/dein.vim/')
 
-if has('vim_starting')
-	" set runtimepath+=~/.vim/bundle/neobundle.vim/
-	set runtimepath+=~/.vim/bundle/repos/github.com/Shougo/dein.vim/
-endif
-let g:neobundle#types#git#default_protocol = 'git'
+filetype plugin indent on
+syntax enable
 " }}}
 
 " basic settings {{{
