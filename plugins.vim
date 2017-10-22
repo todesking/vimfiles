@@ -89,7 +89,7 @@ function! g:todespm#the_hooks.after() abort " {{{
 			autocmd!
 			autocmd BufWinEnter,BufNew * highlight IndentGuidesOdd guifg=NONE guibg=NONE
 		augroup END
-		let g:indent_guides_enable_on_vim_startup=1
+		let g:indent_guides_enable_on_vim_startup=0
 		let g:indent_guides_start_level=1
 		let g:indent_guides_guide_size=1
 	endif
@@ -615,6 +615,10 @@ endfunction " }}}
 
 " }}}
 
+if(has('python3'))
+	call s:bundle('Shougo/denite.nvim')
+endif
+
 
 if(has('lua'))
 	call s:bundle('Shougo/neocomplete.vim')
@@ -780,7 +784,14 @@ function! g:todespm#the_hooks.after() abort " {{{
 		endif
 		let notifier = g:SyntasticNotifiers.Instance()
 		call notifier.reset(g:SyntasticLoclist.current())
-		call b:syntastic_loclist.destroy()
+
+		if(!has_key(b:, 'syntastic_loclist')) " TODO
+			return
+		endif
+
+		if(has_key(b:syntastic_loclist, 'destroy')) " TODO: BUG?
+			call b:syntastic_loclist.destroy()
+		endif
 
 		let loclist = g:SyntasticLoclist.New(getqflist())
 		call loclist.deploy()
@@ -885,7 +896,7 @@ function! g:todespm#the_hooks.after() abort " {{{
 	augroup END
 endfunction " }}}
 
-call s:bundle('evanmiller/nginx-vim-syntax')
+" call s:bundle('evanmiller/nginx-vim-syntax')
 
 call s:bundle('wavded/vim-stylus')
 

@@ -2,6 +2,10 @@ snippet def
     def ${1:name} = {
     }
 
+snippet mks
+options word
+    mkString("\n")
+
 snippet Main
     object Main {
       def main(args: Array[String]): Unit = {
@@ -50,7 +54,7 @@ snippet ip
 
 snippet il
 options word
-    implicitly
+    implicitly[
 
 snippet id
     implicit def 
@@ -88,6 +92,8 @@ snippet cl
 snippet t
     trait 
 
+snippet o
+    object 
 snippet co
     case object 
 
@@ -107,3 +113,40 @@ snippet ll
 
 snippet c
     case 
+
+snippet u
+options word
+    : Unit = {
+
+snippet ad
+options word
+    Array[Double]
+
+snippet ai
+options word
+    Array[Int]
+
+snippet i.ss
+    import org.apache.spark.sql.SparkSession
+
+snippet i.df
+    import org.apache.spark.sql.DataFrame
+
+snippet i.ds
+    import org.apache.spark.sql.Dataset
+
+snippet i.si
+    import spark.implicits._
+
+snippet i.sf
+    import org.apache.spark.sql.functions
+
+snippet i.jc
+    import scala.collection.JavaConverters._
+
+snippet i.tt
+    import scala.reflect.runtime.universe.TypeTag
+
+snippet i.bo
+    import scala.collection.breakOut
+

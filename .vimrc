@@ -6,6 +6,8 @@ let $RUBY_DLL=$HOME.'/.rbenv/versions/2.2.0/lib/libruby.dylib'
 
 let $LC_ALL='en_US.UTF8'
 
+set pythonthreedll=/usr/local/Cellar/python3/3.5.2_3/Frameworks/Python.framework/Versions/3.5/Python
+
 if version < 800
 	finish
 endif
@@ -32,7 +34,7 @@ filetype off                   " required!
 filetype plugin indent off     " required!
 
 if has('vim_starting')
-	set runtimepath+=~/.vim/bundle/neobundle.vim/
+	" set runtimepath+=~/.vim/bundle/neobundle.vim/
 	set runtimepath+=~/.vim/bundle/repos/github.com/Shougo/dein.vim/
 endif
 let g:neobundle#types#git#default_protocol = 'git'
@@ -635,3 +637,5 @@ nnoremap <C-B> :<C-U>up<CR>
 
 map y <Plug>(operator-flashy)
 nmap Y <Plug>(operator-flashy)$
+
+imap <D-Space> <Space>

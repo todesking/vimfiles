@@ -56,7 +56,7 @@ function! todespm#run_after_hooks() abort " {{{
 	call todespm#current().end()
 
 	for p in s:plugins
-		if todespm#current().enabled(p.name) && has_key(p.hooks, 'after')
+		if (p.type == "hooks" || todespm#current().enabled(p.name)) && has_key(p.hooks, 'after')
 			let m = ''
 			try
 				call p.hooks.after()
