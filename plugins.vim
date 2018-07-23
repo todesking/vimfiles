@@ -627,6 +627,9 @@ if(has('python3'))
 
 		call denite#custom#option('_', 'direction', 'topleft')
 
+		call denite#custom#source('file_rec', 'converters', ['converter/mark_dup'])
+		call denite#custom#source('file_mru', 'converters', ['converter/mark_dup'])
+
 		nnoremap <silent><C-S> :Denite file_mru<CR>
 		nnoremap <C-Q>  <ESC>
 		nnoremap <C-Q>u :Denite -resume
@@ -635,6 +638,8 @@ if(has('python3'))
 		nnoremap <C-Q>c :<C-u>DeniteBufferDir file_rec<CR>
 		nnoremap <C-Q>l :<C-u>Denite line<CR>
 		nnoremap <C-Q>b :<C-u>Denite buffer<CR>
+		nnoremap <C-Q>b :<C-u>Denite unite:outline<CR>
+		nnoremap <C-Q>d :<C-u>Denite unite:fold<CR>
 		nnoremap <C-Q><C-P> :<C-u>Denite -resume -cursor-pos=-1 -immediately<CR>
 		nnoremap <C-Q><C-N> :<C-u>Denite -resume -cursor-pos=+1 -immediately<CR>
 	endfunction " }}}
@@ -644,6 +649,21 @@ if(has('python3'))
 	" Unite {{{
 	call s:bundle('Shougo/unite.vim')
 	call s:bundle('Shougo/unite-outline')
+	call s:bundle('osyo-manga/unite-fold')
+	" }}}
+
+	function! Vimrc_unite_syntax() abort " {{{
+		" syntax match MyDeniteProjectName /^\[[^]]\+\]/
+		" highlight link MyDeniteProjectName Identifier
+		syntax region MyDeniteUnimportant matchgroup=MyDeniteConceal excludenl start=/{{{/ end=/}}}/ concealends containedin=deniteSource_file_mru,deniteSoure_file_rec
+		highlight link MyDeniteUnimportant Comment
+		setlocal concealcursor+=i
+	endfunction " }}}
+
+	augroup vimrc-denite-syntax
+		autocmd!
+		autocmd FileType denite :call Vimrc_unite_syntax()
+	augroup END
 	" }}}
 endif
 " }}}
