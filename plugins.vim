@@ -636,8 +636,13 @@ if(has('python3'))
 		nnoremap <C-Q><C-P> :<C-u>Denite -resume -cursor-pos=-1 -immediately<CR>
 		nnoremap <C-Q><C-N> :<C-u>Denite -resume -cursor-pos=+1 -immediately<CR>
 	endfunction " }}}
+
 	call s:bundle('Shougo/neomru.vim')
-	
+
+	" Unite {{{
+	call s:bundle('Shougo/unite.vim')
+	call s:bundle('Shougo/unite-outline')
+	" }}}
 endif
 " }}}
 
