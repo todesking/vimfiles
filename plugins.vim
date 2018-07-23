@@ -625,6 +625,8 @@ if(has('python3'))
 		call denite#custom#map('insert', '<C-U>', '<denite:scroll_window_upwards>', 'noremap')
 		call denite#custom#map('insert', '<C-D>', '<denite:scroll_window_downwards>', 'noremap')
 
+		call denite#custom#option('_', 'direction', 'topleft')
+
 		nnoremap <silent><C-S> :Denite file_mru<CR>
 		nnoremap <C-Q>  <ESC>
 		nnoremap <C-Q>u :Denite -resume
