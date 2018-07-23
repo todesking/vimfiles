@@ -1,6 +1,6 @@
 if has('gui')
 	let g:molokai_original=1
-	set guifont=Sauce\ Code\ Powerline:h11
+	set guifont=Source\ Code\ Pro\ for\ Powerline:h11
 	set noballooneval
 	set guioptions=erL
 	set colorcolumn=120
@@ -14,6 +14,6 @@ if has('gui')
 		highlight Error guibg=#FF6666
 	augroup END
 	MenuLang en_US.UTF-8
-	set lines=49
-	set columns=177
+	set lines=52
+	set columns=180
 endif
