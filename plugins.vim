@@ -228,393 +228,394 @@ call s:bundle('katono/rogue.vim')
 
 
 " " Unite {{{
-" call s:bundle('Shougo/unite.vim')
-" function! g:todespm#the_hooks.after() abort " {{{
-" 	let g:unite_enable_start_insert = 1
-" 	let g:unite_update_time = 100
-" 	let g:unite_cursor_line_highlight='CursorLine'
-" 	let g:unite_redraw_hold_candidates=300000
-" 
-" 	let g:unite_source_rec_max_cache_files = 50000
-" 	let g:unite_source_rec_async_command=[expand('~/.vim/bin/list_file_rec')]
-" 	let g:unite_source_file_async_command=expand('~/.vim/bin/list_file_rec')
-" 
-" 	let g:unite_source_history_unite_limit = 1
-" 
-" 	call unite#filters#sorter_default#use(['sorter_smart'])
-" 
-" 	" unite-file_mru {{{
-" 	let g:unite_source_file_mru_limit=1000
-" 	let g:unite_source_file_mru_time_format=''
-" 	let g:unite_source_mru_do_validate=0
-" 	" }}}
-" 
-" 
-" 	" hide_unimportant_path {{{
-" 	let filter={'name': 'converter_hide_unimportant_path'}
-" 	function! filter.filter(candidates, context)
-" 		if len(a:candidates) > 1000
-" 			return a:candidates
-" 		endif
-" 		let header_pat = '^\[[^\]]\+\] '
-" 		let prev = []
-" 		for cand in a:candidates
-" 			let path = cand.abbr
-" 			if empty(path) | let path = cand.word | endif
-" 
-" 			let header = matchstr(path, header_pat)
-" 			if header == -1 | let header = '' | endif
-" 			if !empty(header) | let path = substitute(path, header_pat, '', '') | endif
-" 			let components = [header] + split(path, '/', 1)
-" 			let i = 0
-" 			let l = min([len(components), len(prev)])
-" 			while i < l
-" 				if components[i] != prev[i] | break | endif
-" 				let i = i + 1
-" 			endwhile
-" 
-" 			if len(components[0]) > 0
-" 				if i > 1
-" 					let cand.abbr = '!!!{'.components[0].join(components[1: i-1], '/').'/}!!!'.join(components[i :], '/')
-" 				elseif i == 1
-" 					let cand.abbr = '!!!{'.components[0].'}!!!'.join(components[i :], '/')
-" 				endif
-" 			endif
-" 			let prev = components
-" 		endfor
-" 		return a:candidates
-" 	endfunction
-" 	call unite#define_filter(filter)
-" 	" }}}
-" 
-" 	" Default source config " {{{
-" 	call unite#custom#source('file_mru', 'matchers', ['converter_index', 'matcher_context'])
-" 
-" 	for g:source in ['file', 'file_mru', 'file_rec', 'file_rec/async', 'buffer']
-" 		call unite#custom#source(g:source, 'converters', ['converter_summarize_project_path', 'converter_hide_unimportant_path'])
-" 	endfor
-" 	unlet g:source
-" 
-" 	for g:source in ['file_rec', 'file_rec/async']
-" 		call unite#custom#source(g:source, 'matchers', ['matcher_default'])
-" 	endfor
-" 	unlet g:source
-" 
-" 	call unite#custom#source('file_rec', 'max_candidates', 0)
-" 	call unite#custom#source('file_rec/async', 'max_candidates', 0)
-" 	" }}}
-" endfunction " }}}
-" 
-" " Vimrc_unite_syntax {{{
-" function! Vimrc_unite_syntax()
-" 	syntax match unite__word_tag /\[[^]]\+\]/ contained containedin=uniteSource__FileMru,uniteSource__FileRec,uniteSource__FileRecAsync
-" 	highlight link unite__word_tag Identifier
-" 	syntax region UniteUnimportant keepend excludenl matchgroup=UniteUnimportantMarker start=/!!!{/ end=/}!!!/ concealends containedin=uniteSource__FileMru,uniteSource_File,uniteSource__FileRec,uniteSource__FileRecAsync,uniteSource__Buffer
-" 	highlight link UniteUnimportant Comment
-" 	setlocal concealcursor+=i
-" endfunction
-" 
-" augroup vimrc-untie-syntax
-" 	autocmd!
-" 	autocmd FileType unite :call Vimrc_unite_syntax()
-" augroup END
-" " }}}
-" 
-" call s:bundle('tsukkee/unite-tag')
-" function! g:todespm#the_hooks.after() abort " {{{
-" 	let g:unite_source_tag_max_name_length = 50
-" 	let g:unite_source_tag_max_fname_length = 999
-" 	let g:unite_source_tag_strict_truncate_string = 1
-" 
-" 	nnoremap <C-Q>t :<C-u>Unite tag -immediately<CR>
-" 	" C-] to unite tag jump
-" 	augroup vimrc-tagjump-unite
-" 		autocmd!
-" 		autocmd BufEnter *
-" 					\   if empty(&buftype)
-" 					\|      nnoremap <buffer> <C-]> m':<C-u>UniteWithCursorWord -immediately outline tag<CR>
-" 					\|  endif
-" 	augroup END
-" 	let c = {'name': 'converter_tag'}
-" 	function! c.filter(candidates, context) abort
-" 		for c in a:candidates
-" 			let spath = current_project#summarize_path(c.action__path)
-" 			let c.abbr = printf('%-25s @%-100s', c.action__tagname, spath)
-" 			let c.word = c.action__tagname . ' ' . spath
-" 		endfor
-" 		return a:candidates
-" 	endfunction
-" 	call unite#define_filter(c)
-" 	call unite#custom#source('tag','converters', ['converter_tag'])
-" endfunction " }}}
-" 
-" call s:bundle('Shougo/unite-outline')
-" function! g:todespm#the_hooks.after() abort " {{{
-" 	let g:unite_source_outline_scala_show_all_declarations = 1
-" 	let g:unite_source_outline_info = {
-" 	\  'ref-man': unite#sources#outline#defaults#man#outline_info(),
-" 	\ }
-" 	let x = unite#sources#outline#modules#ctags#import()
-" 	let x.exe .= ' --languages=+Java,C,C++'
-" endfunction " }}}
-" 
-" call s:bundle('sgur/unite-qf')
-" function! g:todespm#the_hooks.after() abort " {{{
-" 	nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview -no-split -winheight=30 -wipe<CR>
-" 	nnoremap <C-Q>F :<C-u>Unite locationlist -no-start-insert -auto-preview -no-split -winheight=30 -wipe<CR>
-" 
-" 	for s in ['qf', 'locationlist']
-" 		call unite#custom#profile('source/' . s, 'context', {'max_multi_lines': 20})
-" 		call unite#custom#source(s, 'converters', ['converter_pretty_qf'])
-" 	endfor
-" 
-" 	let filter = {'name': 'converter_pretty_qf'}
-" 
-" 	function! filter.filter(candidates, context) abort " {{{
-" 		for c in a:candidates
-" 			let message = substitute(c.word, '^.\{-}|\d\+| ', '', '')
-" 			let message = join(map(split(message, "\n"), '"| " . v:val'), "\n") . "\n|"
-" 			let c.word = current_project#summarize_path(c.action__path) . ':' . c.action__line . "\n" . message
-" 		endfor
-" 		return a:candidates
-" 	endfunction " }}}
-" 
-" 	call unite#define_filter(filter)
-" endfunction " }}}
-" 
-" call s:bundle('basyura/unite-rails')
-" function! g:todespm#the_hooks.after() abort " {{{
-" 	nnoremap <C-Q>r <ESC>
-" 	nnoremap <C-Q>j  :<C-u>Unite jump<CR>
-" 	nnoremap <C-Q>ra :<C-u>Unite rails/asset<CR>
-" 	nnoremap <C-Q>rm :<C-u>Unite rails/model<CR>
-" 	nnoremap <C-Q>rc :<C-u>Unite rails/controller<CR>
-" 	nnoremap <C-Q>rv :<C-u>Unite rails/view<CR>
-" 	nnoremap <C-Q>rf :<C-u>Unite rails/config<CR>
-" 	nnoremap <C-Q>rd :<C-u>Unite rails/db -input=seeds/\ <CR>
-" 	nnoremap <C-Q>ri :<C-u>Unite rails/db -input=migrate/\ <CR>
-" 	nnoremap <C-Q>rl :<C-u>Unite rails/lib<CR>
-" 	nnoremap <C-Q>rh :<C-u>Unite rails/helper<CR>
-" endfunction " }}}
-" 
-" call s:bundle('osyo-manga/unite-fold')
-" function! g:todespm#the_hooks.after() abort " {{{
-" 	call unite#custom#source('fold','sorters', ['sorter_nothing'])
-" 	function! g:Vimrc_unite_fold_foldtext(bufnr, val)
-" 		if has_key(a:val, 'word')
-" 			return a:val.word
-" 		else
-" 			let marker_label = matchstr(a:val.line, "\"\\s*\\zs.*\\ze".split(&foldmarker, ",")[0])
-" 			if !empty(marker_label)
-" 				return marker_label
-" 			else
-" 				return matchstr(a:val.line, "^\\zs.*\\ze\\s*\"\\s*.*".split(&foldmarker, ",")[0])
-" 			endif
-" 		end
-" 	endfunction
-" 	let g:Unite_fold_foldtext=function('g:Vimrc_unite_fold_foldtext')
-" 
-" 	nnoremap <C-Q>d :<C-u>Unite fold<CR>
-" endfunction " }}}
-" 
-" call s:bundle('ujihisa/unite-colorscheme')
-" function! g:todespm#the_hooks.after() abort " {{{
-" 	command! Colors Unite colorscheme -auto-preview
-" endfunction " }}}
-" 
-" call s:bundle('ujihisa/unite-font')
-" 
-" call s:bundle('Shougo/neomru.vim')
-" function! g:todespm#the_hooks.after() abort " {{{
-" 	let g:neomru#do_validate = 1
-" endfunction " }}}
-" 
-" call s:bundle('osyo-manga/unite-candidate_sorter')
-" function! g:todespm#the_hooks.after() abort " {{{
-" 	augroup vimrc-unite-candidate-sorter
-" 	  autocmd!
-" 	  autocmd FileType unite nmap <silent><buffer> S <Plug>(unite-candidate_sort)
-" 	augroup END
-" endfunction " }}}
-" 
-" 
-" " Keymap {{{
-" 
-" augroup unite-keybind
-" 	autocmd!
-" 	autocmd FileType unite nmap <buffer><silent><Esc> q
-" augroup END
-" 
-" nnoremap <silent><C-S> :Unite file_mru<CR>
-" 
-" nnoremap <C-Q>  <ESC>
-" 
-" nnoremap <C-Q>u :UniteResume<CR>
-" nnoremap <C-Q>o m':<C-u>Unite outline<CR>
-" nnoremap <C-Q>P :<C-u>exec 'Unite file_rec/async:'.current_project#info(expand('%')).main_path<CR>
-" nnoremap <C-Q>p :<C-u>exec 'Unite file_rec/async:'.current_project#info(expand('%')).sub_path<CR>
-" nnoremap <C-Q>c :<C-u>exec 'Unite file_rec:'.expand('%:p:h').'/'<CR>
-" nnoremap <C-Q>l :<C-u>Unite line<CR>
-" nnoremap <C-Q>b :<C-u>Unite buffer<CR>
-" nnoremap <C-Q>gc :<C-u>Unite git/files/conflict<CR>
-" nnoremap <C-Q>gf :<C-u>Unite gitreview/changed_files<CR>
-" nnoremap <C-Q><C-P> :<C-u>UnitePrevious<CR>
-" nnoremap <C-Q><C-N> :<C-u>UniteNext<CR>
-" nnoremap <C-Q><C-Q>p :<C-u>Projects<CR>
-" nnoremap <C-Q><C-Q>n :<C-u>Nyandoc<CR>
-" " }}}
-" 
-" 
-" " Sources {{{
-" call s:new_hooks('unite-neco')
-" function! g:todespm#the_hooks.after() abort " unite-neco {{{
-" 	" from: https://github.com/ujihisa/config/blob/master/_vimrc
-" 	let s:unite_source = {'name': 'neco'}
-" 	function! s:unite_source.gather_candidates(args, context)
-" 		let necos = [
-" 			\ "~(-'_'-) goes right",
-" 			\ "~(-'_'-) goes right and left",
-" 			\ "~(-'_'-) goes right quickly",
-" 			\ "~(-'_'-) skips right",
-" 			\ "~(-'_'-)  -8(*'_'*) go right and left",
-" 			\ "(=' .' ) ~w",
-" 			\ ]
-" 		return map(necos, '{
-" 			\ "word": v:val,
-" 			\ "source": "neco",
-" 			\ "kind": "command",
-" 			\ "action__command": "Neco " . v:key,
-" 			\ }')
-" 	endfunction
-" 	call unite#define_source(s:unite_source)
-" endfunction " }}}
-" 
-" call s:new_hooks('unite-massive-candidates')
-" function! g:todespm#the_hooks.after() abort " unite-massive-candidates {{{
-" 	let s:unite_source = {'name': 'massive-candidates'}
-" 	function! s:unite_source.gather_candidates(args, context)
-" 		return map(repeat(['a', 'b', 'c'], 10000), '{
-" 			\ "word": v:val,
-" 			\ "source": "massive-candidates",
-" 			\ "kind": "word",
-" 			\ }')
-" 	endfunction
-" 	call unite#define_source(s:unite_source)
-" endfunction " }}}
-" 
-" call s:new_hooks('unite vim-functions')
-" function! g:todespm#the_hooks.after() abort " Unite vim-functions {{{
-" 	let def = {'name': 'vim-functions', 'default_action': 'open'}
-" 
-" 	let s:unite_vim_functions_cache = []
-" 
-" 	function! def.gather_candidates(args, context) abort " {{{
-" 		if len(s:unite_vim_functions_cache)
-" 			return s:unite_vim_functions_cache
-" 		endif
-" 		let s:unite_vim_functions_cache = s:make_cache_functions()
-" 		for c in s:unite_vim_functions_cache
-" 			let c.kind = 'common'
-" 			let c.action__tagname = c.word . ')'
-" 			let c.abbr = substitute(c.abbr, '\t', '        ', 'g')
-" 		endfor
-" 		return s:unite_vim_functions_cache
-" 	endfunction " }}}
-" 
-" 	let def.action_table = {}
-" 	let def.action_table.open = {}
-" 
-" 	function! def.action_table.open.func(candidate) abort " {{{
-" 		execute 'help ' . a:candidate.action__tagname
-" 	endfunction " }}}
-" 
-" 	call unite#define_source(def)
-" 
-" 	" from NeoComplete(https://github.com/Shougo/neocomplete.vim)
-" 	" autoload/neocomplete/sources/vim/helper.vim
-" 	function! s:make_cache_functions() "{{{
-" 	  let helpfile = expand(findfile('doc/eval.txt', &runtimepath))
-" 	  if !filereadable(helpfile)
-" 		return []
-" 	  endif
-" 
-" 	  let lines = readfile(helpfile)
-" 	  let functions = []
-" 	  let start = match(lines, '^abs')
-" 	  let end = match(lines, '^abs', start, 2)
-" 	  let desc = ''
-" 	  for i in range(end-1, start, -1)
-" 		let desc = substitute(lines[i], '^\s\+\ze\S', '', '').' '.desc
-" 		let _ = matchlist(desc,
-" 			  \'^\s*\(\(\i\+(\).*)\)\s\+\(\w*\)\s\+\(.\+[^*]\)$')
-" 		if !empty(_)
-" 		  call insert(functions, {
-" 				\ 'word' : _[2],
-" 				\ 'abbr' : substitute(_[0], '(\zs\s\+', '', ''),
-" 				\ })
-" 		  let desc = ''
-" 		endif
-" 	  endfor
-" 
-" 	  return functions
-" 	endfunction "}}}
-" endfunction "}}}
-" 
-" call s:new_hooks('unite git sources')
-" function! g:todespm#the_hooks.after() abort " Git sources {{{
-" 	" (original: https://github.com/aereal/dotfiles/blob/master/.vim/vimrc )
-" 	function! s:git_read_path(cmd) abort " {{{
-" 		let base = fugitive#extract_git_dir(expand('%')) . "/.."
-" 		execute 'lcd ' . base
-" 		let output = unite#util#system('git diff-files --name-only --diff-filter=U')
-" 		lcd -
-" 		return [base, split(output, "\n")]
-" 	endfunction " }}}
-" 	function! s:git_make_candidates(source_name, cmd) abort " {{{
-" 		let [base, files] = s:git_read_path(a:cmd)
-" 		return map(files, '{
-" 					\ "word" : v:val,
-" 					\ "source" : a:source_name,
-" 					\ "kind" : "file",
-" 					\ "action__path" : fnamemodify(base . "/" . v:val, ":p"),
-" 					\ }')
-" 	endfunction " }}}
-" 
-" 	" unite-git-files-conflict {{{
-" 	let s:unite_git_files_conflict = {
-" 				\   'name' : 'git/files/conflict',
-" 				\ }
-" 	function! s:unite_git_files_conflict.gather_candidates(args, context)
-" 		return s:git_make_candidates('git/files/conflict', 'git diff-files --name-only --diff-filter=U')
-" 	endfunction
-" 	call unite#define_source(s:unite_git_files_conflict)
-" 	" }}}
-" 
-" 	" unite-git-files-modified {{{
-" 	let s:unite_git_files_modified = {
-" 				\   'name' : 'git/files/modified',
-" 				\ }
-" 	function! s:unite_git_files_modified.gather_candidates(args, context)
-" 		return s:git_make_candidates('git/files/modified', 'git ls-files --modified')
-" 	endfunction
-" 	call unite#define_source(s:unite_git_files_modified)
-" 	" }}}
-" 
-" 	" unite-git-files-others {{{
-" 	let s:unite_git_files_others = {
-" 				\   'name' : 'git/files/others',
-" 				\ }
-" 	function! s:unite_git_files_others.gather_candidates(args, context)
-" 		return s:git_make_candidates('git/files/others', 'git ls-files --others --exclude-standard')
-" 	endfunction
-" 	call unite#define_source(s:unite_git_files_others)
-" 	" }}}
-" endfunction " }}}
-" 
-" " }}}
-" 
-" " }}}
-" 
+if 0
+	call s:bundle('Shougo/unite.vim')
+	function! g:todespm#the_hooks.after() abort " {{{
+		let g:unite_enable_start_insert = 1
+		let g:unite_update_time = 100
+		let g:unite_cursor_line_highlight='CursorLine'
+		let g:unite_redraw_hold_candidates=300000
+
+		let g:unite_source_rec_max_cache_files = 50000
+		let g:unite_source_rec_async_command=[expand('~/.vim/bin/list_file_rec')]
+		let g:unite_source_file_async_command=expand('~/.vim/bin/list_file_rec')
+
+		let g:unite_source_history_unite_limit = 1
+
+		call unite#filters#sorter_default#use(['sorter_smart'])
+
+		" unite-file_mru {{{
+		let g:unite_source_file_mru_limit=1000
+		let g:unite_source_file_mru_time_format=''
+		let g:unite_source_mru_do_validate=0
+		" }}}
+
+
+		" hide_unimportant_path {{{
+		let filter={'name': 'converter_hide_unimportant_path'}
+		function! filter.filter(candidates, context)
+			if len(a:candidates) > 1000
+				return a:candidates
+			endif
+			let header_pat = '^\[[^\]]\+\] '
+			let prev = []
+			for cand in a:candidates
+				let path = cand.abbr
+				if empty(path) | let path = cand.word | endif
+
+				let header = matchstr(path, header_pat)
+				if header == -1 | let header = '' | endif
+				if !empty(header) | let path = substitute(path, header_pat, '', '') | endif
+				let components = [header] + split(path, '/', 1)
+				let i = 0
+				let l = min([len(components), len(prev)])
+				while i < l
+					if components[i] != prev[i] | break | endif
+					let i = i + 1
+				endwhile
+
+				if len(components[0]) > 0
+					if i > 1
+						let cand.abbr = '!!!{'.components[0].join(components[1: i-1], '/').'/}!!!'.join(components[i :], '/')
+					elseif i == 1
+						let cand.abbr = '!!!{'.components[0].'}!!!'.join(components[i :], '/')
+					endif
+				endif
+				let prev = components
+			endfor
+			return a:candidates
+		endfunction
+		call unite#define_filter(filter)
+		" }}}
+
+		" Default source config " {{{
+		call unite#custom#source('file_mru', 'matchers', ['converter_index', 'matcher_context'])
+
+		for g:source in ['file', 'file_mru', 'file_rec', 'file_rec/async', 'buffer']
+			call unite#custom#source(g:source, 'converters', ['converter_summarize_project_path', 'converter_hide_unimportant_path'])
+		endfor
+		unlet g:source
+
+		for g:source in ['file_rec', 'file_rec/async']
+			call unite#custom#source(g:source, 'matchers', ['matcher_default'])
+		endfor
+		unlet g:source
+
+		call unite#custom#source('file_rec', 'max_candidates', 0)
+		call unite#custom#source('file_rec/async', 'max_candidates', 0)
+		" }}}
+	endfunction " }}}
+
+	" Vimrc_unite_syntax {{{
+	function! Vimrc_unite_syntax()
+		syntax match unite__word_tag /\[[^]]\+\]/ contained containedin=uniteSource__FileMru,uniteSource__FileRec,uniteSource__FileRecAsync
+		highlight link unite__word_tag Identifier
+		syntax region UniteUnimportant keepend excludenl matchgroup=UniteUnimportantMarker start=/!!!{/ end=/}!!!/ concealends containedin=uniteSource__FileMru,uniteSource_File,uniteSource__FileRec,uniteSource__FileRecAsync,uniteSource__Buffer
+		highlight link UniteUnimportant Comment
+		setlocal concealcursor+=i
+	endfunction
+
+	augroup vimrc-untie-syntax
+		autocmd!
+		autocmd FileType unite :call Vimrc_unite_syntax()
+	augroup END
+	" }}}
+
+	call s:bundle('tsukkee/unite-tag')
+	function! g:todespm#the_hooks.after() abort " {{{
+		let g:unite_source_tag_max_name_length = 50
+		let g:unite_source_tag_max_fname_length = 999
+		let g:unite_source_tag_strict_truncate_string = 1
+
+		nnoremap <C-Q>t :<C-u>Unite tag -immediately<CR>
+		" C-] to unite tag jump
+		augroup vimrc-tagjump-unite
+			autocmd!
+			autocmd BufEnter *
+						\   if empty(&buftype)
+						\|      nnoremap <buffer> <C-]> m':<C-u>UniteWithCursorWord -immediately outline tag<CR>
+						\|  endif
+		augroup END
+		let c = {'name': 'converter_tag'}
+		function! c.filter(candidates, context) abort
+			for c in a:candidates
+				let spath = current_project#summarize_path(c.action__path)
+				let c.abbr = printf('%-25s @%-100s', c.action__tagname, spath)
+				let c.word = c.action__tagname . ' ' . spath
+			endfor
+			return a:candidates
+		endfunction
+		call unite#define_filter(c)
+		call unite#custom#source('tag','converters', ['converter_tag'])
+	endfunction " }}}
+
+	call s:bundle('Shougo/unite-outline')
+	function! g:todespm#the_hooks.after() abort " {{{
+		let g:unite_source_outline_scala_show_all_declarations = 1
+		let g:unite_source_outline_info = {
+		\  'ref-man': unite#sources#outline#defaults#man#outline_info(),
+		\ }
+		let x = unite#sources#outline#modules#ctags#import()
+		let x.exe .= ' --languages=+Java,C,C++'
+	endfunction " }}}
+
+	call s:bundle('sgur/unite-qf')
+	function! g:todespm#the_hooks.after() abort " {{{
+		nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview -no-split -winheight=30 -wipe<CR>
+		nnoremap <C-Q>F :<C-u>Unite locationlist -no-start-insert -auto-preview -no-split -winheight=30 -wipe<CR>
+
+		for s in ['qf', 'locationlist']
+			call unite#custom#profile('source/' . s, 'context', {'max_multi_lines': 20})
+			call unite#custom#source(s, 'converters', ['converter_pretty_qf'])
+		endfor
+
+		let filter = {'name': 'converter_pretty_qf'}
+
+		function! filter.filter(candidates, context) abort " {{{
+			for c in a:candidates
+				let message = substitute(c.word, '^.\{-}|\d\+| ', '', '')
+				let message = join(map(split(message, "\n"), '"| " . v:val'), "\n") . "\n|"
+				let c.word = current_project#summarize_path(c.action__path) . ':' . c.action__line . "\n" . message
+			endfor
+			return a:candidates
+		endfunction " }}}
+
+		call unite#define_filter(filter)
+	endfunction " }}}
+
+	call s:bundle('basyura/unite-rails')
+	function! g:todespm#the_hooks.after() abort " {{{
+		nnoremap <C-Q>r <ESC>
+		nnoremap <C-Q>j  :<C-u>Unite jump<CR>
+		nnoremap <C-Q>ra :<C-u>Unite rails/asset<CR>
+		nnoremap <C-Q>rm :<C-u>Unite rails/model<CR>
+		nnoremap <C-Q>rc :<C-u>Unite rails/controller<CR>
+		nnoremap <C-Q>rv :<C-u>Unite rails/view<CR>
+		nnoremap <C-Q>rf :<C-u>Unite rails/config<CR>
+		nnoremap <C-Q>rd :<C-u>Unite rails/db -input=seeds/\ <CR>
+		nnoremap <C-Q>ri :<C-u>Unite rails/db -input=migrate/\ <CR>
+		nnoremap <C-Q>rl :<C-u>Unite rails/lib<CR>
+		nnoremap <C-Q>rh :<C-u>Unite rails/helper<CR>
+	endfunction " }}}
+
+	call s:bundle('osyo-manga/unite-fold')
+	function! g:todespm#the_hooks.after() abort " {{{
+		call unite#custom#source('fold','sorters', ['sorter_nothing'])
+		function! g:Vimrc_unite_fold_foldtext(bufnr, val)
+			if has_key(a:val, 'word')
+				return a:val.word
+			else
+				let marker_label = matchstr(a:val.line, "\"\\s*\\zs.*\\ze".split(&foldmarker, ",")[0])
+				if !empty(marker_label)
+					return marker_label
+				else
+					return matchstr(a:val.line, "^\\zs.*\\ze\\s*\"\\s*.*".split(&foldmarker, ",")[0])
+				endif
+			end
+		endfunction
+		let g:Unite_fold_foldtext=function('g:Vimrc_unite_fold_foldtext')
+
+		nnoremap <C-Q>d :<C-u>Unite fold<CR>
+	endfunction " }}}
+
+	call s:bundle('ujihisa/unite-colorscheme')
+	function! g:todespm#the_hooks.after() abort " {{{
+		command! Colors Unite colorscheme -auto-preview
+	endfunction " }}}
+
+	call s:bundle('ujihisa/unite-font')
+
+	call s:bundle('Shougo/neomru.vim')
+	function! g:todespm#the_hooks.after() abort " {{{
+		let g:neomru#do_validate = 1
+	endfunction " }}}
+
+	call s:bundle('osyo-manga/unite-candidate_sorter')
+	function! g:todespm#the_hooks.after() abort " {{{
+		augroup vimrc-unite-candidate-sorter
+		  autocmd!
+		  autocmd FileType unite nmap <silent><buffer> S <Plug>(unite-candidate_sort)
+		augroup END
+	endfunction " }}}
+
+
+	" Keymap {{{
+
+	augroup unite-keybind
+		autocmd!
+		autocmd FileType unite nmap <buffer><silent><Esc> q
+	augroup END
+
+	nnoremap <silent><C-S> :Unite file_mru<CR>
+
+	nnoremap <C-Q>  <ESC>
+
+	nnoremap <C-Q>u :UniteResume<CR>
+	nnoremap <C-Q>o m':<C-u>Unite outline<CR>
+	nnoremap <C-Q>P :<C-u>exec 'Unite file_rec/async:'.current_project#info(expand('%')).main_path<CR>
+	nnoremap <C-Q>p :<C-u>exec 'Unite file_rec/async:'.current_project#info(expand('%')).sub_path<CR>
+	nnoremap <C-Q>c :<C-u>exec 'Unite file_rec:'.expand('%:p:h').'/'<CR>
+	nnoremap <C-Q>l :<C-u>Unite line<CR>
+	nnoremap <C-Q>b :<C-u>Unite buffer<CR>
+	nnoremap <C-Q>gc :<C-u>Unite git/files/conflict<CR>
+	nnoremap <C-Q>gf :<C-u>Unite gitreview/changed_files<CR>
+	nnoremap <C-Q><C-P> :<C-u>UnitePrevious<CR>
+	nnoremap <C-Q><C-N> :<C-u>UniteNext<CR>
+	nnoremap <C-Q><C-Q>p :<C-u>Projects<CR>
+	nnoremap <C-Q><C-Q>n :<C-u>Nyandoc<CR>
+	" }}}
+
+
+	" Sources {{{
+	call s:new_hooks('unite-neco')
+	function! g:todespm#the_hooks.after() abort " unite-neco {{{
+		" from: https://github.com/ujihisa/config/blob/master/_vimrc
+		let s:unite_source = {'name': 'neco'}
+		function! s:unite_source.gather_candidates(args, context)
+			let necos = [
+				\ "~(-'_'-) goes right",
+				\ "~(-'_'-) goes right and left",
+				\ "~(-'_'-) goes right quickly",
+				\ "~(-'_'-) skips right",
+				\ "~(-'_'-)  -8(*'_'*) go right and left",
+				\ "(=' .' ) ~w",
+				\ ]
+			return map(necos, '{
+				\ "word": v:val,
+				\ "source": "neco",
+				\ "kind": "command",
+				\ "action__command": "Neco " . v:key,
+				\ }')
+		endfunction
+		call unite#define_source(s:unite_source)
+	endfunction " }}}
+
+	call s:new_hooks('unite-massive-candidates')
+	function! g:todespm#the_hooks.after() abort " unite-massive-candidates {{{
+		let s:unite_source = {'name': 'massive-candidates'}
+		function! s:unite_source.gather_candidates(args, context)
+			return map(repeat(['a', 'b', 'c'], 10000), '{
+				\ "word": v:val,
+				\ "source": "massive-candidates",
+				\ "kind": "word",
+				\ }')
+		endfunction
+		call unite#define_source(s:unite_source)
+	endfunction " }}}
+
+	call s:new_hooks('unite vim-functions')
+	function! g:todespm#the_hooks.after() abort " Unite vim-functions {{{
+		let def = {'name': 'vim-functions', 'default_action': 'open'}
+
+		let s:unite_vim_functions_cache = []
+
+		function! def.gather_candidates(args, context) abort " {{{
+			if len(s:unite_vim_functions_cache)
+				return s:unite_vim_functions_cache
+			endif
+			let s:unite_vim_functions_cache = s:make_cache_functions()
+			for c in s:unite_vim_functions_cache
+				let c.kind = 'common'
+				let c.action__tagname = c.word . ')'
+				let c.abbr = substitute(c.abbr, '\t', '        ', 'g')
+			endfor
+			return s:unite_vim_functions_cache
+		endfunction " }}}
+
+		let def.action_table = {}
+		let def.action_table.open = {}
+
+		function! def.action_table.open.func(candidate) abort " {{{
+			execute 'help ' . a:candidate.action__tagname
+		endfunction " }}}
+
+		call unite#define_source(def)
+
+		" from NeoComplete(https://github.com/Shougo/neocomplete.vim)
+		" autoload/neocomplete/sources/vim/helper.vim
+		function! s:make_cache_functions() "{{{
+		  let helpfile = expand(findfile('doc/eval.txt', &runtimepath))
+		  if !filereadable(helpfile)
+			return []
+		  endif
+
+		  let lines = readfile(helpfile)
+		  let functions = []
+		  let start = match(lines, '^abs')
+		  let end = match(lines, '^abs', start, 2)
+		  let desc = ''
+		  for i in range(end-1, start, -1)
+			let desc = substitute(lines[i], '^\s\+\ze\S', '', '').' '.desc
+			let _ = matchlist(desc,
+				  \'^\s*\(\(\i\+(\).*)\)\s\+\(\w*\)\s\+\(.\+[^*]\)$')
+			if !empty(_)
+			  call insert(functions, {
+					\ 'word' : _[2],
+					\ 'abbr' : substitute(_[0], '(\zs\s\+', '', ''),
+					\ })
+			  let desc = ''
+			endif
+		  endfor
+
+		  return functions
+		endfunction "}}}
+	endfunction "}}}
+
+	call s:new_hooks('unite git sources')
+	function! g:todespm#the_hooks.after() abort " Git sources {{{
+		" (original: https://github.com/aereal/dotfiles/blob/master/.vim/vimrc )
+		function! s:git_read_path(cmd) abort " {{{
+			let base = fugitive#extract_git_dir(expand('%')) . "/.."
+			execute 'lcd ' . base
+			let output = unite#util#system('git diff-files --name-only --diff-filter=U')
+			lcd -
+			return [base, split(output, "\n")]
+		endfunction " }}}
+		function! s:git_make_candidates(source_name, cmd) abort " {{{
+			let [base, files] = s:git_read_path(a:cmd)
+			return map(files, '{
+						\ "word" : v:val,
+						\ "source" : a:source_name,
+						\ "kind" : "file",
+						\ "action__path" : fnamemodify(base . "/" . v:val, ":p"),
+						\ }')
+		endfunction " }}}
+
+		" unite-git-files-conflict {{{
+		let s:unite_git_files_conflict = {
+					\   'name' : 'git/files/conflict',
+					\ }
+		function! s:unite_git_files_conflict.gather_candidates(args, context)
+			return s:git_make_candidates('git/files/conflict', 'git diff-files --name-only --diff-filter=U')
+		endfunction
+		call unite#define_source(s:unite_git_files_conflict)
+		" }}}
+
+		" unite-git-files-modified {{{
+		let s:unite_git_files_modified = {
+					\   'name' : 'git/files/modified',
+					\ }
+		function! s:unite_git_files_modified.gather_candidates(args, context)
+			return s:git_make_candidates('git/files/modified', 'git ls-files --modified')
+		endfunction
+		call unite#define_source(s:unite_git_files_modified)
+		" }}}
+
+		" unite-git-files-others {{{
+		let s:unite_git_files_others = {
+					\   'name' : 'git/files/others',
+					\ }
+		function! s:unite_git_files_others.gather_candidates(args, context)
+			return s:git_make_candidates('git/files/others', 'git ls-files --others --exclude-standard')
+		endfunction
+		call unite#define_source(s:unite_git_files_others)
+		" }}}
+	endfunction " }}}
+
+	" }}}
+endif
+" }}}
+
 
 " Denite {{{
 if(has('python3'))
@@ -638,7 +639,7 @@ if(has('python3'))
 		nnoremap <C-Q>c :<C-u>DeniteBufferDir file_rec<CR>
 		nnoremap <C-Q>l :<C-u>Denite line<CR>
 		nnoremap <C-Q>b :<C-u>Denite buffer<CR>
-		nnoremap <C-Q>b :<C-u>Denite unite:outline<CR>
+		nnoremap <C-Q>o :<C-u>Denite unite:outline<CR>
 		nnoremap <C-Q>d :<C-u>Denite unite:fold<CR>
 		nnoremap <C-Q><C-P> :<C-u>Denite -resume -cursor-pos=-1 -immediately<CR>
 		nnoremap <C-Q><C-N> :<C-u>Denite -resume -cursor-pos=+1 -immediately<CR>
@@ -664,7 +665,6 @@ if(has('python3'))
 		autocmd!
 		autocmd FileType denite :call Vimrc_unite_syntax()
 	augroup END
-	" }}}
 endif
 " }}}
 
