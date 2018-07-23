@@ -656,7 +656,7 @@ if(has('python3'))
 	function! Vimrc_unite_syntax() abort " {{{
 		" syntax match MyDeniteProjectName /^\[[^]]\+\]/
 		" highlight link MyDeniteProjectName Identifier
-		syntax region MyDeniteUnimportant matchgroup=MyDeniteConceal excludenl start=/{{{/ end=/}}}/ concealends containedin=deniteSource_file_mru,deniteSoure_file_rec
+		syntax region MyDeniteUnimportant matchgroup=MyDeniteConceal excludenl start=/{{{/ end=/}}}/ concealends containedin=deniteSource_file_rec,deniteSource_file_mru
 		highlight link MyDeniteUnimportant Comment
 		setlocal concealcursor+=i
 	endfunction " }}}
