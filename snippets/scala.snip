@@ -6,6 +6,14 @@ snippet mks
 options word
     mkString("\n")
 
+snippet mkss
+options word
+    mkString(" ")
+
+snippet mks,
+options word
+    mkString(", ")
+
 snippet Main
     object Main {
       def main(args: Array[String]): Unit = {
@@ -44,6 +52,9 @@ snippet ot
 
 snippet assertionerror
     throw new AssertionError()
+
+snippet rte
+    throw new RuntimeException
 
 snippet im
 options word
@@ -117,6 +128,7 @@ snippet c
 snippet u
 options word
     : Unit = {
+    }
 
 snippet ad
 options word
@@ -125,6 +137,35 @@ options word
 snippet ai
 options word
     Array[Int]
+
+snippet s
+options word
+    Seq
+
+snippet ss
+options word
+    Seq[String]
+
+snippet si
+options word
+    Seq[Int]
+
+snippet sd
+options word
+    Seq[Double]
+
+snippet tos
+options word
+    toSeq
+
+snippet {
+options word
+    {
+    }
+snippet =>
+options word
+    =>
+    }
 
 snippet i.ss
     import org.apache.spark.sql.SparkSession
@@ -139,7 +180,7 @@ snippet i.si
     import spark.implicits._
 
 snippet i.sf
-    import org.apache.spark.sql.functions
+    import org.apache.spark.sql.{functions => fn}
 
 snippet i.jc
     import scala.collection.JavaConverters._
