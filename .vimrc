@@ -4,6 +4,21 @@ scriptencoding utf-8
 
 let $LC_ALL='en_US.UTF8'
 
+" Python env {{{
+
+" Requirements:
+" * Python3
+" * pip3 install neovim
+
+set pythonthreehome=/usr/local/Cellar/python/3.7.0/Frameworks/Python.framework/Versions/3.7
+set pythonthreedll=/usr/local/Cellar/python/3.7.0/Frameworks/Python.framework/Versions/3.7/Python
+set pyxversion=3
+
+" I don't know why, but vim-hug-neovim-rpc failed without this.
+pythonx import neovim
+
+" }}}
+
 if version < 800
 	finish
 endif

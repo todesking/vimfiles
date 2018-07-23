@@ -669,7 +669,7 @@ endif
 " }}}
 
 
-if(has('lua'))
+if 0 && has('lua') " Neocomplete {{{
 	call s:bundle('Shougo/neocomplete.vim')
 	function! g:todespm#the_hooks.after() abort " {{{
 		let g:neocomplete#enable_at_startup = 1
@@ -706,6 +706,16 @@ if(has('lua'))
 		endfunction
 	endfunction " }}}
 endif
+" }}}
+
+if !has('nvim')
+  call s:bundle('roxma/nvim-yarp')
+  call s:bundle('roxma/vim-hug-neovim-rpc')
+endif
+call s:bundle('Shougo/deoplete.nvim')
+function! g:todespm#the_hooks.after() abort " {{{
+	let g:deoplete#enable_at_startup = 1
+endfunction " }}}
 
 call s:bundle('itchyny/lightline.vim')
 function! g:todespm#the_hooks.after() abort " {{{
