@@ -2,11 +2,7 @@
 
 scriptencoding utf-8
 
-let $RUBY_DLL=$HOME.'/.rbenv/versions/2.2.0/lib/libruby.dylib'
-
 let $LC_ALL='en_US.UTF8'
-
-set pythonthreedll=/usr/local/Cellar/python3/3.5.2_3/Frameworks/Python.framework/Versions/3.5/Python
 
 if version < 800
 	finish
