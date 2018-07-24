@@ -157,12 +157,26 @@ call s:bundle('vim-scripts/argtextobj.vim')
 
 
 " Edit support {{{
-call s:bundle('todesking/YankRing.vim')
+if 0
+	call s:bundle('todesking/YankRing.vim')
+	function! g:todespm#the_hooks.after() abort " {{{
+		let g:yankring_max_element_length = 0
+		let g:yankring_max_history_element_length = 1000 * 10
+		map y <Plug>(operator-flashy)
+		nmap Y <Plug>(operator-flashy)$
+	endfunction " }}}
+endif
+
+call s:bundle('LeafCage/yankround.vim')
 function! g:todespm#the_hooks.after() abort " {{{
-	let g:yankring_max_element_length = 0
-	let g:yankring_max_history_element_length = 1000 * 10
-	map y <Plug>(operator-flashy)
-	nmap Y <Plug>(operator-flashy)$
+	nmap p <Plug>(yankround-p)
+	xmap p <Plug>(yankround-p)
+	nmap P <Plug>(yankround-P)
+	nmap gp <Plug>(yankround-gp)
+	xmap gp <Plug>(yankround-gp)
+	nmap gP <Plug>(yankround-gP)
+	nmap <C-p> <Plug>(yankround-prev)
+	nmap <C-n> <Plug>(yankround-next)
 endfunction " }}}
 
 call s:bundle('junegunn/vim-easy-align')
