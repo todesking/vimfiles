@@ -77,8 +77,6 @@ function! g:todespm#the_hooks.after() abort " {{{
 	let g:EasyMotion_keys = 'siogkmjferndlhyuxvtcbwa'
 endfunction " }}}
 
-call s:bundle('vim-scripts/a.vim')
-
 call s:bundle('nathanaelkane/vim-indent-guides')
 function! g:todespm#the_hooks.after() abort " {{{
 	if has('gui_running')
@@ -100,6 +98,12 @@ call s:bundle('osyo-manga/vim-brightest')
 call s:bundle('deris/vim-shot-f')
 
 call s:bundle('osyo-manga/vim-anzu')
+function! g:todespm#the_hooks.after() abort " {{{
+	nmap n <Plug>(anzu-n-with-echo)
+	nmap N <Plug>(anzu-N-with-echo)
+	nmap * <Plug>(anzu-star-with-echo)
+	nmap # <Plug>(anzu-sharp-with-echo)
+endfunction " }}}
 
 call s:bundle('haya14busa/vim-operator-flashy')
 function! g:todespm#the_hooks.after() abort " {{{
@@ -140,21 +144,12 @@ function! g:todespm#the_hooks.after() abort " {{{
 		\ textobj#methodcall#operator_surround_blocks(deepcopy(g:operator#surround#default_blocks), 'c')
 endfunction " }}}
 
+" This plugin provides a text-object 'a' (argument).
 call s:bundle('vim-scripts/argtextobj.vim')
 " }}}
 
 
 " Edit support {{{
-if 0
-	call s:bundle('todesking/YankRing.vim')
-	function! g:todespm#the_hooks.after() abort " {{{
-		let g:yankring_max_element_length = 0
-		let g:yankring_max_history_element_length = 1000 * 10
-		map y <Plug>(operator-flashy)
-		nmap Y <Plug>(operator-flashy)$
-	endfunction " }}}
-endif
-
 call s:bundle('LeafCage/yankround.vim')
 function! g:todespm#the_hooks.after() abort " {{{
 	nmap p <Plug>(yankround-p)
@@ -167,6 +162,7 @@ function! g:todespm#the_hooks.after() abort " {{{
 	nmap <C-n> <Plug>(yankround-next)
 endfunction " }}}
 
+if 0
 call s:bundle('junegunn/vim-easy-align')
 
 call s:bundle('vim-scripts/Align')
@@ -176,8 +172,9 @@ function! g:todespm#the_hooks.after() abort " {{{
 	map (trashbox-leader-swp) <Plug>SaveWinPosn
 	let g:loaded_AlignMapsPlugin = 1
 endfunction " }}}
+endif
 
-call s:bundle('godlygeek/tabular')
+" call s:bundle('godlygeek/tabular')
 
 call s:bundle('vim-scripts/closetag.vim')
 function! g:todespm#the_hooks.after() abort " {{{
@@ -206,9 +203,7 @@ function! g:todespm#the_hooks.after() abort " {{{
 endfunction " }}}
 
 call s:bundle('tpope/vim-repeat')
-call s:bundle('mbbill/undotree')
 call s:bundle('tpope/vim-commentary')
-call s:bundle('AndrewRadev/splitjoin.vim')
 " }}}
 
 
@@ -217,17 +212,8 @@ call s:bundle('AndrewRadev/linediff.vim')
 call s:bundle('osyo-manga/vim-over')
 call s:bundle('taku-o/vim-zoom')
 call s:bundle('tyru/capture.vim')
-call s:bundle('ciaranm/detectindent')
-call s:bundle('osyo-manga/vim-automatic')
+" call s:bundle('ciaranm/detectindent')
 " }}}
-
-
-" Games {{{
-call s:bundle('mattn/habatobi-vim')
-call s:bundle('thinca/vim-threes')
-call s:bundle('katono/rogue.vim')
-" }}}
-
 
 " " Unite {{{
 if 0
@@ -893,19 +879,13 @@ endfunction " }}}
 
 
 " Colors {{{
-call s:bundle('altercation/vim-colors-solarized')
-call s:bundle('vim-scripts/pyte')
-call s:bundle('vim-scripts/newspaper.vim')
-call s:bundle('vim-scripts/Zenburn')
-call s:bundle('ciaranm/inkpot')
-call s:bundle('w0ng/vim-hybrid')
-call s:bundle('chriskempson/vim-tomorrow-theme')
 call s:bundle('endel/vim-github-colorscheme')
 " }}}
 
 
 " Filetypes {{{
 
+" Python folding
 call s:bundle('tmhedberg/SimpylFold')
 
 call s:bundle('wting/rust.vim')
@@ -930,11 +910,6 @@ endfunction " }}}
 call s:bundle('derekwyatt/vim-scala')
 call s:bundle('derekwyatt/vim-sbt')
 call s:bundle('gre/play2vim')
-
-" call s:bundle('ensime/ensime-vim')
-function! g:todespm#the_hooks.after() abort " {{{
-	let g:ensime_auto_start = 0
-endfunction " }}}
 
 call s:bundle('slim-template/vim-slim')
 function! g:todespm#the_hooks.after() abort " {{{
@@ -986,12 +961,6 @@ endfunction " }}}
 call s:bundle('kchmck/vim-coffee-script')
 
 call s:bundle('ekalinin/Dockerfile.vim')
-
-" Vim " {{{
-" call s:bundle('syngan/vim-vimlint'), {'depends' : 'ynkdir/vim-vimlparser'}
-
-let g:vim_indent_cont = 0
-" }}}
 
 " }}}}
 
@@ -1075,10 +1044,6 @@ function! g:todespm#the_hooks.after() abort " {{{
 		execute 'Ack ' . join(map(opts, 'v:val'), ' ') . ' ' . query . ' ' . path
 	endfunction " }}}
 endfunction " }}}
-
-call s:bundle('Shougo/vimfiler.vim')
-
-call s:bundle('Shougo/vimshell.vim')
 
 call s:bundle('todesking/ttodo.vim')
 function! g:todespm#the_hooks.after() abort " {{{
