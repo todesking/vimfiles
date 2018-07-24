@@ -97,18 +97,6 @@ endfunction " }}}
 
 call s:bundle('osyo-manga/vim-brightest')
 
-call s:bundle('haya14busa/incsearch.vim')
-function! g:todespm#the_hooks.after() abort " {{{
-	let g:incsearch#consistent_n_direction = 1
-	map /  <Plug>(incsearch-forward)
-	map ?  <Plug>(incsearch-backward)
-	map g/ <Plug>(incsearch-stay)
-	map   n <Plug>(incsearch-nohl-n)
-	map   N <Plug>(incsearch-nohl-N)
-	nmap  n <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)
-	nmap  N <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)
-endfunction " }}}
-
 call s:bundle('deris/vim-shot-f')
 
 call s:bundle('osyo-manga/vim-anzu')
