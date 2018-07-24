@@ -2,7 +2,7 @@
 
 scriptencoding utf-8
 
-if version < 800
+if v:version < 800
 	finish
 endif
 
@@ -20,7 +20,9 @@ set pythonthreedll=/usr/local/Cellar/python/3.7.0/Frameworks/Python.framework/Ve
 set pyxversion=3
 
 " I don't know why, but vim-hug-neovim-rpc failed without this.
-pythonx import neovim
+" Use silent! to suppress deprecated message
+" /must>not&exist/foo:1: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+silent! pythonx import neovim
 
 " }}}
 
