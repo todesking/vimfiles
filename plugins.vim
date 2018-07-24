@@ -1012,7 +1012,7 @@ function! g:todespm#the_hooks.after() abort " {{{
 	endfunction
 	function! s:vimrc_gitgutter_bufenter()
 		if !exists('b:vimrc_gitgutter_version') || b:vimrc_gitgutter_version != g:vimrc_gitgutter_version
-			call gitreview#gitgutter#process_buffer(bufnr(''), 0)
+			" call gitreview#gitgutter#process_buffer(bufnr(''), 0)
 			let b:vimrc_gitgutter_version = g:vimrc_gitgutter_version
 		endif
 	endfunction
@@ -1022,12 +1022,14 @@ function! g:todespm#the_hooks.after() abort " {{{
 	augroup END
 endfunction " }}}
 
+if 0
 call s:bundle('todesking/gitreview.vim')
 function! g:todespm#the_hooks.after() abort " {{{
 	nmap ,gg <Plug>(gitreview-gitgutter-next-sign)
 	nmap ,gp <Plug>(gitreview-gitgutter-prev-sign)
 	nmap ,gd :<C-u>GitReviewDiff<CR>
 endfunction " }}}
+endif
 
 " }}}
 
