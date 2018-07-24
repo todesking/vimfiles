@@ -204,6 +204,12 @@ endfunction " }}}
 
 call s:bundle('tpope/vim-repeat')
 call s:bundle('tpope/vim-commentary')
+function! g:todespm#the_hooks.after() abort " {{{
+	augroup vimrc-commentary
+		autocmd!
+		autocmd FileType vim setlocal commentstring=\"\ %s
+	augroup END
+endfunction " }}}
 " }}}
 
 
