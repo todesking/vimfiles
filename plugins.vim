@@ -628,12 +628,20 @@ if(has('python3'))
 
 		call denite#custom#option('_', 'direction', 'topleft')
 
-		call denite#custom#source('file_rec', 'converters', ['converter/project_name', 'converter/mark_dup'])
-		call denite#custom#source('file_mru', 'converters', ['converter/project_name', 'converter/mark_dup'])
+		call denite#custom#source(
+			\ 'file_rec,file_mru',
+			\ 'converters',
+			\ ['converter/project_name', 'converter/mark_dup']
+			\ )
+		call denite#custom#source(
+			\ 'file_rec,file_mru',
+			\ 'matchers',
+			\ ['matcher/substring']
+			\ )
 
 		nnoremap <silent><C-S> :Denite file_mru<CR>
 		nnoremap <C-Q>  <ESC>
-		nnoremap <C-Q>u :Denite -resume
+		nnoremap <C-Q>u :Denite -resume<CR>
 		nnoremap <C-Q>P :<C-u>exec 'Denite file_rec:' . current_project#info(expand('%')).main_path<CR>
 		nnoremap <C-Q>p :<C-u>exec 'Denite file_rec:' . current_project#info(expand('%')).sub_path<CR>
 		nnoremap <C-Q>c :<C-u>DeniteBufferDir file_rec<CR>
