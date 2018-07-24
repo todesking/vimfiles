@@ -646,6 +646,8 @@ if(has('python3'))
 		nnoremap <C-Q>d :<C-u>Denite unite:fold<CR>
 		nnoremap <C-Q><C-P> :<C-u>Denite -resume -cursor-pos=-1 -immediately<CR>
 		nnoremap <C-Q><C-N> :<C-u>Denite -resume -cursor-pos=+1 -immediately<CR>
+
+		nnoremap <C-Q>f :<C-u>Denite unite:qf<CR>
 	endfunction " }}}
 	function! Vimrc_denite_mru_if_available() abort " {{{
 		let info = current_project#info()
@@ -662,6 +664,7 @@ if(has('python3'))
 	call s:bundle('Shougo/unite.vim')
 	call s:bundle('Shougo/unite-outline')
 	call s:bundle('osyo-manga/unite-fold')
+	call s:bundle('sgur/unite-qf')
 	" }}}
 
 	function! Vimrc_unite_syntax() abort " {{{
@@ -1047,7 +1050,8 @@ function! g:todespm#the_hooks.after() abort " {{{
 			let query = a:args[0]
 			let opts = a:args[2:-1]
 		endif
-		execute 'Ack ' . join(map(opts, 'v:val'), ' ') . ' ' . query . ' ' . path
+		" TODO: fix E788 then unsilent
+		silent! execute 'Ack ' . join(map(opts, 'v:val'), ' ') . ' ' . query . ' ' . path
 	endfunction " }}}
 endfunction " }}}
 
