@@ -2,6 +2,11 @@
 
 scriptencoding utf-8
 
+if version < 800
+	finish
+endif
+
+
 let $LC_ALL='en_US.UTF8'
 
 " Python env {{{
@@ -18,10 +23,6 @@ set pyxversion=3
 pythonx import neovim
 
 " }}}
-
-if version < 800
-	finish
-endif
 
 " Sandbox {{{
 function! s:register_sandbox(path) abort " {{{

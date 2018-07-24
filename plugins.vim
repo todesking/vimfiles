@@ -628,8 +628,8 @@ if(has('python3'))
 
 		call denite#custom#option('_', 'direction', 'topleft')
 
-		call denite#custom#source('file_rec', 'converters', ['converter/mark_dup'])
-		call denite#custom#source('file_mru', 'converters', ['converter/mark_dup'])
+		call denite#custom#source('file_rec', 'converters', ['converter/project_name', 'converter/mark_dup'])
+		call denite#custom#source('file_mru', 'converters', ['converter/project_name', 'converter/mark_dup'])
 
 		nnoremap <silent><C-S> :Denite file_mru<CR>
 		nnoremap <C-Q>  <ESC>

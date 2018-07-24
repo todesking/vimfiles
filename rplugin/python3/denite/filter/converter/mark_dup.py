@@ -17,7 +17,7 @@ class Filter(Base):
     def filter(self, context):
         prev = ''
         for candidate in context['candidates']:
-            cur = candidate['word']
+            cur = candidate['abbr']
             prefix, a, _ = decompose(cur, prev)
             if prefix != '':
                 candidate['abbr'] = '{{{' + prefix + '}}}' + a
