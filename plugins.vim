@@ -631,17 +631,18 @@ if(has('python3'))
 		call denite#custom#option('_', 'direction', 'topleft')
 
 		call denite#custom#source(
-			\ 'file_rec,file_mru',
+			\ 'file_rec,file_mru,project_file_mru',
 			\ 'converters',
 			\ ['converter/project_name', 'converter/mark_dup']
 			\ )
 		call denite#custom#source(
-			\ 'file_rec,file_mru',
+			\ 'file_rec,file_mru,project_file_mru',
 			\ 'matchers',
 			\ ['matcher/substring']
 			\ )
 
-		nnoremap <silent><C-S> :Denite file_mru<CR>
+		nnoremap <silent><C-S> :<C-u>call Vimrc_denite_mru_if_available()<CR>
+		nnoremap <silent><C-Q>s :<C-u>Denite file_mru<CR>
 		nnoremap <C-Q>  <ESC>
 		nnoremap <C-Q>u :Denite -resume<CR>
 		nnoremap <C-Q>P :<C-u>exec 'Denite file_rec:' . current_project#info(expand('%')).main_path<CR>
@@ -653,6 +654,14 @@ if(has('python3'))
 		nnoremap <C-Q>d :<C-u>Denite unite:fold<CR>
 		nnoremap <C-Q><C-P> :<C-u>Denite -resume -cursor-pos=-1 -immediately<CR>
 		nnoremap <C-Q><C-N> :<C-u>Denite -resume -cursor-pos=+1 -immediately<CR>
+	endfunction " }}}
+	function! Vimrc_denite_mru_if_available() abort " {{{
+		let info = current_project#info()
+		if empty(info.name)
+			Denite file_mru
+		else
+			call denite#helper#call_denite('Denite', 'project_file_mru:' . info.path, '', '')
+		endif
 	endfunction " }}}
 
 	call s:bundle('Shougo/neomru.vim')
@@ -666,7 +675,7 @@ if(has('python3'))
 	function! Vimrc_unite_syntax() abort " {{{
 		" syntax match MyDeniteProjectName /^\[[^]]\+\]/
 		" highlight link MyDeniteProjectName Identifier
-		syntax region MyDeniteUnimportant matchgroup=MyDeniteConceal excludenl start=/{{{/ end=/}}}/ concealends containedin=deniteSource_file_rec,deniteSource_file_mru
+		syntax region MyDeniteUnimportant matchgroup=MyDeniteConceal excludenl start=/{{{/ end=/}}}/ concealends containedin=deniteSource_file_rec,deniteSource_file_mru,deniteSource_project_file_mru
 		highlight link MyDeniteUnimportant Comment
 		setlocal concealcursor+=i
 	endfunction " }}}
