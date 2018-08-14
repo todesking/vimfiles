@@ -12,6 +12,7 @@ if has('gui')
 		" highlight CursorLine gui=bold guibg=NONE guifg=NONE
 		highlight ColorColumn guibg=#F3F3FF
 		highlight Error guibg=#FF6666
+		highlight ErrorMsg gui=underline
 	augroup END
 	MenuLang en_US.UTF-8
 	set lines=52

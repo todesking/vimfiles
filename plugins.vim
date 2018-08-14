@@ -38,6 +38,35 @@ call s:bundle('Shougo/vimproc.vim', {
       \    },
       \ })
 call s:bundle('todesking/current_project.vim')
+function! g:todespm#the_hooks.after() abort " {{{
+	" @vimlint(EVL103, 1)
+	function! g:Vimrc_complete_dir(prefix, ArgLead, CmdLine, CursorPos) abort " {{{
+		let prefix = a:prefix . '/'
+		let candidates = glob(prefix.a:ArgLead.'*', 1, 1)
+		let result = []
+		for c in candidates
+			if isdirectory(c)
+				call add(result, substitute(c, prefix, '', '').'/')
+			else
+				call add(result, substitute(c, prefix, '', ''))
+			endif
+		endfor
+		return result
+	endfunction  " }}}
+	" @vimlint(EVL103, 0)
+
+	" e-in-current-project
+	command! -complete=customlist,current_project#complete -nargs=1 Pe :exec ':e ' . current_project#info().path . '/' . "<args>"
+	command! -complete=customlist,current_project#complete_main -nargs=1 PE :exec ':e ' . current_project#info().main_path . '/' . "<args>"
+
+
+	command! PTags call Vimrc_PTags()
+
+	function! g:Vimrc_PTags() abort " {{{
+		let pinfo = current_project#info()
+		execute '!cd ' . pinfo.path . ' && ctags -R .'
+	endfunction " }}}
+endfunction " }}}
 
 call s:bundle('todesking/metascope.vim')
 function! g:todespm#the_hooks.after() abort " {{{
@@ -49,10 +78,12 @@ function! g:todespm#the_hooks.after() abort " {{{
 	call metascope#register(def)
 endfunction " }}}
 
+if 0
 call s:bundle('todesking/scoped_qf.vim')
 function! g:todespm#the_hooks.after() abort " {{{
 	let g:scoped_qf_scope_type = 'current_project'
 endfunction " }}}
+endif
 
 call s:bundle('mattn/webapi-vim')
 call s:bundle('kana/vim-operator-user')
@@ -221,7 +252,7 @@ call s:bundle('tyru/capture.vim')
 " call s:bundle('ciaranm/detectindent')
 " }}}
 
-" " Unite {{{
+" Unite {{{
 if 0
 	call s:bundle('Shougo/unite.vim')
 	function! g:todespm#the_hooks.after() abort " {{{
@@ -628,9 +659,15 @@ if(has('python3'))
 			\ ['converter/project_name', 'converter/mark_dup']
 			\ )
 		call denite#custom#source(
-			\ 'file_rec,file_mru,project_file_mru',
+			\ 'file_rec,file_mru,project_file_mru,unite',
 			\ 'matchers',
 			\ ['matcher/substring']
+			\ )
+
+		call denite#custom#var(
+			\ 'file_rec',
+			\ 'command',
+			\ [expand('~/.vim/bin/list_file_rec')]
 			\ )
 
 		nnoremap <silent><C-S> :<C-u>call Vimrc_denite_mru_if_available()<CR>
@@ -646,8 +683,7 @@ if(has('python3'))
 		nnoremap <C-Q>d :<C-u>Denite unite:fold<CR>
 		nnoremap <C-Q><C-P> :<C-u>Denite -resume -cursor-pos=-1 -immediately<CR>
 		nnoremap <C-Q><C-N> :<C-u>Denite -resume -cursor-pos=+1 -immediately<CR>
-
-		nnoremap <C-Q>f :<C-u>Denite unite:qf<CR>
+		nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview -no-split -winheight=30 -wipe<CR>
 	endfunction " }}}
 	function! Vimrc_denite_mru_if_available() abort " {{{
 		let info = current_project#info()
@@ -662,6 +698,12 @@ if(has('python3'))
 
 	" Unite {{{
 	call s:bundle('Shougo/unite.vim')
+	function! g:todespm#the_hooks.after() abort " {{{
+		augroup unite-keybind
+			autocmd!
+			autocmd FileType unite nmap <buffer><silent><Esc> q
+		augroup END
+	endfunction " }}}
 	call s:bundle('Shougo/unite-outline')
 	call s:bundle('osyo-manga/unite-fold')
 	call s:bundle('sgur/unite-qf')
@@ -831,7 +873,8 @@ function! g:todespm#the_hooks.after() abort " {{{
 			let build_finished = proc.last_build_number != build_number
 
 			if build_finished
-				call scoped_qf#set(proc.getqflist())
+				" call scoped_qf#set(proc.getqflist())
+				call proc.set_qf()
 			endif
 
 			let sync = [proc.path, proc.last_build_number]

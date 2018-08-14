@@ -6,6 +6,7 @@ if v:version < 800
 	finish
 endif
 
+source $VIMRUNTIME/defaults.vim
 
 let $LC_ALL='en_US.UTF8'
 
@@ -54,6 +55,13 @@ syntax enable
 set smartcase
 set wrapscan
 set incsearch
+
+
+augroup vimrc-incsearch-highlight
+	autocmd!
+	autocmd CmdlineEnter /,\? :set hlsearch
+	autocmd CmdlineLeave /,\? :set nohlsearch
+augroup END
 
 set mouse=
 
@@ -206,7 +214,7 @@ nnoremap ,cn :<C-U>cnext<CR>
 nnoremap ,cp :<C-U>cprevious<CR>
 nnoremap ,cc :<C-U>cc<CR>
 
-nnoremap <CR> :call append(line('.'),'')<CR>
+" nnoremap <CR> :call append(line('.'),'')<CR>
 
 nnoremap <silent>,n :tabnew<CR>
 nnoremap <silent>,h :tabprevious<CR>
@@ -228,42 +236,10 @@ inoremap <silent><C-L> <C-X><C-L>
 nnoremap j gj
 nnoremap k gk
 
-nnoremap \8 :<C-U>setlocal tabstop=8<CR>
-nnoremap \4 :<C-U>setlocal tabstop=4<CR>
 nnoremap Y y$
 
 set visualbell
 set t_vb=
-
-function! s:register_jump_key(key)
-	exec 'nnoremap' '<silent>'.a:key
-				\ a:key
-				\   .':call <SID>open_current_fold()<CR>'
-				\   .':normal! zz<CR>'
-endfunction
-
-function! s:open_current_fold()
-	if foldclosed(line(".")) != -1
-		normal! zo
-	endif
-endfunction
-
-" call s:register_jump_key('n')
-" call s:register_jump_key('N')
-" call s:register_jump_key('*')
-" call s:register_jump_key('#')
-" call s:register_jump_key('g*')
-" call s:register_jump_key('g#')
-" call s:register_jump_key('{')
-" call s:register_jump_key('}')
-" call s:register_jump_key('<C-I>')
-" call s:register_jump_key('<C-O>')
-" call s:register_jump_key('zz')
-" call s:register_jump_key('H')
-" call s:register_jump_key('M')
-" call s:register_jump_key('L')
-" call s:register_jump_key('<C-T>')
-" call s:register_jump_key('<C-]>')
 
 try
 	nunmap <leader>w=
@@ -431,30 +407,6 @@ function! Vimrc_complete_current_dir(ArgLead, CmdLine, CursorPos)
 endfunction
 " }}}
 
-" @vimlint(EVL103, 1)
-function! Vimrc_complete_dir(prefix, ArgLead, CmdLine, CursorPos) abort " {{{
-	let prefix = a:prefix . '/'
-	let candidates = glob(prefix.a:ArgLead.'*', 1, 1)
-	let result = []
-	for c in candidates
-		if isdirectory(c)
-			call add(result, substitute(c, prefix, '', '').'/')
-		else
-			call add(result, substitute(c, prefix, '', ''))
-		endif
-	endfor
-	return result
-endfunction  " }}}
-" @vimlint(EVL103, 0)
-
-" e-in-current-project
-command! -complete=customlist,current_project#complete -nargs=1 Pe :exec ':e ' . current_project#info().path . '/' . "<args>"
-command! -complete=customlist,current_project#complete_main -nargs=1 PE :exec ':e ' . current_project#info().main_path . '/' . "<args>"
-
-" Unite project {{{
-command! Projects :Unite file:~/projects/ file:~/.vim/bundle/ -default-action=rec
-" }}}
-
 " Nyandoc {{{
 command! Nyandoc :Unite file:.nyandoc/ -default-action=rec
 " }}}
@@ -562,16 +514,6 @@ function! s:vimrc_sid()
 endfunction
 " }}}
 
-" PTags {{{
-command! PTags call Vimrc_PTags()
-
-function! Vimrc_PTags() abort " {{{
-	let pinfo = current_project#info()
-	execute '!cd ' . pinfo.path . ' && ctags -R .'
-endfunction " }}}
-
-" }}}
-
 " S(source %) {{{
 command! S call SourceThis()
 " }}}
@@ -644,8 +586,5 @@ endfunction " }}}
 " }}}
 
 nnoremap <C-B> :<C-U>up<CR>
-
-map y <Plug>(operator-flashy)
-nmap Y <Plug>(operator-flashy)$
 
 imap <D-Space> <Space>
