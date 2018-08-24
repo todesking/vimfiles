@@ -241,6 +241,8 @@ function! g:todespm#the_hooks.after() abort " {{{
 		autocmd FileType vim setlocal commentstring=\"\ %s
 	augroup END
 endfunction " }}}
+
+call s:bundle('vim-scripts/AutoClose')
 " }}}
 
 

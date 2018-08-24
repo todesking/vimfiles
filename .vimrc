@@ -10,6 +10,10 @@ source $VIMRUNTIME/defaults.vim
 
 let $LC_ALL='en_US.UTF8'
 
+set imdisable
+
+inoremap <C-D> <DELETE>
+
 " Python env {{{
 
 " Requirements:
