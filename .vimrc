@@ -12,7 +12,8 @@ let $LC_ALL='en_US.UTF8'
 
 set imdisable
 
-inoremap <C-D> <DELETE>
+inoremap <C-B> <LEFT>
+inoremap <C-F> <RIGHT>
 
 " Python env {{{
 
