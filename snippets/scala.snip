@@ -1,3 +1,6 @@
+snippet l.macros
+    import scala.language.experimental.macros
+
 snippet def
     def ${1:name} = {
     }
@@ -27,6 +30,9 @@ snippet Main
 snippet main
       def main(args: Array[String]): Unit = {
       }
+
+snippet ct
+    com.todesking.
 
 snippet <
     extends 
@@ -64,15 +70,15 @@ snippet im
 options word
     implicit 
 
-snippet ip
-    import 
-
 snippet il
 options word
     implicitly[
 
 snippet id
     implicit def 
+
+snippet iv
+    implicit val 
 
 snippet pt
     private[this] 
@@ -170,6 +176,9 @@ snippet =>
 options word
     =>
     }
+
+snippet i
+    import 
 
 snippet i.ss
     import org.apache.spark.sql.SparkSession
