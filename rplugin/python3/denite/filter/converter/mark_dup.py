@@ -15,11 +15,11 @@ class Filter(Base):
         self.description = 'mark duplicated part'
 
     def filter(self, context):
-        prev = ''
+        prev = []
         for candidate in context['candidates']:
-            cur = candidate['abbr']
+            cur = candidate['abbr'].split('/')
             prefix, a, _ = decompose(cur, prev)
-            if prefix != '':
-                candidate['abbr'] = '{{{' + prefix + '}}}' + a
+            if prefix != []:
+                candidate['abbr'] = '{{{' + '/'.join(prefix) + '}}}/' + '/'.join(a)
             prev = cur
         return context['candidates']

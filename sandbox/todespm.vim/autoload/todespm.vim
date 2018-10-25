@@ -40,6 +40,10 @@ function! todespm#bundle(name, ...) abort " {{{
 	call add(s:plugins, type)
 endfunction " }}}
 
+function! todespm#disable() abort " {{{
+	let s:plugins = s:plugins[:-2]
+endfunction " }}}
+
 function! todespm#new_hooks(name) abort " {{{
 	let hooks = {}
 	call add(s:plugins, {"type": "hooks", "name": a:name, "hooks": hooks})
