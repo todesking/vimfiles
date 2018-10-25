@@ -9,6 +9,10 @@ function! s:bundle(...) abort " {{{
 	return call('todespm#bundle', a:000)
 endfunction " }}}
 
+function! s:disable() abort " {{{
+	call todespm#disable()
+endfunction " }}}
+
 function! s:new_hooks(...) abort " {{{
 	return call('todespm#new_hooks', a:000)
 endfunction " }}}
@@ -227,7 +231,7 @@ function! g:todespm#the_hooks.after() abort " {{{
 	let g:neosnippet#disable_runtime_snippets = {
 	\ '_': 1,
 	\ }
-	imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+	imap <C-k>     <Plug>(neosnippet_expand_or_jump)<C-o>:call timer_start(10, {id->execute('redraw!')})<CR>
 	smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 	xmap <C-k>     <Plug>(neosnippet_expand_target)
 	let g:neosnippet#snippets_directory='~/.vim/snippets'
@@ -659,7 +663,7 @@ if(has('python3'))
 			\ ['converter/project_name', 'converter/mark_dup']
 			\ )
 		call denite#custom#source(
-			\ 'file_rec,file_mru,project_file_mru,unite',
+			\ 'file_rec,file_mru,project_file_mru,unite,tag',
 			\ 'matchers',
 			\ ['matcher/substring']
 			\ )
@@ -683,7 +687,7 @@ if(has('python3'))
 		nnoremap <C-Q>d :<C-u>Denite unite:fold<CR>
 		nnoremap <C-Q><C-P> :<C-u>Denite -resume -cursor-pos=-1 -immediately<CR>
 		nnoremap <C-Q><C-N> :<C-u>Denite -resume -cursor-pos=+1 -immediately<CR>
-		nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview -no-split -winheight=30 -wipe<CR>
+		nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview -no-split -winheight=30 -wipe -max-multi-lines=15<CR>
 	endfunction " }}}
 	function! Vimrc_denite_mru_if_available() abort " {{{
 		let info = current_project#info()
@@ -709,7 +713,7 @@ if(has('python3'))
 	call s:bundle('sgur/unite-qf')
 	" }}}
 
-	function! Vimrc_unite_syntax() abort " {{{
+	function! Vimrc_denite_syntax() abort " {{{
 		" syntax match MyDeniteProjectName /^\[[^]]\+\]/
 		" highlight link MyDeniteProjectName Identifier
 		syntax region MyDeniteUnimportant matchgroup=MyDeniteConceal excludenl start=/{{{/ end=/}}}/ concealends containedin=deniteSource_file_rec,deniteSource_file_mru,deniteSource_project_file_mru
@@ -719,7 +723,7 @@ if(has('python3'))
 
 	augroup vimrc-denite-syntax
 		autocmd!
-		autocmd FileType denite :call Vimrc_unite_syntax()
+		autocmd FileType denite :call Vimrc_denite_syntax()
 	augroup END
 endif
 " }}}
@@ -890,7 +894,8 @@ endfunction " }}}
 
 call s:bundle('scrooloose/syntastic')
 function! g:todespm#the_hooks.after() abort " {{{
-	let g:syntastic_scala_checkers=['fsc']
+	" let g:syntastic_scala_checkers=['fsc']
+	let g:syntastic_scala_checkers=[]
 	let g:syntastic_always_populate_loc_list=1
 
 	" qf to syntastic {{{
@@ -925,6 +930,12 @@ endfunction " }}}
 call s:bundle('todesking/vint-syntastic')
 function! g:todespm#the_hooks.after() abort " {{{
 	let g:syntastic_vim_checkers = ['vint']
+endfunction " }}}
+
+call s:bundle('w0rp/ale')
+function! g:todespm#the_hooks.after() abort " {{{
+	let g:ale_lint_on_text_changed = v:false
+	let g:ale_lint_on_insert_leave = v:false
 endfunction " }}}
 
 " }}}
