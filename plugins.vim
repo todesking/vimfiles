@@ -456,7 +456,7 @@ if 0
 
 	call s:bundle('Shougo/neomru.vim')
 	function! g:todespm#the_hooks.after() abort " {{{
-		let g:neomru#do_validate = 1
+		let g:neomru#do_validate = 0
 	endfunction " }}}
 
 	call s:bundle('osyo-manga/unite-candidate_sorter')
@@ -687,7 +687,6 @@ if(has('python3'))
 		nnoremap <C-Q>d :<C-u>Denite unite:fold<CR>
 		nnoremap <C-Q><C-P> :<C-u>Denite -resume -cursor-pos=-1 -immediately<CR>
 		nnoremap <C-Q><C-N> :<C-u>Denite -resume -cursor-pos=+1 -immediately<CR>
-		nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview -no-split -winheight=30 -wipe -max-multi-lines=15<CR>
 	endfunction " }}}
 	function! Vimrc_denite_mru_if_available() abort " {{{
 		let info = current_project#info()
@@ -703,12 +702,37 @@ if(has('python3'))
 	" Unite {{{
 	call s:bundle('Shougo/unite.vim')
 	function! g:todespm#the_hooks.after() abort " {{{
+		nnoremap <C-Q>f :<C-u>Unite qf -no-start-insert -auto-preview -no-split -winheight=30 -wipe -max-multi-lines=15<CR>
 		augroup unite-keybind
 			autocmd!
 			autocmd FileType unite nmap <buffer><silent><Esc> q
 		augroup END
+
+		for s in ['qf', 'locationlist']
+			call unite#custom#profile('source/' . s, 'context', {'max_multi_lines': 20})
+			call unite#custom#source(s, 'converters', ['converter_pretty_qf'])
+		endfor
+
+		let filter = {'name': 'converter_pretty_qf'}
+
+		function! filter.filter(candidates, context) abort " {{{
+			for c in a:candidates
+				let message = substitute(c.word, '^.\{-}|\d\+| ', '', '')
+				let message = join(map(split(message, "\n"), '"| " . v:val'), "\n") . "\n|"
+				let c.word = current_project#summarize_path(c.action__path) . ':' . c.action__line . "\n" . message
+			endfor
+			return a:candidates
+		endfunction " }}}
+
+		call unite#define_filter(filter)
 	endfunction " }}}
-	call s:bundle('Shougo/unite-outline')
+	call s:bundle('Shougo/unite-outline') " {{{
+	function! g:todespm#the_hooks.after() abort " {{{
+		let g:unite_source_outline_scala_show_all_declarations = 1
+		let g:unite_source_outline_max_headings = 10000
+		let g:unite_source_outline_cache_limit = 10000
+	endfunction " }}}
+	" }}}
 	call s:bundle('osyo-manga/unite-fold')
 	call s:bundle('sgur/unite-qf')
 	" }}}
@@ -962,7 +986,7 @@ call s:bundle('tpope/vim-rbenv')
 call s:bundle('vim-ruby/vim-ruby')
 call s:bundle('tpope/vim-rails')
 call s:bundle('rhysd/vim-textobj-ruby')
-call s:bundle('todesking/ruby_hl_lvar.vim')
+" call s:bundle('todesking/ruby_hl_lvar.vim')
 function! g:todespm#the_hooks.after() abort " {{{
 	let g:ruby_hl_lvar_show_warnings = 1
 endfunction " }}}

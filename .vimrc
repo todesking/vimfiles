@@ -15,14 +15,27 @@ set imdisable
 inoremap <C-B> <LEFT>
 inoremap <C-F> <RIGHT>
 
+let g:Vimrc_status_redraw = 1
+augroup Vimrc_status_redraw
+	autocmd!
+	autocmd CmdlineEnter * let g:Vimrc_status_redraw = 0
+	autocmd CmdlineLeave * let g:Vimrc_status_redraw = 1
+augroup END
+function! g:Vimrc_status_redraw_handler(id) abort " {{{
+	if g:Vimrc_status_redraw
+		redrawstatus
+	endif
+endfunction " }}}
+let g:Vimrc_status_redraw_timer = timer_start(500, function('g:Vimrc_status_redraw_handler'), {'repeat': -1})
+
 " Python env {{{
 
 " Requirements:
 " * Python3
 " * pip3 install neovim
 
-set pythonthreehome=/usr/local/Cellar/python/3.7.0/Frameworks/Python.framework/Versions/3.7
-set pythonthreedll=/usr/local/Cellar/python/3.7.0/Frameworks/Python.framework/Versions/3.7/Python
+set pythonthreehome=/usr/local/Cellar/python/3.7.3/Frameworks/Python.framework/Versions/3.7
+set pythonthreedll=/usr/local/Cellar/python/3.7.3/Frameworks/Python.framework/Versions/3.7/Python
 set pyxversion=3
 
 " I don't know why, but vim-hug-neovim-rpc failed without this.
@@ -151,7 +164,7 @@ augroup END
 
 function! Vimrc_setft(ft) abort " {{{
 	if(!exists('b:current_syntax') || b:current_syntax == a:ft)
-		let &filetype = a:ft
+		exec 'setf ' . a:ft
 	endif
 endfunction " }}}
 
