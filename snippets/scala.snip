@@ -24,11 +24,13 @@ options word
 snippet Main
     object Main {
       def main(args: Array[String]): Unit = {
+      ${1}
       }
     }
 
 snippet main
       def main(args: Array[String]): Unit = {
+      ${1}
       }
 
 snippet ct
@@ -138,6 +140,7 @@ snippet c
 snippet u
 options word
     : Unit = {
+    ${1}
     }
 
 snippet ad
@@ -171,14 +174,20 @@ options word
 snippet {
 options word
     {
+    ${1}
     }
+
 snippet =>
 options word
     =>
+    ${1}
     }
 
 snippet i
     import 
+
+snippet i.ml
+    import org.apache.spark.ml
 
 snippet i.ss
     import org.apache.spark.sql.SparkSession
